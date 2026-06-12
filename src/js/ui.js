@@ -13,35 +13,6 @@ function accBadge(a) {
   return ({ ARQ:'b-arq', Toptal:'b-toptal', Bancolombia:'b-bancol', Otro:'b-otro' }[a] || 'b-otro');
 }
 
-function setSyncStatus(status) {
-  const dot = $('sync-dot');
-  if (!dot) return;
-  const map = { synced: '#1D9E75', syncing: '#EF9F27', offline: 'var(--txt3)' };
-  dot.style.background = map[status] || map.offline;
-  dot.title = { synced: 'Sincronizado', syncing: 'Sincronizando…', offline: 'Sin conexión / no configurado' }[status];
-}
-
-function renderAuthState(user) {
-  const w = $('auth-widget');
-  if (!w) return;
-  if (!sbReady()) { w.innerHTML = ''; return; }
-
-  if (user) {
-    const name  = user.user_metadata?.full_name || user.email || 'Usuario';
-    const avatar = user.user_metadata?.avatar_url;
-    w.innerHTML = `
-      <div class="auth-user" onclick="sbSignOut().then(() => renderAuthState(null))">
-        ${avatar ? `<img src="${avatar}" class="auth-avatar" alt="">` : `<div class="auth-initial">${name[0].toUpperCase()}</div>`}
-        <span class="auth-name">${name.split(' ')[0]}</span>
-      </div>`;
-  } else {
-    w.innerHTML = `
-      <div style="display:flex;gap:5px">
-        <button class="btn auth-login-btn" onclick="sbSignIn('google')">Google</button>
-        <button class="btn auth-login-btn" onclick="sbSignIn('github')">GitHub</button>
-      </div>`;
-  }
-}
 
 function renderTabs() {
   const wrap = $('month-tabs');

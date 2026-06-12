@@ -61,20 +61,11 @@ initAnnual();
 GASTOS_KEYS.forEach(k => { const el = $('g-' + k); if (el) el.addEventListener('input', recalc); });
 ['p-trm','p-pv','p-smmlv'].forEach(id => { const el = $(id); if (el) el.addEventListener('input', recalc); });
 
-// Auth + cloud sync
+// Sync con Supabase al arrancar (si está configurado)
 if (sbReady()) {
-  setSyncStatus('offline');
-  sbGetUser().then(user => renderAuthState(user));
-  sbOnAuthChange(async (event, user) => {
-    renderAuthState(user);
-    if (event === 'SIGNED_IN') {
-      await syncFromCloud();
-      renderTabs();
-      loadForm(curKey);
-      recalc();
-    }
-    if (event === 'SIGNED_OUT') {
-      setSyncStatus('offline');
-    }
+  syncFromCloud().then(() => {
+    renderTabs();
+    loadForm(curKey);
+    recalc();
   });
 }

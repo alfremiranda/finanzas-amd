@@ -28,18 +28,16 @@ function save() {
 }
 
 async function syncFromCloud() {
-  setSyncStatus('syncing');
   const rows = await sbPullAll();
-  if (!rows) { setSyncStatus('offline'); return; }
+  if (!rows) return;
 
-  // Cloud data wins for same key; push local-only months to cloud
   const cloudKeys = new Set(rows.map(r => r.key));
   rows.forEach(({ key, data }) => { db[key] = data; });
 
+  // Sube meses locales que no están en la nube
   for (const key of Object.keys(db)) {
     if (!cloudKeys.has(key)) await sbPush(key, db[key]);
   }
 
   saveLocal();
-  setSyncStatus('synced');
 }
