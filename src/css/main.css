@@ -85,7 +85,13 @@ input:focus,select:focus{outline:2px solid var(--blue);outline-offset:-1px}
 .green{color:var(--green)}
 .danger{color:var(--danger)}
 .section-group{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-@media(max-width:600px){.section-group,.g2,.g3,.metric-grid{grid-template-columns:1fr}.app{padding:8px}}
+@media(max-width:600px){
+  .section-group,.g2,.g3,.metric-grid{grid-template-columns:1fr}
+  .section-group{display:flex;flex-direction:column}
+  .section-group>div:first-child{order:2}
+  .section-group>div:last-child{order:1}
+  .app{padding:8px}
+}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--txt);color:var(--bg);padding:10px 20px;border-radius:20px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:99}
 .toast.show{opacity:1}
 .annual-tbl{width:100%;border-collapse:collapse;font-size:12px}
