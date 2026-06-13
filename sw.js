@@ -1,4 +1,4 @@
-const CACHE = 'neto-v4';
+const CACHE = 'neto-v10';
 
 const ASSETS = [
   './',
@@ -15,6 +15,7 @@ const ASSETS = [
   './src/js/chart.js',
   './src/js/annual.js',
   './src/js/app.js',
+  'https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js',
   'https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js',
   'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js',
 ];

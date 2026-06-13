@@ -1,5 +1,7 @@
 const $ = id => document.getElementById(id);
 const set = (id, v) => { const el = $(id); if (el) el.textContent = v; };
+const icon = (name, size) => { const s = size || 15; return `<i data-lucide="${name}" width="${s}" height="${s}"></i>`; };
+const renderIcons = () => { if (typeof lucide !== 'undefined') lucide.createIcons(); };
 const bar = (id, a, b) => { const p = b > 0 ? Math.min(Math.round(a / b * 100), 100) : 0; $(id).style.width = p + '%'; };
 
 const parseCOP = str => parseInt(String(str).replace(/\D/g, '')) || 0;
@@ -68,20 +70,21 @@ function renderEgresos() {
   const egresos = getMonth(curKey).egresos || [];
   const trm     = getMonth(curKey).trm;
   if (!egresos.length) {
-    el.innerHTML = `<div class="empty-state"><div class="empty-icon">📤</div><p>Sin egresos este mes</p><button class="btn btn-p btn-sm" onclick="openSheet('sheet-egreso')">＋ Agregar egreso</button></div>`;
-    return;
+    el.innerHTML = `<div class="empty-state"><div class="empty-icon">${icon('receipt', 28)}</div><p>Sin egresos este mes</p><button class="btn btn-p btn-sm" onclick="openAddEgreso()">${icon('plus', 13)} Agregar egreso</button></div>`;
+    renderIcons(); return;
   }
   el.innerHTML = egresos.map(e => {
-    const tipo   = EGRESO_TIPOS.find(t => t.id === e.tipo) || { label: e.tipo };
-    const amtStr = e.currency === 'USD' ? USD(e.amount) : COP(e.amount);
-    const subStr = e.currency === 'USD' ? COP(e.amount * trm) : '';
+    const tipo    = EGRESO_TIPOS.find(t => t.id === e.tipo) || { label: e.tipo };
+    const hasAmt  = e.amount > 0;
+    const amtStr  = hasAmt ? (e.currency === 'USD' ? USD(e.amount) : COP(e.amount)) : '<span style="color:var(--txt3)">—</span>';
+    const subStr  = hasAmt && e.currency === 'USD' ? COP(e.amount * trm) : '';
     const dateStr = e.date ? e.date.slice(5).replace('-', '/') : '';
     return `
       <div class="income-item">
         <div class="ii-l">
           <div class="ii-d">${tipo.label}</div>
           <div class="ii-m">
-            <span class="badge b-otro">${e.tipo}</span>
+            <span class="badge b-otro">${e.currency}</span>
             ${dateStr ? `<span style="color:var(--txt3)">· ${dateStr}</span>` : ''}
           </div>
         </div>
@@ -89,9 +92,13 @@ function renderEgresos() {
           <div class="ii-a">${amtStr}</div>
           ${subStr ? `<div class="ii-s">${subStr}</div>` : ''}
         </div>
-        <button class="btn btn-d btn-icon" onclick="deleteEgreso(${e.id})">✕</button>
+        <div style="display:flex;gap:4px;flex-shrink:0">
+          <button class="btn btn-icon" onclick="editEgreso(${e.id})" title="Editar">${icon('pencil', 14)}</button>
+          <button class="btn btn-d btn-icon" onclick="deleteEgreso(${e.id})">${icon('x', 14)}</button>
+        </div>
       </div>`;
   }).join('');
+  renderIcons();
 }
 
 function renderMonthNav() {
@@ -174,7 +181,7 @@ function recalc() {
 
   const il = $('income-list');
   if (!incomes.length) {
-    il.innerHTML = `<div class="empty-state"><div class="empty-icon">💸</div><p>Sin ingresos este mes</p><button class="btn btn-p btn-sm" onclick="openSheet('sheet-income')">＋ Registrar ingreso</button></div>`;
+    il.innerHTML = `<div class="empty-state"><div class="empty-icon">${icon('banknote', 28)}</div><p>Sin ingresos este mes</p><button class="btn btn-p btn-sm" onclick="openSheet('sheet-income')">${icon('plus', 13)} Registrar ingreso</button></div>`;
   } else {
     il.innerHTML = incomes.map(i => `
       <div class="income-item">
@@ -194,13 +201,13 @@ function recalc() {
                <button class="btn btn-d btn-icon" onclick="deleteIncome(${i.id})">Eliminar</button>
                <button class="btn btn-icon" onclick="setPendingDelete(null)">No</button>
              </div>`
-          : `<button class="btn btn-d btn-icon" onclick="setPendingDelete(${i.id})">✕</button>`
+          : `<button class="btn btn-d btn-icon" onclick="setPendingDelete(${i.id})">${icon('x', 14)}</button>`
         }
       </div>`).join('');
   }
 
   const ibc = calcIBC(incomes, trm, smmlv);
-  const ss  = calcSS(ibc, calcPV(egresos, trm));
+  const ss  = calcSS(ibc);
 
   const ibcEsMinimo = ibc <= smmlv;
   set('o-ibc', COP(ibc));
@@ -209,10 +216,9 @@ function recalc() {
   set('o-salud', COP(ss.salud)); set('o-salud-u', USD(ss.salud / trm));
   set('o-pens',  COP(ss.pens));  set('o-pens-u',  USD(ss.pens / trm));
   set('o-arl',   COP(ss.arl));   set('o-arl-u',   USD(ss.arl / trm));
-  set('o-pv',    COP(ss.pv));    set('o-pv-u',    USD(ss.pv / trm));
   set('o-total', COP(ss.total) + ' / ' + USD(ss.total / trm));
 
-  const gast = calcGastos(egresos, trm);
+  const gast = calcGastos(egresos, trm);  // pension_vol now included here
   const { ret, prim, netoLibre } = calcDistribucion(bruto, ss.total, gast);
 
   bar('bss',  ss.total,             bruto); set('pss',  pct(ss.total, bruto)); set('vss',  COP(ss.total));
@@ -233,6 +239,7 @@ function recalc() {
   renderTransfers();
   updateChart();
   updateAnnual();
+  renderIcons();
 }
 
 function renderTransfers() {
@@ -240,8 +247,8 @@ function renderTransfers() {
   if (!el) return;
   const transfers = (getMonth(curKey).transfers || []);
   if (!transfers.length) {
-    el.innerHTML = `<div class="empty-state"><div class="empty-icon">🔀</div><p>Sin movimientos este mes</p><button class="btn btn-p btn-sm" onclick="openSheet('sheet-transfer')">＋ Agregar movimiento</button></div>`;
-    return;
+    el.innerHTML = `<div class="empty-state"><div class="empty-icon">${icon('arrow-left-right', 28)}</div><p>Sin movimientos este mes</p><button class="btn btn-p btn-sm" onclick="openSheet('sheet-transfer')">${icon('plus', 13)} Agregar movimiento</button></div>`;
+    renderIcons(); return;
   }
   el.innerHTML = '<div class="divider" style="margin:10px 0"></div>' + transfers.map(t => {
     const fromAcc = TRANSFER_ACCOUNTS.find(a => a.id === t.from) || { label: t.from };
@@ -256,7 +263,8 @@ function renderTransfers() {
           <div class="ti-route">${fromAcc.label} → ${toAcc.label}${dateStr ? '<span class="ti-date">' + dateStr + '</span>' : ''}</div>
           <div class="ti-detail">${fromStr} → ${toStr}${trmStr}</div>
         </div>
-        <button class="btn btn-d btn-icon" onclick="deleteTransfer(${t.id})">✕</button>
+        <button class="btn btn-d btn-icon" onclick="deleteTransfer(${t.id})">${icon('x', 14)}</button>
       </div>`;
   }).join('');
+  renderIcons();
 }
