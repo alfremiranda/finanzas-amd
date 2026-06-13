@@ -86,16 +86,6 @@ function deleteIncome(id) {
   recalc();
 }
 
-function saveMonth() {
-  const d = getMonth(curKey);
-  d.trm = parseFloat($('p-trm').value) || DEFAULTS.trm;
-  d.transfer_date = $('p-transfer-date').value || '';
-  db[curKey] = d;
-  save();
-  toast('Transferencia guardada');
-  recalc();
-}
-
 function onTransferAccountChange() {
   const fromId = $('t-from') && $('t-from').value;
   const toId   = $('t-to')   && $('t-to').value;
@@ -146,6 +136,7 @@ function addTransfer() {
   const d = getMonth(curKey);
   if (!d.transfers) d.transfers = [];
   d.transfers.push({ id: Date.now(), date: date || new Date().toISOString().slice(0, 10), from: fromId, to: toId, amount, fromCurrency: from.currency, toCurrency: to.currency, trm, toAmount });
+  if (cross && trm) d.trm = trm;
   db[curKey] = d;
   save();
   $('t-amt').value = '';
@@ -235,10 +226,6 @@ if (pvEl) {
     recalc();
   });
 }
-
-// TRM: recalc en vivo, se guarda con el botón
-const trmEl = $('p-trm');
-if (trmEl) trmEl.addEventListener('input', recalc);
 
 // TRM en vivo
 initLiveTRM();

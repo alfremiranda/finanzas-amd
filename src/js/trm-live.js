@@ -65,16 +65,15 @@ function renderLiveTRM(trm, fresh) {
   const hdr = $('trm-live-hdr');
   if (hdr) hdr.innerHTML = `<span class="trm-live-dot ${dotClass}" title="${title}">${dot}</span> TRM&nbsp;${formatted}`;
 
-  // Card strip
-  const val = $('trm-live-val');
-  if (val) val.innerHTML = `${formatted} <span class="trm-live-dot ${dotClass}" title="${title}">${dot}</span>`;
+  // Sheet strip
+  const sheetVal = $('trm-live-sheet-val');
+  if (sheetVal) sheetVal.innerHTML = `${formatted} <span class="trm-live-dot ${dotClass}" title="${title}">${dot}</span>`;
 
-  // Botón Usar
-  const btn = $('btn-use-live-trm');
-  if (btn) btn.onclick = () => {
-    const el = $('p-trm');
-    el.value = trm;
-    el.dispatchEvent(new Event('input'));
+  // Sheet "Usar →"
+  const sheetBtn = $('trm-live-sheet-btn');
+  if (sheetBtn) sheetBtn.onclick = () => {
+    const el = $('t-trm');
+    if (el) { el.value = trm; el.dispatchEvent(new Event('input')); }
     toast('TRM de hoy aplicado');
   };
 }

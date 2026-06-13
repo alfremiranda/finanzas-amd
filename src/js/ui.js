@@ -111,8 +111,6 @@ function updateNumberHints() {
 
 function loadForm(key) {
   const d = getMonth(key);
-  $('p-trm').value = d.trm;
-  $('p-transfer-date').value = d.transfer_date || '';
   $('p-pv').value = copFormat(d.pv || 0);
   GASTOS_KEYS.forEach(k => { const el = $('g-' + k); if (el) el.value = copFormat(d.gastos[k] || 0); });
 
