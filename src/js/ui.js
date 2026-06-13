@@ -27,10 +27,6 @@ function renderExtras() {
 function renderMonthNav() {
   const [y, m] = curKey.split('-');
   $('month-title').textContent = MONTHS[parseInt(m)] + ' ' + y;
-  const keys = Object.keys(db).filter(k => k !== '_settings').sort();
-  const idx = keys.indexOf(curKey);
-  const prevBtn = $('btn-prev');
-  if (prevBtn) prevBtn.disabled = idx <= 0;
 }
 
 const _hintUpdaters = [];

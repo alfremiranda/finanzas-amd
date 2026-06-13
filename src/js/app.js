@@ -8,7 +8,25 @@ function switchMonth(key) {
 function prevMonth() {
   const keys = Object.keys(db).filter(k => k !== '_settings').sort();
   const idx = keys.indexOf(curKey);
-  if (idx > 0) switchMonth(keys[idx - 1]);
+  if (idx > 0) {
+    switchMonth(keys[idx - 1]);
+    return;
+  }
+  const [y, m] = curKey.split('-').map(Number);
+  const prevM = m - 1 < 0 ? 11 : m - 1;
+  const prevY = m - 1 < 0 ? y - 1 : y;
+  const newKey = monthKey(prevM, prevY);
+  const current = getMonth(curKey);
+  db[newKey] = {
+    trm: current.trm,
+    transfer_date: '',
+    pv: current.pv,
+    incomes: [],
+    gastos: { ...current.gastos, extras: [] },
+  };
+  save();
+  switchMonth(newKey);
+  toast('Mes creado');
 }
 
 function nextMonth() {
