@@ -1,5 +1,5 @@
 border/neutral-alpha-10	COLOR	rgba(100,116,139,0.1)	rgba(255,255,255,0.3)	color/slate/500/10	color/white/30
-bg/account	COLOR	#f1f5f9	#334155	color/slate/100	color/slate/700
+bg/account	COLOR	#e2e8f0	#334155	color/slate/200	color/slate/700
 fg/account	COLOR	#475569	#cbd5e1	color/slate/600	color/slate/300
 bg/brand	COLOR	#0e7490	#06b6d4	color/cyan/700	color/cyan/500
 bg/brand-alpha-20	COLOR	rgba(6,182,212,0.2)	rgba(6,182,212,0.2)	color/cyan/500/20	color/cyan/500/20

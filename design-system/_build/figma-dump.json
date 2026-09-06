@@ -73,7 +73,7 @@
         ],
         [
           "bg/hover",
-          "#f1f5f9",
+          "#e2e8f0",
           "#334155"
         ],
         [
@@ -88,7 +88,7 @@
         ],
         [
           "bg/disabled",
-          "#f1f5f9",
+          "#e2e8f0",
           "#1e293b"
         ],
         [
@@ -133,7 +133,7 @@
         ],
         [
           "bg/neutral-subtle",
-          "#f1f5f9",
+          "#e2e8f0",
           "#1e293b"
         ],
         [
@@ -413,7 +413,7 @@
         ],
         [
           "category/other/surface",
-          "#f1f5f9",
+          "#e2e8f0",
           "#1e293b"
         ],
         [
@@ -448,7 +448,7 @@
         ],
         [
           "bg/account",
-          "#f1f5f9",
+          "#e2e8f0",
           "#334155"
         ],
         [
@@ -2131,11 +2131,11 @@
       "name": "bg/hover",
       "type": "COLOR",
       "values": {
-        "Light": "#f1f5f9",
+        "Light": "#e2e8f0",
         "Dark": "#334155"
       },
       "aliases": {
-        "Light": "color/slate/100",
+        "Light": "color/slate/200",
         "Dark": "color/slate/700"
       }
     },
@@ -2170,11 +2170,11 @@
       "name": "bg/disabled",
       "type": "COLOR",
       "values": {
-        "Light": "#f1f5f9",
+        "Light": "#e2e8f0",
         "Dark": "#1e293b"
       },
       "aliases": {
-        "Light": "color/slate/100",
+        "Light": "color/slate/200",
         "Dark": "color/slate/800"
       }
     },
@@ -2287,11 +2287,11 @@
       "name": "bg/neutral-subtle",
       "type": "COLOR",
       "values": {
-        "Light": "#f1f5f9",
+        "Light": "#e2e8f0",
         "Dark": "#1e293b"
       },
       "aliases": {
-        "Light": "color/slate/100",
+        "Light": "color/slate/200",
         "Dark": "color/slate/800"
       }
     },
@@ -3015,11 +3015,11 @@
       "name": "category/other/surface",
       "type": "COLOR",
       "values": {
-        "Light": "#f1f5f9",
+        "Light": "#e2e8f0",
         "Dark": "#1e293b"
       },
       "aliases": {
-        "Light": "color/slate/100",
+        "Light": "color/slate/200",
         "Dark": "color/slate/800"
       }
     },
@@ -3106,11 +3106,11 @@
       "name": "bg/account",
       "type": "COLOR",
       "values": {
-        "Light": "#f1f5f9",
+        "Light": "#e2e8f0",
         "Dark": "#334155"
       },
       "aliases": {
-        "Light": "color/slate/100",
+        "Light": "color/slate/200",
         "Dark": "color/slate/700"
       }
     },

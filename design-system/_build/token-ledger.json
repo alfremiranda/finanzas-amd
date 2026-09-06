@@ -1,876 +1,881 @@
 {
- "_meta": {
-  "version": "1.0",
-  "date": "2026-08-21",
-  "why": "The published CSS follows Figma. Names are derived mechanically (-- + figma name, / -> -); this ledger holds the ONLY things a rule cannot derive: what an old name became, and what died.",
-  "rule": "published custom property = \"--\" + figma variable name with \"/\" replaced by \"-\"",
-  "aliasPolicy": "An alias is emitted alongside the new name for one cycle, then retired when its use count reaches zero. Alfredo, 2026-08-21.",
-  "derivations": {
-   "provenance": "invert rename-map prefixes -> token-migration (applied 1.2 record)",
-   "scale": "numeric families: family picks the scale, value picks the rung",
-   "named": "written exception with a cited decision",
-   "logged": "second hop recorded in coherence-log after 1.2"
-  },
-  "notDerivedFromValues": "Value equality is not identity (Rule 7). Value matching left 88 of 132 ambiguous and produced confidently wrong uniques. It is not used here."
- },
- "acceptedValueChanges": {
-  "--badge-neutral-background": "Light surface ladder — bg/subtle moved slate-100 -> slate-20 (7882f319)",
-  "--badge-accent-background": "Light surface ladder — bg/subtle moved slate-100 -> slate-20 (7882f319)",
-  "--notification-secondary-background": "Light surface ladder — bg/subtle moved slate-100 -> slate-20 (7882f319)",
-  "--badge-neutral-foreground": "fg/subtle moved slate-500 -> slate-700 for contrast (7882f319)",
-  "--button-ghost-foreground": "fg/subtle moved slate-500 -> slate-700 for contrast (7882f319)",
-  "--notification-secondary-foreground": "fg/subtle moved slate-500 -> slate-700 for contrast (7882f319)",
-  "--badge-info-background": "income moved cyan -> blue at Alfredo's instruction; badge/info aliases income (f99b16ad)",
-  "--badge-info-foreground": "income moved cyan -> blue at Alfredo's instruction; badge/info aliases income (f99b16ad)",
-  "--button-outline-border": "outline border was slate-200 on light and read as no border; now slate-500 in both modes",
-  "--button-danger-border": "dark border was red-800 on a dark surface; now red-600, same as light",
-  "--sidebar-surface": "decided 2026-08-17, a token with no consumers: rgba(255,255,255,0.5) -> #ffffff",
-  "--input-size-sm-height": "Field/Input rework — control heights moved onto the 8-point scale, 28 -> 32 (f904c8cd)",
-  "--input-size-md-height": "Field/Input rework — 36 -> 40 (f904c8cd)",
-  "--input-size-lg-height": "Field/Input rework — 44 -> 48 (f904c8cd)",
-  "--input-size-lg-padding-x": "Field/Input rework — 16 -> 14, to keep the lg control on the scale (f904c8cd)",
-  "--account-amber-accent": "Light 600 -> 700, 2026-08-22. The dot inside AccountBadge sits on bg/account (slate-100), not on its own tint: 600 measured 2.91:1 there, below the 3:1 a graphic object needs. 700 gives 4.58:1.",
-  "--account-green-accent": "Light 600 -> 700, 2026-08-22. Same background as amber; 600 measured 3.01:1, a pass by 0.01 that any future tweak to bg/account would break. 700 gives 4.58:1."
- },
- "aliases": {
-  "--badge-primary-background": {
-   "uses": 0,
-   "to": "--action-chip-selected-background",
-   "via": "named",
-   "why": "A-2026-08-19 §2: badge/primary was borrowed by action-chip; own family authorised, renamed in place"
-  },
-  "--badge-primary-border": {
-   "uses": 0,
-   "to": "--action-chip-selected-border",
-   "via": "named",
-   "why": "A-2026-08-19 §2"
-  },
-  "--badge-primary-foreground": {
-   "uses": 0,
-   "to": "--action-chip-selected-foreground",
-   "via": "named",
-   "why": "A-2026-08-19 §2"
-  },
-  "--border-focus": {
-   "uses": 1,
-   "to": "--shadow-focus-inner",
-   "via": "provenance",
-   "why": "--color-border-focus -> --shadow-focus-inner in token-migration + coherence-log second hop"
-  },
-  "--border-input": {
-   "uses": 0,
-   "to": "--border-default",
-   "via": "provenance",
-   "why": "--color-border-input -> --border-default in token-migration"
-  },
-  "--border-width-hairline": {
-   "uses": 0,
-   "to": "--border-width-default",
-   "via": "scale",
-   "why": "value 1 on a scale family — the number is the job"
-  },
-  "--border-width-medium": {
-   "uses": 0,
-   "to": "--border-width-strong",
-   "via": "scale",
-   "why": "value 2 on a scale family — the number is the job"
-  },
-  "--border-width-thick": {
-   "uses": 0,
-   "to": "--border-width-strongest",
-   "via": "scale",
-   "why": "value 4 on a scale family — the number is the job"
-  },
-  "--category-bank-default": {
-   "uses": 0,
-   "to": "--category-bank-accent",
-   "via": "provenance",
-   "why": "--color-category-bank-default -> --category-bank-accent in token-migration"
-  },
-  "--category-connectivity-default": {
-   "uses": 0,
-   "to": "--category-connectivity-accent",
-   "via": "provenance",
-   "why": "--color-category-connectivity-default -> --category-connectivity-accent in token-migration"
-  },
-  "--category-family-default": {
-   "uses": 0,
-   "to": "--category-family-accent",
-   "via": "provenance",
-   "why": "--color-category-family-default -> --category-family-accent in token-migration"
-  },
-  "--category-food-default": {
-   "uses": 0,
-   "to": "--category-food-accent",
-   "via": "provenance",
-   "why": "--color-category-food-default -> --category-food-accent in token-migration"
-  },
-  "--category-health-default": {
-   "uses": 0,
-   "to": "--category-health-accent",
-   "via": "provenance",
-   "why": "--color-category-health-default -> --category-health-accent in token-migration"
-  },
-  "--category-home-default": {
-   "uses": 0,
-   "to": "--category-home-accent",
-   "via": "provenance",
-   "why": "--color-category-home-default -> --category-home-accent in token-migration"
-  },
-  "--category-insurance-default": {
-   "uses": 0,
-   "to": "--category-insurance-accent",
-   "via": "provenance",
-   "why": "--color-category-insurance-default -> --category-insurance-accent in token-migration"
-  },
-  "--category-other-default": {
-   "uses": 0,
-   "to": "--category-other-accent",
-   "via": "provenance",
-   "why": "--color-category-other-default -> --category-other-accent in token-migration"
-  },
-  "--category-recreation-default": {
-   "uses": 0,
-   "to": "--category-recreation-accent",
-   "via": "provenance",
-   "why": "--color-category-recreation-default -> --category-recreation-accent in token-migration"
-  },
-  "--category-savings-default": {
-   "uses": 0,
-   "to": "--category-savings-accent",
-   "via": "provenance",
-   "why": "--color-category-savings-default -> --category-savings-accent in token-migration"
-  },
-  "--category-shopping-default": {
-   "uses": 0,
-   "to": "--category-shopping-accent",
-   "via": "provenance",
-   "why": "--color-category-shopping-default -> --category-shopping-accent in token-migration"
-  },
-  "--category-tax-default": {
-   "uses": 0,
-   "to": "--category-tax-accent",
-   "via": "provenance",
-   "why": "--color-category-tax-default -> --category-tax-accent in token-migration"
-  },
-  "--category-transit-default": {
-   "uses": 0,
-   "to": "--category-transit-accent",
-   "via": "provenance",
-   "why": "--color-category-transit-default -> --category-transit-accent in token-migration"
-  },
-  "--category-travel-default": {
-   "uses": 0,
-   "to": "--category-travel-accent",
-   "via": "provenance",
-   "why": "--color-category-travel-default -> --category-travel-accent in token-migration"
-  },
-  "--category-work-default": {
-   "uses": 0,
-   "to": "--category-work-accent",
-   "via": "provenance",
-   "why": "--color-category-work-default -> --category-work-accent in token-migration"
-  },
-  "--data-categorical-1": {
-   "uses": 0,
-   "to": "--chart-categorical-1",
-   "via": "provenance",
-   "why": "--color-categorical-1 -> --chart-categorical-1 in token-migration"
-  },
-  "--data-categorical-2": {
-   "uses": 0,
-   "to": "--chart-categorical-2",
-   "via": "provenance",
-   "why": "--color-categorical-2 -> --chart-categorical-2 in token-migration"
-  },
-  "--data-categorical-3": {
-   "uses": 0,
-   "to": "--chart-categorical-3",
-   "via": "provenance",
-   "why": "--color-categorical-3 -> --chart-categorical-3 in token-migration"
-  },
-  "--data-categorical-4": {
-   "uses": 0,
-   "to": "--chart-categorical-4",
-   "via": "provenance",
-   "why": "--color-categorical-4 -> --chart-categorical-4 in token-migration"
-  },
-  "--data-categorical-5": {
-   "uses": 0,
-   "to": "--chart-categorical-5",
-   "via": "provenance",
-   "why": "--color-categorical-5 -> --chart-categorical-5 in token-migration"
-  },
-  "--data-sequential-1": {
-   "uses": 0,
-   "to": "--chart-sequential-1",
-   "via": "provenance",
-   "why": "--color-sequential-1 -> --chart-sequential-1 in token-migration"
-  },
-  "--data-sequential-2": {
-   "uses": 0,
-   "to": "--chart-sequential-2",
-   "via": "provenance",
-   "why": "--color-sequential-2 -> --chart-sequential-2 in token-migration"
-  },
-  "--data-sequential-3": {
-   "uses": 0,
-   "to": "--chart-sequential-3",
-   "via": "provenance",
-   "why": "--color-sequential-3 -> --chart-sequential-3 in token-migration"
-  },
-  "--data-sequential-4": {
-   "uses": 0,
-   "to": "--chart-sequential-4",
-   "via": "provenance",
-   "why": "--color-sequential-4 -> --chart-sequential-4 in token-migration"
-  },
-  "--data-sequential-5": {
-   "uses": 0,
-   "to": "--chart-sequential-5",
-   "via": "provenance",
-   "why": "--color-sequential-5 -> --chart-sequential-5 in token-migration"
-  },
-  "--foreground-default": {
-   "uses": 12,
-   "to": "--fg-default",
-   "via": "provenance",
-   "why": "--color-foreground-default -> --fg-default in token-migration"
-  },
-  "--foreground-on-card": {
-   "uses": 19,
-   "to": "--fg-default",
-   "via": "provenance",
-   "why": "--color-foreground-on-card -> --fg-default in token-migration"
-  },
-  "--foreground-on-inverse": {
-   "uses": 2,
-   "to": "--fg-on-inverse",
-   "via": "provenance",
-   "why": "--color-foreground-on-inverse -> --fg-on-inverse in token-migration"
-  },
-  "--foreground-on-popover": {
-   "uses": 6,
-   "to": "--fg-default",
-   "via": "provenance",
-   "why": "--color-foreground-on-popover -> --fg-default in token-migration"
-  },
-  "--foreground-placeholder": {
-   "uses": 8,
-   "to": "--fg-placeholder",
-   "via": "provenance",
-   "why": "--color-foreground-placeholder -> --fg-placeholder in token-migration"
-  },
-  "--foreground-subtle": {
-   "uses": 38,
-   "to": "--fg-subtle",
-   "via": "provenance",
-   "why": "--color-foreground-subtle -> --fg-subtle in token-migration"
-  },
-  "--input-color-border-focus": {
-   "uses": 3,
-   "to": "--input-color-ring",
-   "via": "named",
-   "why": "a focus border IS the ring; Figma keeps one token for the job, not two"
-  },
-  "--interactive-accent": {
-   "uses": 1,
-   "to": "--bg-subtle",
-   "via": "provenance",
-   "why": "--color-interactive-accent -> --bg-subtle in token-migration"
-  },
-  "--interactive-accent-foreground": {
-   "uses": 1,
-   "to": "--fg-on-subtle",
-   "via": "provenance",
-   "why": "--color-interactive-accent-foreground -> --fg-on-subtle in token-migration"
-  },
-  "--interactive-primary": {
-   "uses": 14,
-   "to": "--bg-brand",
-   "via": "provenance",
-   "why": "--color-interactive-primary -> --bg-brand in token-migration"
-  },
-  "--interactive-primary-foreground": {
-   "uses": 3,
-   "to": "--fg-on-brand",
-   "via": "provenance",
-   "why": "--color-interactive-primary-foreground -> --fg-on-brand in token-migration"
-  },
-  "--interactive-secondary": {
-   "uses": 1,
-   "to": "--bg-subtle",
-   "via": "provenance",
-   "why": "--color-interactive-secondary -> --bg-subtle in token-migration"
-  },
-  "--interactive-secondary-foreground": {
-   "uses": 1,
-   "to": "--fg-on-subtle",
-   "via": "provenance",
-   "why": "--color-interactive-secondary-foreground -> --fg-on-subtle in token-migration"
-  },
-  "--kpi-expense-default": {
-   "uses": 2,
-   "to": "--fg-expense",
-   "via": "provenance",
-   "why": "--color-expense-default -> --fg-expense in token-migration"
-  },
-  "--kpi-expense-foreground": {
-   "uses": 2,
-   "to": "--fg-expense-strong",
-   "via": "provenance",
-   "why": "--color-expense-foreground -> --fg-expense-strong in token-migration"
-  },
-  "--kpi-expense-surface": {
-   "uses": 1,
-   "to": "--bg-expense-subtle",
-   "via": "provenance",
-   "why": "--color-expense-surface -> --bg-expense-subtle in token-migration"
-  },
-  "--kpi-income-default": {
-   "uses": 2,
-   "to": "--fg-income",
-   "via": "provenance",
-   "why": "--color-income-default -> --fg-income in token-migration"
-  },
-  "--kpi-income-foreground": {
-   "uses": 3,
-   "to": "--fg-income-strong",
-   "via": "provenance",
-   "why": "--color-income-foreground -> --fg-income-strong in token-migration"
-  },
-  "--kpi-income-surface": {
-   "uses": 2,
-   "to": "--bg-income-subtle",
-   "via": "provenance",
-   "why": "--color-income-surface -> --bg-income-subtle in token-migration"
-  },
-  "--kpi-net-default": {
-   "uses": 2,
-   "to": "--bg-net",
-   "via": "provenance",
-   "why": "--color-net-default -> --bg-net in token-migration"
-  },
-  "--kpi-net-foreground": {
-   "uses": 1,
-   "to": "--fg-net",
-   "via": "provenance",
-   "why": "--color-net-foreground -> --fg-net in token-migration"
-  },
-  "--kpi-net-surface": {
-   "uses": 1,
-   "to": "--bg-net-subtle",
-   "via": "provenance",
-   "why": "--color-net-surface -> --bg-net-subtle in token-migration"
-  },
-  "--kpi-provision-default": {
-   "uses": 2,
-   "to": "--fg-provision",
-   "via": "provenance",
-   "why": "--color-provision-default -> --fg-provision in token-migration"
-  },
-  "--kpi-provision-foreground": {
-   "uses": 2,
-   "to": "--fg-provision-strong",
-   "via": "provenance",
-   "why": "--color-provision-foreground -> --fg-provision-strong in token-migration"
-  },
-  "--kpi-provision-surface": {
-   "uses": 2,
-   "to": "--bg-provision-subtle",
-   "via": "provenance",
-   "why": "--color-provision-surface -> --bg-provision-subtle in token-migration"
-  },
-  "--kpi-tax-default": {
-   "uses": 2,
-   "to": "--bg-tax",
-   "via": "provenance",
-   "why": "--color-tax-default -> --bg-tax in token-migration"
-  },
-  "--kpi-tax-foreground": {
-   "uses": 1,
-   "to": "--fg-tax",
-   "via": "provenance",
-   "why": "--color-tax-foreground -> --fg-tax in token-migration"
-  },
-  "--kpi-tax-surface": {
-   "uses": 1,
-   "to": "--bg-tax-subtle",
-   "via": "provenance",
-   "why": "--color-tax-surface -> --bg-tax-subtle in token-migration"
-  },
-  "--padding-lg": {
-   "uses": 0,
-   "to": "--spacing-20",
-   "via": "scale",
-   "why": "value 20 on a scale family — the number is the job"
-  },
-  "--padding-md": {
-   "uses": 0,
-   "to": "--spacing-16",
-   "via": "scale",
-   "why": "value 16 on a scale family — the number is the job"
-  },
-  "--padding-sm": {
-   "uses": 0,
-   "to": "--spacing-8",
-   "via": "scale",
-   "why": "value 8 on a scale family — the number is the job"
-  },
-  "--padding-xl": {
-   "uses": 0,
-   "to": "--spacing-24",
-   "via": "scale",
-   "why": "value 24 on a scale family — the number is the job"
-  },
-  "--padding-xs": {
-   "uses": 0,
-   "to": "--spacing-4",
-   "via": "scale",
-   "why": "value 4 on a scale family — the number is the job"
-  },
-  "--radius-2xl": {
-   "uses": 0,
-   "to": "--radius-16",
-   "via": "scale",
-   "why": "value 16 on a scale family — the number is the job"
-  },
-  "--radius-lg": {
-   "uses": 12,
-   "to": "--radius-8",
-   "via": "scale",
-   "why": "value 8 on a scale family — the number is the job"
-  },
-  "--radius-md": {
-   "uses": 4,
-   "to": "--radius-6",
-   "via": "scale",
-   "why": "value 6 on a scale family — the number is the job"
-  },
-  "--radius-sm": {
-   "uses": 0,
-   "to": "--radius-4",
-   "via": "scale",
-   "why": "value 4 on a scale family — the number is the job"
-  },
-  "--radius-xl": {
-   "uses": 13,
-   "to": "--radius-12",
-   "via": "scale",
-   "why": "value 12 on a scale family — the number is the job"
-  },
-  "--radius-xs": {
-   "uses": 0,
-   "to": "--radius-2",
-   "via": "scale",
-   "why": "value 2 on a scale family — the number is the job"
-  },
-  "--size-0": {
-   "uses": 0,
-   "to": "--spacing-0",
-   "via": "scale",
-   "why": "value 0 on a scale family — the number is the job"
-  },
-  "--size-16": {
-   "uses": 0,
-   "to": "--spacing-16",
-   "via": "scale",
-   "why": "value 16 on a scale family — the number is the job"
-  },
-  "--size-20": {
-   "uses": 0,
-   "to": "--spacing-20",
-   "via": "scale",
-   "why": "value 20 on a scale family — the number is the job"
-  },
-  "--size-24": {
-   "uses": 0,
-   "to": "--spacing-24",
-   "via": "scale",
-   "why": "value 24 on a scale family — the number is the job"
-  },
-  "--size-32": {
-   "uses": 0,
-   "to": "--spacing-32",
-   "via": "scale",
-   "why": "value 32 on a scale family — the number is the job"
-  },
-  "--size-4": {
-   "uses": 0,
-   "to": "--spacing-4",
-   "via": "scale",
-   "why": "value 4 on a scale family — the number is the job"
-  },
-  "--size-48": {
-   "uses": 0,
-   "to": "--spacing-48",
-   "via": "scale",
-   "why": "value 48 on a scale family — the number is the job"
-  },
-  "--size-64": {
-   "uses": 0,
-   "to": "--spacing-64",
-   "via": "scale",
-   "why": "value 64 on a scale family — the number is the job"
-  },
-  "--size-8": {
-   "uses": 0,
-   "to": "--spacing-8",
-   "via": "scale",
-   "why": "value 8 on a scale family — the number is the job"
-  },
-  "--size-icon-lg": {
-   "uses": 0,
-   "to": "--icon-size-xl",
-   "via": "scale",
-   "why": "value 24 on a scale family — the number is the job"
-  },
-  "--size-icon-md": {
-   "uses": 0,
-   "to": "--icon-size-lg",
-   "via": "scale",
-   "why": "value 20 on a scale family — the number is the job"
-  },
-  "--size-icon-sm": {
-   "uses": 0,
-   "to": "--icon-size-md",
-   "via": "scale",
-   "why": "value 16 on a scale family — the number is the job"
-  },
-  "--size-icon-xs": {
-   "uses": 0,
-   "to": "--icon-size-sm",
-   "via": "scale",
-   "why": "value 12 on a scale family — the number is the job"
-  },
-  "--spacing-component-lg": {
-   "uses": 0,
-   "to": "--spacing-16",
-   "via": "scale",
-   "why": "value 16 on a scale family — the number is the job"
-  },
-  "--spacing-component-md": {
-   "uses": 0,
-   "to": "--spacing-12",
-   "via": "scale",
-   "why": "value 12 on a scale family — the number is the job"
-  },
-  "--spacing-component-sm": {
-   "uses": 0,
-   "to": "--spacing-8",
-   "via": "scale",
-   "why": "value 8 on a scale family — the number is the job"
-  },
-  "--spacing-component-xl": {
-   "uses": 0,
-   "to": "--spacing-20",
-   "via": "scale",
-   "why": "value 20 on a scale family — the number is the job"
-  },
-  "--spacing-component-xs": {
-   "uses": 0,
-   "to": "--spacing-4",
-   "via": "scale",
-   "why": "value 4 on a scale family — the number is the job"
-  },
-  "--status-danger-default": {
-   "uses": 3,
-   "to": "--fg-danger-strong",
-   "via": "provenance",
-   "why": "--color-danger-default -> --fg-danger-strong in token-migration"
-  },
-  "--status-danger-foreground": {
-   "uses": 0,
-   "to": "--fg-danger-strongest",
-   "via": "provenance",
-   "why": "--color-danger-foreground -> --fg-danger-strongest in token-migration"
-  },
-  "--status-danger-surface": {
-   "uses": 2,
-   "to": "--bg-danger-subtlest",
-   "via": "provenance",
-   "why": "--color-danger-surface -> --bg-danger-subtlest in token-migration"
-  },
-  "--status-destructive-default": {
-   "uses": 1,
-   "to": "--fg-danger-strong",
-   "via": "provenance",
-   "why": "--color-destructive-default -> --fg-danger-strong in token-migration"
-  },
-  "--status-destructive-foreground": {
-   "uses": 1,
-   "to": "--button-danger-filled-foreground",
-   "via": "named",
-   "why": "contrast: --fg-on-solid is white in both modes and measures 2.77:1 on the dark danger fill #f87171; --button-danger-filled-foreground is #450a0a there, 5.84:1"
-  },
-  "--status-live-default": {
-   "uses": 0,
-   "to": "--bg-live",
-   "via": "provenance",
-   "why": "--color-live-default -> --bg-live in token-migration"
-  },
-  "--status-live-ring": {
-   "uses": 0,
-   "to": "--bg-live-ring",
-   "via": "provenance",
-   "why": "--color-live-ring -> --bg-live-ring in token-migration"
-  },
-  "--surface-feedback-danger": {
-   "uses": 0,
-   "to": "--bg-danger-subtle",
-   "via": "provenance",
-   "why": "--color-feedback-danger -> --bg-danger-subtle in token-migration"
-  },
-  "--surface-feedback-danger-emphasis": {
-   "uses": 0,
-   "to": "--fg-danger",
-   "via": "provenance",
-   "why": "--color-feedback-danger-emphasis -> --fg-danger in token-migration"
-  },
-  "--surface-feedback-info": {
-   "uses": 0,
-   "to": "--bg-info-subtle",
-   "via": "provenance",
-   "why": "--color-feedback-info -> --bg-info-subtle in token-migration"
-  },
-  "--surface-feedback-info-emphasis": {
-   "uses": 0,
-   "to": "--fg-info",
-   "via": "provenance",
-   "why": "--color-feedback-info-emphasis -> --fg-info in token-migration"
-  },
-  "--surface-feedback-neutral": {
-   "uses": 1,
-   "to": "--bg-neutral-subtle",
-   "via": "provenance",
-   "why": "--color-feedback-neutral -> --bg-neutral-subtle in token-migration"
-  },
-  "--surface-feedback-neutral-emphasis": {
-   "uses": 0,
-   "to": "--fg-neutral",
-   "via": "provenance",
-   "why": "--color-feedback-neutral-emphasis -> --fg-neutral in token-migration"
-  },
-  "--surface-feedback-success": {
-   "uses": 0,
-   "to": "--bg-success-subtle",
-   "via": "provenance",
-   "why": "--color-feedback-success -> --bg-success-subtle in token-migration"
-  },
-  "--surface-feedback-success-emphasis": {
-   "uses": 0,
-   "to": "--fg-success",
-   "via": "provenance",
-   "why": "--color-feedback-success-emphasis -> --fg-success in token-migration"
-  },
-  "--surface-feedback-warning": {
-   "uses": 0,
-   "to": "--bg-warning-subtle",
-   "via": "provenance",
-   "why": "--color-feedback-warning -> --bg-warning-subtle in token-migration"
-  },
-  "--surface-feedback-warning-emphasis": {
-   "uses": 0,
-   "to": "--fg-warning",
-   "via": "provenance",
-   "why": "--color-feedback-warning-emphasis -> --fg-warning in token-migration"
-  },
-  "--surface-inverse": {
-   "uses": 2,
-   "to": "--bg-inverse",
-   "via": "provenance",
-   "why": "--color-surface-inverse -> --bg-inverse in token-migration"
-  },
-  "--surface-popover": {
-   "uses": 3,
-   "to": "--bg-anchored",
-   "via": "provenance",
-   "why": "--color-surface-popover -> --bg-anchored in token-migration + coherence-log second hop"
-  },
-  "--surface-raised": {
-   "uses": 0,
-   "to": "--bg-floating",
-   "via": "provenance",
-   "why": "--color-surface-raised -> --bg-floating in token-migration"
-  },
-  "--surface-scrim": {
-   "uses": 0,
-   "to": "--bg-scrim",
-   "via": "provenance",
-   "why": "--color-surface-scrim -> --bg-scrim in token-migration"
-  },
-  "--surface-status-active": {
-   "uses": 0,
-   "to": "--bg-active",
-   "via": "provenance",
-   "why": "--color-status-active -> --bg-active in token-migration"
-  },
-  "--surface-status-disabled": {
-   "uses": 1,
-   "to": "--bg-disabled",
-   "via": "provenance",
-   "why": "--color-status-disabled -> --bg-disabled in token-migration"
-  },
-  "--surface-status-hover": {
-   "uses": 1,
-   "to": "--bg-hover",
-   "via": "provenance",
-   "why": "--color-status-hover -> --bg-hover in token-migration"
-  },
-  "--surface-status-selected": {
-   "uses": 1,
-   "to": "--bg-selected",
-   "via": "provenance",
-   "why": "--color-status-selected -> --bg-selected in token-migration"
-  },
-  "--surface-sunken": {
-   "uses": 0,
-   "to": "--bg-sunken",
-   "via": "provenance",
-   "why": "--color-surface-sunken -> --bg-sunken in token-migration"
-  },
-  "--surface-wrap-card": {
-   "uses": 10,
-   "to": "--bg-surface",
-   "via": "provenance",
-   "why": "--color-wrap-card -> --bg-surface in token-migration"
-  },
-  "--surface-wrap-container": {
-   "uses": 0,
-   "to": "--bg-chrome",
-   "via": "provenance",
-   "why": "--color-wrap-container -> --bg-chrome in token-migration + coherence-log second hop"
-  },
-  "--surface-wrap-default": {
-   "uses": 3,
-   "to": "--bg-canvas",
-   "via": "provenance",
-   "why": "--color-wrap-default -> --bg-canvas in token-migration"
-  },
-  "--surface-wrap-subtle": {
-   "uses": 6,
-   "to": "--bg-subtle",
-   "via": "provenance",
-   "why": "--color-wrap-subtle -> --bg-subtle in token-migration"
-  },
-  "--spinner-track-on-dark": {
-   "uses": 1,
-   "to": "--spinner-track-on-solid",
-   "via": "named",
-   "why": "Renamed 2026-08-22. on-light/on-dark named the BUTTON, not the surface: the values invert between modes, so on-dark was light in light mode and dark in dark — the opposite of what the name promised. Found by Dev while implementing the spinner."
-  },
-  "--spinner-head-on-dark": {
-   "uses": 1,
-   "to": "--spinner-head-on-solid",
-   "via": "named",
-   "why": "Renamed 2026-08-22. on-light/on-dark named the BUTTON, not the surface: the values invert between modes, so on-dark was light in light mode and dark in dark — the opposite of what the name promised. Found by Dev while implementing the spinner."
-  },
-  "--spinner-track-on-light": {
-   "uses": 1,
-   "to": "--spinner-track-default",
-   "via": "named",
-   "why": "Renamed 2026-08-22. on-light/on-dark named the BUTTON, not the surface: the values invert between modes, so on-dark was light in light mode and dark in dark — the opposite of what the name promised. Found by Dev while implementing the spinner."
-  },
-  "--spinner-head-on-light": {
-   "uses": 1,
-   "to": "--spinner-head-default",
-   "via": "named",
-   "why": "Renamed 2026-08-22. on-light/on-dark named the BUTTON, not the surface: the values invert between modes, so on-dark was light in light mode and dark in dark — the opposite of what the name promised. Found by Dev while implementing the spinner."
-  }
- },
- "tombstones": {
-  "--border-width-none": {
-   "uses": 0,
-   "via": "logged",
-   "why": "1.3 collapsed the three zeros into scale/0; Semantic keeps spacing/0 and radius/none but deliberately no border-width/none — a zero-width border is no border. Zero consumers."
-  },
-  "--surface-brand-default": {
-   "uses": 0,
-   "via": "provenance",
-   "why": "token-migration.removed — deleted in 1.2, nothing replaces it"
-  },
-  "--surface-brand-emphasis": {
-   "uses": 0,
-   "via": "provenance",
-   "why": "token-migration.removed — deleted in 1.2, nothing replaces it"
-  },
-  "--surface-overlay": {
-   "uses": 0,
-   "via": "provenance",
-   "why": "token-migration.removed — deleted in 1.2, nothing replaces it"
-  },
-  "--account-1-foreground": {
-   "uses": 0,
-   "via": "decided",
-   "why": "Named a specific account (arq · toptal · bancol · other). Account colour became user data on 2026-08-22 — docs/25-account-color.md. Dev repointed build.py 109-112 and the preview mock at 525; verified at zero consumers before tombstoning, not taken from the commit message.",
-   "frozenWas": {
-    "light": "#0e7490",
-    "dark": "#67e8f9"
-   }
-  },
-  "--account-1-surface": {
-   "uses": 0,
-   "via": "decided",
-   "why": "Named a specific account (arq · toptal · bancol · other). Account colour became user data on 2026-08-22 — docs/25-account-color.md. Dev repointed build.py 109-112 and the preview mock at 525; verified at zero consumers before tombstoning, not taken from the commit message.",
-   "frozenWas": {
-    "light": "#ecfeff",
-    "dark": "#083344"
-   }
-  },
-  "--account-2-foreground": {
-   "uses": 0,
-   "via": "decided",
-   "why": "Named a specific account (arq · toptal · bancol · other). Account colour became user data on 2026-08-22 — docs/25-account-color.md. Dev repointed build.py 109-112 and the preview mock at 525; verified at zero consumers before tombstoning, not taken from the commit message.",
-   "frozenWas": {
-    "light": "#7c3aed",
-    "dark": "#c4b5fd"
-   }
-  },
-  "--account-2-surface": {
-   "uses": 0,
-   "via": "decided",
-   "why": "Named a specific account (arq · toptal · bancol · other). Account colour became user data on 2026-08-22 — docs/25-account-color.md. Dev repointed build.py 109-112 and the preview mock at 525; verified at zero consumers before tombstoning, not taken from the commit message.",
-   "frozenWas": {
-    "light": "#f5f3ff",
-    "dark": "#4c1d95"
-   }
-  },
-  "--account-3-foreground": {
-   "uses": 0,
-   "via": "decided",
-   "why": "Named a specific account (arq · toptal · bancol · other). Account colour became user data on 2026-08-22 — docs/25-account-color.md. Dev repointed build.py 109-112 and the preview mock at 525; verified at zero consumers before tombstoning, not taken from the commit message.",
-   "frozenWas": {
-    "light": "#047857",
-    "dark": "#6ee7b7"
-   }
-  },
-  "--account-3-surface": {
-   "uses": 0,
-   "via": "decided",
-   "why": "Named a specific account (arq · toptal · bancol · other). Account colour became user data on 2026-08-22 — docs/25-account-color.md. Dev repointed build.py 109-112 and the preview mock at 525; verified at zero consumers before tombstoning, not taken from the commit message.",
-   "frozenWas": {
-    "light": "#ecfdf5",
-    "dark": "#022c22"
-   }
-  },
-  "--account-4-foreground": {
-   "uses": 0,
-   "via": "decided",
-   "why": "Named a specific account (arq · toptal · bancol · other). Account colour became user data on 2026-08-22 — docs/25-account-color.md. Dev repointed build.py 109-112 and the preview mock at 525; verified at zero consumers before tombstoning, not taken from the commit message.",
-   "frozenWas": {
-    "light": "#475569",
-    "dark": "#cbd5e1"
-   }
-  },
-  "--account-4-surface": {
-   "uses": 0,
-   "via": "decided",
-   "why": "Named a specific account (arq · toptal · bancol · other). Account colour became user data on 2026-08-22 — docs/25-account-color.md. Dev repointed build.py 109-112 and the preview mock at 525; verified at zero consumers before tombstoning, not taken from the commit message.",
-   "frozenWas": {
-    "light": "#f1f5f9",
-    "dark": "#334155"
-   }
-  }
- },
- "pending": {}
+  "_meta": {
+    "version": "1.0",
+    "date": "2026-08-21",
+    "why": "The published CSS follows Figma. Names are derived mechanically (-- + figma name, / -> -); this ledger holds the ONLY things a rule cannot derive: what an old name became, and what died.",
+    "rule": "published custom property = \"--\" + figma variable name with \"/\" replaced by \"-\"",
+    "aliasPolicy": "An alias is emitted alongside the new name for one cycle, then retired when its use count reaches zero. Alfredo, 2026-08-21.",
+    "derivations": {
+      "provenance": "invert rename-map prefixes -> token-migration (applied 1.2 record)",
+      "scale": "numeric families: family picks the scale, value picks the rung",
+      "named": "written exception with a cited decision",
+      "logged": "second hop recorded in coherence-log after 1.2"
+    },
+    "notDerivedFromValues": "Value equality is not identity (Rule 7). Value matching left 88 of 132 ambiguous and produced confidently wrong uniques. It is not used here."
+  },
+  "acceptedValueChanges": {
+    "--badge-neutral-background": "Light surface ladder — bg/subtle moved slate-100 -> slate-20 (7882f319)",
+    "--badge-accent-background": "Light surface ladder — bg/subtle moved slate-100 -> slate-20 (7882f319)",
+    "--notification-secondary-background": "Light surface ladder — bg/subtle moved slate-100 -> slate-20 (7882f319)",
+    "--badge-neutral-foreground": "fg/subtle moved slate-500 -> slate-700 for contrast (7882f319)",
+    "--button-ghost-foreground": "fg/subtle moved slate-500 -> slate-700 for contrast (7882f319)",
+    "--notification-secondary-foreground": "fg/subtle moved slate-500 -> slate-700 for contrast (7882f319)",
+    "--badge-info-background": "income moved cyan -> blue at Alfredo's instruction; badge/info aliases income (f99b16ad)",
+    "--badge-info-foreground": "income moved cyan -> blue at Alfredo's instruction; badge/info aliases income (f99b16ad)",
+    "--button-outline-border": "outline border was slate-200 on light and read as no border; now slate-500 in both modes",
+    "--button-danger-border": "dark border was red-800 on a dark surface; now red-600, same as light",
+    "--sidebar-surface": "decided 2026-08-17, a token with no consumers: rgba(255,255,255,0.5) -> #ffffff",
+    "--input-size-sm-height": "Field/Input rework — control heights moved onto the 8-point scale, 28 -> 32 (f904c8cd)",
+    "--input-size-md-height": "Field/Input rework — 36 -> 40 (f904c8cd)",
+    "--input-size-lg-height": "Field/Input rework — 44 -> 48 (f904c8cd)",
+    "--input-size-lg-padding-x": "Field/Input rework — 16 -> 14, to keep the lg control on the scale (f904c8cd)",
+    "--account-amber-accent": "Light 600 -> 700, 2026-08-22. The dot inside AccountBadge sits on bg/account (slate-100), not on its own tint: 600 measured 2.91:1 there, below the 3:1 a graphic object needs. 700 gives 4.58:1.",
+    "--account-green-accent": "Light 600 -> 700, 2026-08-22. Same background as amber; 600 measured 3.01:1, a pass by 0.01 that any future tweak to bg/account would break. 700 gives 4.58:1.",
+    "--bg-hover": "Neutral quiet-fill rung — slate/100 -> slate/200 in Light. It resolved to #f1f5f9, exactly bg/surface/default, so anything painted with it on a card was invisible. Five semantic tokens shared that value and all five are NEUTRALS; the eleven hued category surfaces measure 1.01-1.06 against the same card and stay, because they are told apart by hue and a neutral has nothing but lightness. Found three times at its own site first (ss glyph, Progress track, Skeleton). Alfredo, 2026-09-02.",
+    "--bg-disabled": "Neutral quiet-fill rung — slate/100 -> slate/200 in Light. It resolved to #f1f5f9, exactly bg/surface/default, so anything painted with it on a card was invisible. Five semantic tokens shared that value and all five are NEUTRALS; the eleven hued category surfaces measure 1.01-1.06 against the same card and stay, because they are told apart by hue and a neutral has nothing but lightness. Found three times at its own site first (ss glyph, Progress track, Skeleton). Alfredo, 2026-09-02.",
+    "--bg-neutral-subtle": "Neutral quiet-fill rung — slate/100 -> slate/200 in Light. It resolved to #f1f5f9, exactly bg/surface/default, so anything painted with it on a card was invisible. Five semantic tokens shared that value and all five are NEUTRALS; the eleven hued category surfaces measure 1.01-1.06 against the same card and stay, because they are told apart by hue and a neutral has nothing but lightness. Found three times at its own site first (ss glyph, Progress track, Skeleton). Alfredo, 2026-09-02.",
+    "--category-other-surface": "Neutral quiet-fill rung — slate/100 -> slate/200 in Light. It resolved to #f1f5f9, exactly bg/surface/default, so anything painted with it on a card was invisible. Five semantic tokens shared that value and all five are NEUTRALS; the eleven hued category surfaces measure 1.01-1.06 against the same card and stay, because they are told apart by hue and a neutral has nothing but lightness. Found three times at its own site first (ss glyph, Progress track, Skeleton). Alfredo, 2026-09-02.",
+    "--bg-account": "Neutral quiet-fill rung — slate/100 -> slate/200 in Light. It resolved to #f1f5f9, exactly bg/surface/default, so anything painted with it on a card was invisible. Five semantic tokens shared that value and all five are NEUTRALS; the eleven hued category surfaces measure 1.01-1.06 against the same card and stay, because they are told apart by hue and a neutral has nothing but lightness. Found three times at its own site first (ss glyph, Progress track, Skeleton). Alfredo, 2026-09-02."
+  },
+  "aliases": {
+    "--badge-primary-background": {
+      "uses": 0,
+      "to": "--action-chip-selected-background",
+      "via": "named",
+      "why": "A-2026-08-19 §2: badge/primary was borrowed by action-chip; own family authorised, renamed in place"
+    },
+    "--badge-primary-border": {
+      "uses": 0,
+      "to": "--action-chip-selected-border",
+      "via": "named",
+      "why": "A-2026-08-19 §2"
+    },
+    "--badge-primary-foreground": {
+      "uses": 0,
+      "to": "--action-chip-selected-foreground",
+      "via": "named",
+      "why": "A-2026-08-19 §2"
+    },
+    "--border-focus": {
+      "uses": 1,
+      "to": "--shadow-focus-inner",
+      "via": "provenance",
+      "why": "--color-border-focus -> --shadow-focus-inner in token-migration + coherence-log second hop"
+    },
+    "--border-input": {
+      "uses": 0,
+      "to": "--border-default",
+      "via": "provenance",
+      "why": "--color-border-input -> --border-default in token-migration"
+    },
+    "--border-width-hairline": {
+      "uses": 0,
+      "to": "--border-width-default",
+      "via": "scale",
+      "why": "value 1 on a scale family — the number is the job"
+    },
+    "--border-width-medium": {
+      "uses": 0,
+      "to": "--border-width-strong",
+      "via": "scale",
+      "why": "value 2 on a scale family — the number is the job"
+    },
+    "--border-width-thick": {
+      "uses": 0,
+      "to": "--border-width-strongest",
+      "via": "scale",
+      "why": "value 4 on a scale family — the number is the job"
+    },
+    "--category-bank-default": {
+      "uses": 0,
+      "to": "--category-bank-accent",
+      "via": "provenance",
+      "why": "--color-category-bank-default -> --category-bank-accent in token-migration"
+    },
+    "--category-connectivity-default": {
+      "uses": 0,
+      "to": "--category-connectivity-accent",
+      "via": "provenance",
+      "why": "--color-category-connectivity-default -> --category-connectivity-accent in token-migration"
+    },
+    "--category-family-default": {
+      "uses": 0,
+      "to": "--category-family-accent",
+      "via": "provenance",
+      "why": "--color-category-family-default -> --category-family-accent in token-migration"
+    },
+    "--category-food-default": {
+      "uses": 0,
+      "to": "--category-food-accent",
+      "via": "provenance",
+      "why": "--color-category-food-default -> --category-food-accent in token-migration"
+    },
+    "--category-health-default": {
+      "uses": 0,
+      "to": "--category-health-accent",
+      "via": "provenance",
+      "why": "--color-category-health-default -> --category-health-accent in token-migration"
+    },
+    "--category-home-default": {
+      "uses": 0,
+      "to": "--category-home-accent",
+      "via": "provenance",
+      "why": "--color-category-home-default -> --category-home-accent in token-migration"
+    },
+    "--category-insurance-default": {
+      "uses": 0,
+      "to": "--category-insurance-accent",
+      "via": "provenance",
+      "why": "--color-category-insurance-default -> --category-insurance-accent in token-migration"
+    },
+    "--category-other-default": {
+      "uses": 0,
+      "to": "--category-other-accent",
+      "via": "provenance",
+      "why": "--color-category-other-default -> --category-other-accent in token-migration"
+    },
+    "--category-recreation-default": {
+      "uses": 0,
+      "to": "--category-recreation-accent",
+      "via": "provenance",
+      "why": "--color-category-recreation-default -> --category-recreation-accent in token-migration"
+    },
+    "--category-savings-default": {
+      "uses": 0,
+      "to": "--category-savings-accent",
+      "via": "provenance",
+      "why": "--color-category-savings-default -> --category-savings-accent in token-migration"
+    },
+    "--category-shopping-default": {
+      "uses": 0,
+      "to": "--category-shopping-accent",
+      "via": "provenance",
+      "why": "--color-category-shopping-default -> --category-shopping-accent in token-migration"
+    },
+    "--category-tax-default": {
+      "uses": 0,
+      "to": "--category-tax-accent",
+      "via": "provenance",
+      "why": "--color-category-tax-default -> --category-tax-accent in token-migration"
+    },
+    "--category-transit-default": {
+      "uses": 0,
+      "to": "--category-transit-accent",
+      "via": "provenance",
+      "why": "--color-category-transit-default -> --category-transit-accent in token-migration"
+    },
+    "--category-travel-default": {
+      "uses": 0,
+      "to": "--category-travel-accent",
+      "via": "provenance",
+      "why": "--color-category-travel-default -> --category-travel-accent in token-migration"
+    },
+    "--category-work-default": {
+      "uses": 0,
+      "to": "--category-work-accent",
+      "via": "provenance",
+      "why": "--color-category-work-default -> --category-work-accent in token-migration"
+    },
+    "--data-categorical-1": {
+      "uses": 0,
+      "to": "--chart-categorical-1",
+      "via": "provenance",
+      "why": "--color-categorical-1 -> --chart-categorical-1 in token-migration"
+    },
+    "--data-categorical-2": {
+      "uses": 0,
+      "to": "--chart-categorical-2",
+      "via": "provenance",
+      "why": "--color-categorical-2 -> --chart-categorical-2 in token-migration"
+    },
+    "--data-categorical-3": {
+      "uses": 0,
+      "to": "--chart-categorical-3",
+      "via": "provenance",
+      "why": "--color-categorical-3 -> --chart-categorical-3 in token-migration"
+    },
+    "--data-categorical-4": {
+      "uses": 0,
+      "to": "--chart-categorical-4",
+      "via": "provenance",
+      "why": "--color-categorical-4 -> --chart-categorical-4 in token-migration"
+    },
+    "--data-categorical-5": {
+      "uses": 0,
+      "to": "--chart-categorical-5",
+      "via": "provenance",
+      "why": "--color-categorical-5 -> --chart-categorical-5 in token-migration"
+    },
+    "--data-sequential-1": {
+      "uses": 0,
+      "to": "--chart-sequential-1",
+      "via": "provenance",
+      "why": "--color-sequential-1 -> --chart-sequential-1 in token-migration"
+    },
+    "--data-sequential-2": {
+      "uses": 0,
+      "to": "--chart-sequential-2",
+      "via": "provenance",
+      "why": "--color-sequential-2 -> --chart-sequential-2 in token-migration"
+    },
+    "--data-sequential-3": {
+      "uses": 0,
+      "to": "--chart-sequential-3",
+      "via": "provenance",
+      "why": "--color-sequential-3 -> --chart-sequential-3 in token-migration"
+    },
+    "--data-sequential-4": {
+      "uses": 0,
+      "to": "--chart-sequential-4",
+      "via": "provenance",
+      "why": "--color-sequential-4 -> --chart-sequential-4 in token-migration"
+    },
+    "--data-sequential-5": {
+      "uses": 0,
+      "to": "--chart-sequential-5",
+      "via": "provenance",
+      "why": "--color-sequential-5 -> --chart-sequential-5 in token-migration"
+    },
+    "--foreground-default": {
+      "uses": 12,
+      "to": "--fg-default",
+      "via": "provenance",
+      "why": "--color-foreground-default -> --fg-default in token-migration"
+    },
+    "--foreground-on-card": {
+      "uses": 19,
+      "to": "--fg-default",
+      "via": "provenance",
+      "why": "--color-foreground-on-card -> --fg-default in token-migration"
+    },
+    "--foreground-on-inverse": {
+      "uses": 2,
+      "to": "--fg-on-inverse",
+      "via": "provenance",
+      "why": "--color-foreground-on-inverse -> --fg-on-inverse in token-migration"
+    },
+    "--foreground-on-popover": {
+      "uses": 6,
+      "to": "--fg-default",
+      "via": "provenance",
+      "why": "--color-foreground-on-popover -> --fg-default in token-migration"
+    },
+    "--foreground-placeholder": {
+      "uses": 8,
+      "to": "--fg-placeholder",
+      "via": "provenance",
+      "why": "--color-foreground-placeholder -> --fg-placeholder in token-migration"
+    },
+    "--foreground-subtle": {
+      "uses": 38,
+      "to": "--fg-subtle",
+      "via": "provenance",
+      "why": "--color-foreground-subtle -> --fg-subtle in token-migration"
+    },
+    "--input-color-border-focus": {
+      "uses": 3,
+      "to": "--input-color-ring",
+      "via": "named",
+      "why": "a focus border IS the ring; Figma keeps one token for the job, not two"
+    },
+    "--interactive-accent": {
+      "uses": 1,
+      "to": "--bg-subtle",
+      "via": "provenance",
+      "why": "--color-interactive-accent -> --bg-subtle in token-migration"
+    },
+    "--interactive-accent-foreground": {
+      "uses": 1,
+      "to": "--fg-on-subtle",
+      "via": "provenance",
+      "why": "--color-interactive-accent-foreground -> --fg-on-subtle in token-migration"
+    },
+    "--interactive-primary": {
+      "uses": 14,
+      "to": "--bg-brand",
+      "via": "provenance",
+      "why": "--color-interactive-primary -> --bg-brand in token-migration"
+    },
+    "--interactive-primary-foreground": {
+      "uses": 3,
+      "to": "--fg-on-brand",
+      "via": "provenance",
+      "why": "--color-interactive-primary-foreground -> --fg-on-brand in token-migration"
+    },
+    "--interactive-secondary": {
+      "uses": 1,
+      "to": "--bg-subtle",
+      "via": "provenance",
+      "why": "--color-interactive-secondary -> --bg-subtle in token-migration"
+    },
+    "--interactive-secondary-foreground": {
+      "uses": 1,
+      "to": "--fg-on-subtle",
+      "via": "provenance",
+      "why": "--color-interactive-secondary-foreground -> --fg-on-subtle in token-migration"
+    },
+    "--kpi-expense-default": {
+      "uses": 2,
+      "to": "--fg-expense",
+      "via": "provenance",
+      "why": "--color-expense-default -> --fg-expense in token-migration"
+    },
+    "--kpi-expense-foreground": {
+      "uses": 2,
+      "to": "--fg-expense-strong",
+      "via": "provenance",
+      "why": "--color-expense-foreground -> --fg-expense-strong in token-migration"
+    },
+    "--kpi-expense-surface": {
+      "uses": 1,
+      "to": "--bg-expense-subtle",
+      "via": "provenance",
+      "why": "--color-expense-surface -> --bg-expense-subtle in token-migration"
+    },
+    "--kpi-income-default": {
+      "uses": 2,
+      "to": "--fg-income",
+      "via": "provenance",
+      "why": "--color-income-default -> --fg-income in token-migration"
+    },
+    "--kpi-income-foreground": {
+      "uses": 3,
+      "to": "--fg-income-strong",
+      "via": "provenance",
+      "why": "--color-income-foreground -> --fg-income-strong in token-migration"
+    },
+    "--kpi-income-surface": {
+      "uses": 2,
+      "to": "--bg-income-subtle",
+      "via": "provenance",
+      "why": "--color-income-surface -> --bg-income-subtle in token-migration"
+    },
+    "--kpi-net-default": {
+      "uses": 2,
+      "to": "--bg-net",
+      "via": "provenance",
+      "why": "--color-net-default -> --bg-net in token-migration"
+    },
+    "--kpi-net-foreground": {
+      "uses": 1,
+      "to": "--fg-net",
+      "via": "provenance",
+      "why": "--color-net-foreground -> --fg-net in token-migration"
+    },
+    "--kpi-net-surface": {
+      "uses": 1,
+      "to": "--bg-net-subtle",
+      "via": "provenance",
+      "why": "--color-net-surface -> --bg-net-subtle in token-migration"
+    },
+    "--kpi-provision-default": {
+      "uses": 2,
+      "to": "--fg-provision",
+      "via": "provenance",
+      "why": "--color-provision-default -> --fg-provision in token-migration"
+    },
+    "--kpi-provision-foreground": {
+      "uses": 2,
+      "to": "--fg-provision-strong",
+      "via": "provenance",
+      "why": "--color-provision-foreground -> --fg-provision-strong in token-migration"
+    },
+    "--kpi-provision-surface": {
+      "uses": 2,
+      "to": "--bg-provision-subtle",
+      "via": "provenance",
+      "why": "--color-provision-surface -> --bg-provision-subtle in token-migration"
+    },
+    "--kpi-tax-default": {
+      "uses": 2,
+      "to": "--bg-tax",
+      "via": "provenance",
+      "why": "--color-tax-default -> --bg-tax in token-migration"
+    },
+    "--kpi-tax-foreground": {
+      "uses": 1,
+      "to": "--fg-tax",
+      "via": "provenance",
+      "why": "--color-tax-foreground -> --fg-tax in token-migration"
+    },
+    "--kpi-tax-surface": {
+      "uses": 1,
+      "to": "--bg-tax-subtle",
+      "via": "provenance",
+      "why": "--color-tax-surface -> --bg-tax-subtle in token-migration"
+    },
+    "--padding-lg": {
+      "uses": 0,
+      "to": "--spacing-20",
+      "via": "scale",
+      "why": "value 20 on a scale family — the number is the job"
+    },
+    "--padding-md": {
+      "uses": 0,
+      "to": "--spacing-16",
+      "via": "scale",
+      "why": "value 16 on a scale family — the number is the job"
+    },
+    "--padding-sm": {
+      "uses": 0,
+      "to": "--spacing-8",
+      "via": "scale",
+      "why": "value 8 on a scale family — the number is the job"
+    },
+    "--padding-xl": {
+      "uses": 0,
+      "to": "--spacing-24",
+      "via": "scale",
+      "why": "value 24 on a scale family — the number is the job"
+    },
+    "--padding-xs": {
+      "uses": 0,
+      "to": "--spacing-4",
+      "via": "scale",
+      "why": "value 4 on a scale family — the number is the job"
+    },
+    "--radius-2xl": {
+      "uses": 0,
+      "to": "--radius-16",
+      "via": "scale",
+      "why": "value 16 on a scale family — the number is the job"
+    },
+    "--radius-lg": {
+      "uses": 12,
+      "to": "--radius-8",
+      "via": "scale",
+      "why": "value 8 on a scale family — the number is the job"
+    },
+    "--radius-md": {
+      "uses": 4,
+      "to": "--radius-6",
+      "via": "scale",
+      "why": "value 6 on a scale family — the number is the job"
+    },
+    "--radius-sm": {
+      "uses": 0,
+      "to": "--radius-4",
+      "via": "scale",
+      "why": "value 4 on a scale family — the number is the job"
+    },
+    "--radius-xl": {
+      "uses": 13,
+      "to": "--radius-12",
+      "via": "scale",
+      "why": "value 12 on a scale family — the number is the job"
+    },
+    "--radius-xs": {
+      "uses": 0,
+      "to": "--radius-2",
+      "via": "scale",
+      "why": "value 2 on a scale family — the number is the job"
+    },
+    "--size-0": {
+      "uses": 0,
+      "to": "--spacing-0",
+      "via": "scale",
+      "why": "value 0 on a scale family — the number is the job"
+    },
+    "--size-16": {
+      "uses": 0,
+      "to": "--spacing-16",
+      "via": "scale",
+      "why": "value 16 on a scale family — the number is the job"
+    },
+    "--size-20": {
+      "uses": 0,
+      "to": "--spacing-20",
+      "via": "scale",
+      "why": "value 20 on a scale family — the number is the job"
+    },
+    "--size-24": {
+      "uses": 0,
+      "to": "--spacing-24",
+      "via": "scale",
+      "why": "value 24 on a scale family — the number is the job"
+    },
+    "--size-32": {
+      "uses": 0,
+      "to": "--spacing-32",
+      "via": "scale",
+      "why": "value 32 on a scale family — the number is the job"
+    },
+    "--size-4": {
+      "uses": 0,
+      "to": "--spacing-4",
+      "via": "scale",
+      "why": "value 4 on a scale family — the number is the job"
+    },
+    "--size-48": {
+      "uses": 0,
+      "to": "--spacing-48",
+      "via": "scale",
+      "why": "value 48 on a scale family — the number is the job"
+    },
+    "--size-64": {
+      "uses": 0,
+      "to": "--spacing-64",
+      "via": "scale",
+      "why": "value 64 on a scale family — the number is the job"
+    },
+    "--size-8": {
+      "uses": 0,
+      "to": "--spacing-8",
+      "via": "scale",
+      "why": "value 8 on a scale family — the number is the job"
+    },
+    "--size-icon-lg": {
+      "uses": 0,
+      "to": "--icon-size-xl",
+      "via": "scale",
+      "why": "value 24 on a scale family — the number is the job"
+    },
+    "--size-icon-md": {
+      "uses": 0,
+      "to": "--icon-size-lg",
+      "via": "scale",
+      "why": "value 20 on a scale family — the number is the job"
+    },
+    "--size-icon-sm": {
+      "uses": 0,
+      "to": "--icon-size-md",
+      "via": "scale",
+      "why": "value 16 on a scale family — the number is the job"
+    },
+    "--size-icon-xs": {
+      "uses": 0,
+      "to": "--icon-size-sm",
+      "via": "scale",
+      "why": "value 12 on a scale family — the number is the job"
+    },
+    "--spacing-component-lg": {
+      "uses": 0,
+      "to": "--spacing-16",
+      "via": "scale",
+      "why": "value 16 on a scale family — the number is the job"
+    },
+    "--spacing-component-md": {
+      "uses": 0,
+      "to": "--spacing-12",
+      "via": "scale",
+      "why": "value 12 on a scale family — the number is the job"
+    },
+    "--spacing-component-sm": {
+      "uses": 0,
+      "to": "--spacing-8",
+      "via": "scale",
+      "why": "value 8 on a scale family — the number is the job"
+    },
+    "--spacing-component-xl": {
+      "uses": 0,
+      "to": "--spacing-20",
+      "via": "scale",
+      "why": "value 20 on a scale family — the number is the job"
+    },
+    "--spacing-component-xs": {
+      "uses": 0,
+      "to": "--spacing-4",
+      "via": "scale",
+      "why": "value 4 on a scale family — the number is the job"
+    },
+    "--status-danger-default": {
+      "uses": 3,
+      "to": "--fg-danger-strong",
+      "via": "provenance",
+      "why": "--color-danger-default -> --fg-danger-strong in token-migration"
+    },
+    "--status-danger-foreground": {
+      "uses": 0,
+      "to": "--fg-danger-strongest",
+      "via": "provenance",
+      "why": "--color-danger-foreground -> --fg-danger-strongest in token-migration"
+    },
+    "--status-danger-surface": {
+      "uses": 2,
+      "to": "--bg-danger-subtlest",
+      "via": "provenance",
+      "why": "--color-danger-surface -> --bg-danger-subtlest in token-migration"
+    },
+    "--status-destructive-default": {
+      "uses": 1,
+      "to": "--fg-danger-strong",
+      "via": "provenance",
+      "why": "--color-destructive-default -> --fg-danger-strong in token-migration"
+    },
+    "--status-destructive-foreground": {
+      "uses": 1,
+      "to": "--button-danger-filled-foreground",
+      "via": "named",
+      "why": "contrast: --fg-on-solid is white in both modes and measures 2.77:1 on the dark danger fill #f87171; --button-danger-filled-foreground is #450a0a there, 5.84:1"
+    },
+    "--status-live-default": {
+      "uses": 0,
+      "to": "--bg-live",
+      "via": "provenance",
+      "why": "--color-live-default -> --bg-live in token-migration"
+    },
+    "--status-live-ring": {
+      "uses": 0,
+      "to": "--bg-live-ring",
+      "via": "provenance",
+      "why": "--color-live-ring -> --bg-live-ring in token-migration"
+    },
+    "--surface-feedback-danger": {
+      "uses": 0,
+      "to": "--bg-danger-subtle",
+      "via": "provenance",
+      "why": "--color-feedback-danger -> --bg-danger-subtle in token-migration"
+    },
+    "--surface-feedback-danger-emphasis": {
+      "uses": 0,
+      "to": "--fg-danger",
+      "via": "provenance",
+      "why": "--color-feedback-danger-emphasis -> --fg-danger in token-migration"
+    },
+    "--surface-feedback-info": {
+      "uses": 0,
+      "to": "--bg-info-subtle",
+      "via": "provenance",
+      "why": "--color-feedback-info -> --bg-info-subtle in token-migration"
+    },
+    "--surface-feedback-info-emphasis": {
+      "uses": 0,
+      "to": "--fg-info",
+      "via": "provenance",
+      "why": "--color-feedback-info-emphasis -> --fg-info in token-migration"
+    },
+    "--surface-feedback-neutral": {
+      "uses": 1,
+      "to": "--bg-neutral-subtle",
+      "via": "provenance",
+      "why": "--color-feedback-neutral -> --bg-neutral-subtle in token-migration"
+    },
+    "--surface-feedback-neutral-emphasis": {
+      "uses": 0,
+      "to": "--fg-neutral",
+      "via": "provenance",
+      "why": "--color-feedback-neutral-emphasis -> --fg-neutral in token-migration"
+    },
+    "--surface-feedback-success": {
+      "uses": 0,
+      "to": "--bg-success-subtle",
+      "via": "provenance",
+      "why": "--color-feedback-success -> --bg-success-subtle in token-migration"
+    },
+    "--surface-feedback-success-emphasis": {
+      "uses": 0,
+      "to": "--fg-success",
+      "via": "provenance",
+      "why": "--color-feedback-success-emphasis -> --fg-success in token-migration"
+    },
+    "--surface-feedback-warning": {
+      "uses": 0,
+      "to": "--bg-warning-subtle",
+      "via": "provenance",
+      "why": "--color-feedback-warning -> --bg-warning-subtle in token-migration"
+    },
+    "--surface-feedback-warning-emphasis": {
+      "uses": 0,
+      "to": "--fg-warning",
+      "via": "provenance",
+      "why": "--color-feedback-warning-emphasis -> --fg-warning in token-migration"
+    },
+    "--surface-inverse": {
+      "uses": 2,
+      "to": "--bg-inverse",
+      "via": "provenance",
+      "why": "--color-surface-inverse -> --bg-inverse in token-migration"
+    },
+    "--surface-popover": {
+      "uses": 3,
+      "to": "--bg-anchored",
+      "via": "provenance",
+      "why": "--color-surface-popover -> --bg-anchored in token-migration + coherence-log second hop"
+    },
+    "--surface-raised": {
+      "uses": 0,
+      "to": "--bg-floating",
+      "via": "provenance",
+      "why": "--color-surface-raised -> --bg-floating in token-migration"
+    },
+    "--surface-scrim": {
+      "uses": 0,
+      "to": "--bg-scrim",
+      "via": "provenance",
+      "why": "--color-surface-scrim -> --bg-scrim in token-migration"
+    },
+    "--surface-status-active": {
+      "uses": 0,
+      "to": "--bg-active",
+      "via": "provenance",
+      "why": "--color-status-active -> --bg-active in token-migration"
+    },
+    "--surface-status-disabled": {
+      "uses": 1,
+      "to": "--bg-disabled",
+      "via": "provenance",
+      "why": "--color-status-disabled -> --bg-disabled in token-migration"
+    },
+    "--surface-status-hover": {
+      "uses": 1,
+      "to": "--bg-hover",
+      "via": "provenance",
+      "why": "--color-status-hover -> --bg-hover in token-migration"
+    },
+    "--surface-status-selected": {
+      "uses": 1,
+      "to": "--bg-selected",
+      "via": "provenance",
+      "why": "--color-status-selected -> --bg-selected in token-migration"
+    },
+    "--surface-sunken": {
+      "uses": 0,
+      "to": "--bg-sunken",
+      "via": "provenance",
+      "why": "--color-surface-sunken -> --bg-sunken in token-migration"
+    },
+    "--surface-wrap-card": {
+      "uses": 10,
+      "to": "--bg-surface",
+      "via": "provenance",
+      "why": "--color-wrap-card -> --bg-surface in token-migration"
+    },
+    "--surface-wrap-container": {
+      "uses": 0,
+      "to": "--bg-chrome",
+      "via": "provenance",
+      "why": "--color-wrap-container -> --bg-chrome in token-migration + coherence-log second hop"
+    },
+    "--surface-wrap-default": {
+      "uses": 3,
+      "to": "--bg-canvas",
+      "via": "provenance",
+      "why": "--color-wrap-default -> --bg-canvas in token-migration"
+    },
+    "--surface-wrap-subtle": {
+      "uses": 6,
+      "to": "--bg-subtle",
+      "via": "provenance",
+      "why": "--color-wrap-subtle -> --bg-subtle in token-migration"
+    },
+    "--spinner-track-on-dark": {
+      "uses": 1,
+      "to": "--spinner-track-on-solid",
+      "via": "named",
+      "why": "Renamed 2026-08-22. on-light/on-dark named the BUTTON, not the surface: the values invert between modes, so on-dark was light in light mode and dark in dark — the opposite of what the name promised. Found by Dev while implementing the spinner."
+    },
+    "--spinner-head-on-dark": {
+      "uses": 1,
+      "to": "--spinner-head-on-solid",
+      "via": "named",
+      "why": "Renamed 2026-08-22. on-light/on-dark named the BUTTON, not the surface: the values invert between modes, so on-dark was light in light mode and dark in dark — the opposite of what the name promised. Found by Dev while implementing the spinner."
+    },
+    "--spinner-track-on-light": {
+      "uses": 1,
+      "to": "--spinner-track-default",
+      "via": "named",
+      "why": "Renamed 2026-08-22. on-light/on-dark named the BUTTON, not the surface: the values invert between modes, so on-dark was light in light mode and dark in dark — the opposite of what the name promised. Found by Dev while implementing the spinner."
+    },
+    "--spinner-head-on-light": {
+      "uses": 1,
+      "to": "--spinner-head-default",
+      "via": "named",
+      "why": "Renamed 2026-08-22. on-light/on-dark named the BUTTON, not the surface: the values invert between modes, so on-dark was light in light mode and dark in dark — the opposite of what the name promised. Found by Dev while implementing the spinner."
+    }
+  },
+  "tombstones": {
+    "--border-width-none": {
+      "uses": 0,
+      "via": "logged",
+      "why": "1.3 collapsed the three zeros into scale/0; Semantic keeps spacing/0 and radius/none but deliberately no border-width/none — a zero-width border is no border. Zero consumers."
+    },
+    "--surface-brand-default": {
+      "uses": 0,
+      "via": "provenance",
+      "why": "token-migration.removed — deleted in 1.2, nothing replaces it"
+    },
+    "--surface-brand-emphasis": {
+      "uses": 0,
+      "via": "provenance",
+      "why": "token-migration.removed — deleted in 1.2, nothing replaces it"
+    },
+    "--surface-overlay": {
+      "uses": 0,
+      "via": "provenance",
+      "why": "token-migration.removed — deleted in 1.2, nothing replaces it"
+    },
+    "--account-1-foreground": {
+      "uses": 0,
+      "via": "decided",
+      "why": "Named a specific account (arq · toptal · bancol · other). Account colour became user data on 2026-08-22 — docs/25-account-color.md. Dev repointed build.py 109-112 and the preview mock at 525; verified at zero consumers before tombstoning, not taken from the commit message.",
+      "frozenWas": {
+        "light": "#0e7490",
+        "dark": "#67e8f9"
+      }
+    },
+    "--account-1-surface": {
+      "uses": 0,
+      "via": "decided",
+      "why": "Named a specific account (arq · toptal · bancol · other). Account colour became user data on 2026-08-22 — docs/25-account-color.md. Dev repointed build.py 109-112 and the preview mock at 525; verified at zero consumers before tombstoning, not taken from the commit message.",
+      "frozenWas": {
+        "light": "#ecfeff",
+        "dark": "#083344"
+      }
+    },
+    "--account-2-foreground": {
+      "uses": 0,
+      "via": "decided",
+      "why": "Named a specific account (arq · toptal · bancol · other). Account colour became user data on 2026-08-22 — docs/25-account-color.md. Dev repointed build.py 109-112 and the preview mock at 525; verified at zero consumers before tombstoning, not taken from the commit message.",
+      "frozenWas": {
+        "light": "#7c3aed",
+        "dark": "#c4b5fd"
+      }
+    },
+    "--account-2-surface": {
+      "uses": 0,
+      "via": "decided",
+      "why": "Named a specific account (arq · toptal · bancol · other). Account colour became user data on 2026-08-22 — docs/25-account-color.md. Dev repointed build.py 109-112 and the preview mock at 525; verified at zero consumers before tombstoning, not taken from the commit message.",
+      "frozenWas": {
+        "light": "#f5f3ff",
+        "dark": "#4c1d95"
+      }
+    },
+    "--account-3-foreground": {
+      "uses": 0,
+      "via": "decided",
+      "why": "Named a specific account (arq · toptal · bancol · other). Account colour became user data on 2026-08-22 — docs/25-account-color.md. Dev repointed build.py 109-112 and the preview mock at 525; verified at zero consumers before tombstoning, not taken from the commit message.",
+      "frozenWas": {
+        "light": "#047857",
+        "dark": "#6ee7b7"
+      }
+    },
+    "--account-3-surface": {
+      "uses": 0,
+      "via": "decided",
+      "why": "Named a specific account (arq · toptal · bancol · other). Account colour became user data on 2026-08-22 — docs/25-account-color.md. Dev repointed build.py 109-112 and the preview mock at 525; verified at zero consumers before tombstoning, not taken from the commit message.",
+      "frozenWas": {
+        "light": "#ecfdf5",
+        "dark": "#022c22"
+      }
+    },
+    "--account-4-foreground": {
+      "uses": 0,
+      "via": "decided",
+      "why": "Named a specific account (arq · toptal · bancol · other). Account colour became user data on 2026-08-22 — docs/25-account-color.md. Dev repointed build.py 109-112 and the preview mock at 525; verified at zero consumers before tombstoning, not taken from the commit message.",
+      "frozenWas": {
+        "light": "#475569",
+        "dark": "#cbd5e1"
+      }
+    },
+    "--account-4-surface": {
+      "uses": 0,
+      "via": "decided",
+      "why": "Named a specific account (arq · toptal · bancol · other). Account colour became user data on 2026-08-22 — docs/25-account-color.md. Dev repointed build.py 109-112 and the preview mock at 525; verified at zero consumers before tombstoning, not taken from the commit message.",
+      "frozenWas": {
+        "light": "#f1f5f9",
+        "dark": "#334155"
+      }
+    }
+  },
+  "pending": {}
 }
