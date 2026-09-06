@@ -419,6 +419,36 @@ async function auditPage(pageId) {
     }
   };
 
+  // ── C12 · un borde de un solo lado en una forma redonda ───────────────────
+  // Un stroke en UN lado es un filete, y un filete necesita un borde recto donde
+  // apoyarse. Una forma con radio completo no tiene ninguno: el borde se dibuja
+  // como un arco que empieza y termina en el aire.
+  //
+  // Encontrado por Alfredo el 2026-09-02 — dijo que las pastillas se veian
+  // incompletas, y lo estaban: strokeTopWeight 1 y los otros tres en 0. Eran las
+  // 12 variantes Outline de Badge, las 8 de action-chip y AccountBadge, o sea
+  // TODA pastilla con borde del sistema. Nadie lo habia reportado porque a tamaño
+  // real un arco de 1px sobre una pastilla de 20px de alto se lee como un borde
+  // mal renderizado, no como un error de diseño.
+  //
+  // El chequeo es exacto y no admite excepcion legitima: en una forma redonda no
+  // hay lado sobre el que un filete tenga sentido. En una forma con esquinas si
+  // —topnav lleva su filete abajo, Sidebar a la derecha— y por eso el radio es la
+  // condicion y no el numero de lados.
+  const c12 = (nd) => {
+    if (nd.type === 'COMPONENT_SET') return;              // el borde punteado lo pinta Figma
+    if (!nd.strokes || !nd.strokes.length) return;
+    if (!('strokeTopWeight' in nd)) return;
+    const w = [nd.strokeTopWeight, nd.strokeRightWeight, nd.strokeBottomWeight, nd.strokeLeftWeight];
+    if (w.every(x => x === w[0])) return;
+    const r = nd.cornerRadius;
+    const redondo = (typeof r === 'number' && r >= 999) ||
+      (nd.topLeftRadius >= 999 && nd.topRightRadius >= 999 &&
+       nd.bottomLeftRadius >= 999 && nd.bottomRightRadius >= 999);
+    if (!redondo) return;
+    add('C12_borde_parcial_en_forma_redonda', (ownerOf(nd) || page.name) + ' / ' + nd.name, w.join('·'));
+  };
+
   for (const n of page.findAll(() => true)) {
     const path = n.name;
     const ajeno = esMarcaAjena(n);
@@ -437,6 +467,7 @@ async function auditPage(pageId) {
     c9(n);
     c10(n);
     c11(n);
+    c12(n);
 
     // C8 — un numero de layout escrito a mano. Las instancias quedan fuera: su geometria
     // la decide el componente, no la pantalla que lo usa.

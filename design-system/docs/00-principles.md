@@ -191,6 +191,7 @@ through there.
 | `C9` `doc:` heading pinned to a fixed width | a documentation title clipped by the next rename, silently, because the node's height does not grow with the wrap |
 | `C10` `doc:` spec vs its component | documentation that describes a component the file no longer contains — a false variant count, or prose that stopped matching the thing |
 | `C11` HTML entity in a description | `&#39;` and `&quot;` where an apostrophe or a quote was typed — the write path escapes them, so the prose ships as garbage in Figma, in the generated `.html` and in Dev Mode |
+| `C12` one-edge stroke on a fully rounded shape | a pill whose border draws as an arc across the top and stops — a rule needs a straight edge and a pill has none |
 
 ## A5b. C5, C6 and C7 — what calibrating them cost (2026-08-22)
 
