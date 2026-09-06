@@ -11,8 +11,8 @@
   --bg-chrome: #e2e8f0;
   --bg-canvas: #f8fafc;
   --bg-hover: #e2e8f0;
-  --bg-active: #e2e8f0;
-  --bg-selected: #e0f2fe;
+  --bg-active: #cbd5e1;
+  --bg-selected: rgba(6,182,212,0.1);
   --bg-disabled: #e2e8f0;
   --bg-success-subtle: #d1fae5;
   --fg-success: #059669;
@@ -93,11 +93,11 @@
   --fg-on-subtle: #1e293b;
   --bg-live: #10b981;
   --bg-live-ring: rgba(16,185,129,0.2);
-  --fg-danger-strong: #dc2626;
+  --fg-danger-strong: #b91c1c;
   --bg-danger-subtlest: #fef2f2;
-  --fg-danger-strongest: #b91c1c;
+  --fg-danger-strongest: #991b1b;
   --fg-subtle: #334155;
-  --fg-placeholder: #94a3b8;
+  --fg-placeholder: #64748b;
   --fg-on-inverse: #f8fafc;
   --bg-scrim: rgba(0,0,0,0.4);
   --bg-neutral-alpha-10: rgba(0,0,0,0.1);
@@ -115,7 +115,7 @@
   --bg-anchored: #fcfdfe;
   --bg-floating: #fdfefe;
   --bg-overlay: #ffffff;
-  --border-subtle: #cbd5e1;
+  --border-emphasis: #cbd5e1;
   --fg-on-solid: #ffffff;
   --border-brand-strong: #0e7490;
   --bg-expense: #ef4444;
@@ -529,6 +529,7 @@
   --spinner-head-on-dark: var(--spinner-head-on-solid);
   --spinner-track-on-light: var(--spinner-track-default);
   --spinner-head-on-light: var(--spinner-head-default);
+  --border-subtle: var(--border-emphasis);
 
   /* QUARANTINE — no Figma source. See token-ledger.json `pending`. Should only shrink. */
 
@@ -551,14 +552,14 @@
   --bg-canvas: #020617;
   --bg-hover: #334155;
   --bg-active: #475569;
-  --bg-selected: #0c4a6e;
+  --bg-selected: rgba(6,182,212,0.2);
   --bg-disabled: #1e293b;
   --bg-success-subtle: #022c22;
   --fg-success: #6ee7b7;
   --bg-warning-subtle: #451a03;
   --fg-warning: #fcd34d;
   --bg-danger-subtle: #450a0a;
-  --fg-danger: #fca5a5;
+  --fg-danger: #f87171;
   --bg-info-subtle: #0c4a6e;
   --fg-info: #7dd3fc;
   --bg-neutral-subtle: #1e293b;
@@ -632,11 +633,11 @@
   --fg-on-subtle: #f1f5f9;
   --bg-live: #34d399;
   --bg-live-ring: rgba(16,185,129,0.3);
-  --fg-danger-strong: #f87171;
+  --fg-danger-strong: #fca5a5;
   --bg-danger-subtlest: #450a0a;
-  --fg-danger-strongest: #fca5a5;
+  --fg-danger-strongest: #fecaca;
   --fg-subtle: #cbd5e1;
-  --fg-placeholder: #64748b;
+  --fg-placeholder: #94a3b8;
   --fg-on-inverse: #0f172a;
   --bg-scrim: rgba(0,0,0,0.5);
   --bg-neutral-alpha-10: rgba(255,255,255,0.1);
@@ -654,7 +655,7 @@
   --bg-anchored: #334155;
   --bg-floating: #3d4b5f;
   --bg-overlay: #475569;
-  --border-subtle: #334155;
+  --border-emphasis: #334155;
   --fg-on-solid: #ffffff;
   --border-brand-strong: #06b6d4;
   --bg-expense: #f87171;

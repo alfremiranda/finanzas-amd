@@ -78,13 +78,13 @@
         ],
         [
           "bg/active",
-          "#e2e8f0",
+          "#cbd5e1",
           "#475569"
         ],
         [
           "bg/selected",
-          "#e0f2fe",
-          "#0c4a6e"
+          "rgba(6,182,212,0.1)",
+          "rgba(6,182,212,0.2)"
         ],
         [
           "bg/disabled",
@@ -119,7 +119,7 @@
         [
           "fg/danger",
           "#dc2626",
-          "#fca5a5"
+          "#f87171"
         ],
         [
           "bg/info-subtle",
@@ -488,8 +488,8 @@
         ],
         [
           "fg/danger-strong",
-          "#dc2626",
-          "#f87171"
+          "#b91c1c",
+          "#fca5a5"
         ],
         [
           "bg/danger-subtlest",
@@ -498,8 +498,8 @@
         ],
         [
           "fg/danger-strongest",
-          "#b91c1c",
-          "#fca5a5"
+          "#991b1b",
+          "#fecaca"
         ],
         [
           "fg/subtle",
@@ -508,8 +508,8 @@
         ],
         [
           "fg/placeholder",
-          "#94a3b8",
-          "#64748b"
+          "#64748b",
+          "#94a3b8"
         ],
         [
           "spacing/0",
@@ -802,7 +802,7 @@
           "#475569"
         ],
         [
-          "border/subtle",
+          "border/emphasis",
           "#cbd5e1",
           "#334155"
         ],
@@ -2144,11 +2144,11 @@
       "name": "bg/active",
       "type": "COLOR",
       "values": {
-        "Light": "#e2e8f0",
+        "Light": "#cbd5e1",
         "Dark": "#475569"
       },
       "aliases": {
-        "Light": "color/slate/200",
+        "Light": "color/slate/300",
         "Dark": "color/slate/600"
       }
     },
@@ -2157,12 +2157,12 @@
       "name": "bg/selected",
       "type": "COLOR",
       "values": {
-        "Light": "#e0f2fe",
-        "Dark": "#0c4a6e"
+        "Light": "rgba(6,182,212,0.1)",
+        "Dark": "rgba(6,182,212,0.2)"
       },
       "aliases": {
-        "Light": "color/sky/100",
-        "Dark": "color/sky/900"
+        "Light": "bg/brand-alpha-10",
+        "Dark": "bg/brand-alpha-20"
       }
     },
     {
@@ -2249,11 +2249,11 @@
       "type": "COLOR",
       "values": {
         "Light": "#dc2626",
-        "Dark": "#fca5a5"
+        "Dark": "#f87171"
       },
       "aliases": {
         "Light": "color/red/600",
-        "Dark": "color/red/300"
+        "Dark": "color/red/400"
       }
     },
     {
@@ -3210,12 +3210,12 @@
       "name": "fg/danger-strong",
       "type": "COLOR",
       "values": {
-        "Light": "#dc2626",
-        "Dark": "#f87171"
+        "Light": "#b91c1c",
+        "Dark": "#fca5a5"
       },
       "aliases": {
-        "Light": "color/red/600",
-        "Dark": "color/red/400"
+        "Light": "color/red/700",
+        "Dark": "color/red/300"
       }
     },
     {
@@ -3236,12 +3236,12 @@
       "name": "fg/danger-strongest",
       "type": "COLOR",
       "values": {
-        "Light": "#b91c1c",
-        "Dark": "#fca5a5"
+        "Light": "#991b1b",
+        "Dark": "#fecaca"
       },
       "aliases": {
-        "Light": "color/red/700",
-        "Dark": "color/red/300"
+        "Light": "color/red/800",
+        "Dark": "color/red/200"
       }
     },
     {
@@ -3262,12 +3262,12 @@
       "name": "fg/placeholder",
       "type": "COLOR",
       "values": {
-        "Light": "#94a3b8",
-        "Dark": "#64748b"
+        "Light": "#64748b",
+        "Dark": "#94a3b8"
       },
       "aliases": {
-        "Light": "color/slate/400",
-        "Dark": "color/slate/500"
+        "Light": "color/slate/500",
+        "Dark": "color/slate/400"
       }
     },
     {
@@ -4026,7 +4026,7 @@
     },
     {
       "collection": "Semantic",
-      "name": "border/subtle",
+      "name": "border/emphasis",
       "type": "COLOR",
       "values": {
         "Light": "#cbd5e1",
@@ -4111,8 +4111,8 @@
         "Dark": "#64748b"
       },
       "aliases": {
-        "Light": "fg/placeholder",
-        "Dark": "fg/placeholder"
+        "Light": "color/slate/400",
+        "Dark": "color/slate/500"
       }
     },
     {
