@@ -26,8 +26,10 @@ export function UpdatePrompt() {
       className={cn(
         'fixed left-1/2 -translate-x-1/2 z-[120] flex items-center gap-3',
         'bg-[var(--foreground)] text-[var(--card)] pl-5 pr-2 py-2 rounded-full shadow-lg',
-        'bottom-6',
-        '[.has-mobile-nav_&]:bottom-[calc(68px+env(safe-area-inset-bottom)+10px)]',
+        // Above the tab bar's band on mobile. This used to hang off a `.has-mobile-nav`
+        // class that nothing ever set, so the offset never applied and the bar could cover
+        // the message it was confirming.
+        'bottom-[calc(58px+42px+env(safe-area-inset-bottom))] sm:bottom-6',
       )}
     >
       <span className="ts-body-small">Hay una versión nueva</span>

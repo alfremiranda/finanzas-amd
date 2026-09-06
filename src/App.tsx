@@ -189,7 +189,7 @@ export default function App() {
             {view === 'mes' ? (
               <MesView />
             ) : (
-              <div className="max-w-5xl mx-auto w-full p-4 sm:p-5 lg:p-6 pb-4 sm:pb-5 lg:pb-6">
+              <div className="max-w-5xl mx-auto w-full p-4 sm:p-5 lg:p-6 pb-[calc(58px+42px+env(safe-area-inset-bottom))] sm:pb-5 lg:pb-6">
                 {view === 'dashboard' && <DashboardView />}
                 {view === 'cuentas'   && <CuentasView />}
                 {view === 'cuenta'    && <CuentaView />}
@@ -201,7 +201,7 @@ export default function App() {
           </main>
         </div>
 
-        <Sidebar_MobileNav />
+        <Sidebar_MobileNav scrollRef={mainRef} />
         <FAB />
 
         {/* Global sheets */}
