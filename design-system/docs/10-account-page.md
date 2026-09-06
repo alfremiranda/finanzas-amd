@@ -322,3 +322,58 @@ comes back, with the number named in the description rather than the picture.
 asked. `Dual` was an answer nobody had a question for, and it survived because its description
 described how it *looked*. A description that says what a thing looks like cannot be checked. One
 that names the quantity can be, and Dev checked it in one sentence.
+
+## 12. El flujo dibujado (2026-09-02)
+
+`Flow - Accounts` quedó con la misma forma que `Flow - Onboarding`: cuatro secciones — Desktop y
+Mobile, claro y oscuro — cada una con el camino feliz y los casos límite. **36 frames**, nueve por
+sección.
+
+### Camino feliz
+
+    1 · Cuentas (índice)     header + accounts-grid
+    2 · Cuenta (detalle)     breadcrumb + AccountSummaryCard + LedgerContainer
+
+### Los casos, y por qué cada uno existe
+
+Ninguno es adorno: cada uno es un estado que el modelo de datos permite y que hoy no estaba
+dibujado en ninguna parte.
+
+| Caso | Qué lo produce |
+|---|---|
+| `sin cuentas` | terminar el onboarding sin agregar ninguna |
+| `siete cuentas` | el caso que Dev midió y que partió el flujo — a 412 la grilla ocupa dos filas |
+| `nombre largo` | `label` no tiene límite; a 220px trunca |
+| `sin movimientos` | cuenta creada hoy: ni ledger ni gráfica |
+| `un solo día` | hay movimientos pero la gráfica necesita **dos días distintos**, así que aún no dibuja |
+| `tarjeta de crédito` | el saldo es una deuda y la meta lleva el chip de fechas |
+| `sin configurar` | cuenta sin `startingBalance` |
+
+**`un solo día` es el que no se me habría ocurrido sin leer el código.** Hay filas en el ledger y
+aun así no hay gráfica, porque una serie necesita dos puntos. Sin dibujarlo, quien lo implemente
+va a tratar "hay movimientos" y "hay gráfica" como la misma condición.
+
+### Tres cosas que el dibujo decidió
+
+**1 · La grilla del índice envuelve.** Estaba en `NO_WRAP` con recorte, así que la séptima cuenta
+simplemente no existía. Un contenedor que recorta datos del usuario no es una decisión de layout,
+es una pérdida.
+
+**2 · En el índice no hay nada seleccionado.** Con el flujo partido, el índice es un **selector del
+que te vas**: presionas y sales. No queda panel en pantalla al que una selección pueda referirse.
+Las doce grillas del flujo tienen sus tarjetas en `Default`.
+
+`AccountCard :: State=Selected` **no se retira** — es lo que la tarjeta necesita en cuanto aparezca
+donde se elige algo y te quedas, como un picker dentro de una hoja. Pero hoy no tiene consumidor en
+este flujo, y un estado sin consumidor termina implementándose porque existe y no porque haga falta.
+
+**3 · La gráfica y su rango se ocultan juntos.** Cuando no hay datos suficientes se van `chart`,
+`chart-range` y el `divider` que los separa. Un divisor que separa de nada es una línea decorativa,
+y un selector de rango sobre una gráfica ausente ofrece filtrar la nada.
+
+### De paso
+
+`Flow - Onboarding` tenía **dos secciones con el mismo nombre** (`Mobile · 412 · Dark`); la primera
+era la clara. Renombrada, porque un nombre repetido en el panel de capas es una trampa para el
+siguiente que llegue.
+
