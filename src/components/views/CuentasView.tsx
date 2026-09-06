@@ -245,8 +245,8 @@ export function CuentasView() {
           <Empty>
             <EmptyHeader>
               <EmptyMedia variant="icon"><Landmark size={14} /></EmptyMedia>
-              <EmptyTitle>Sin cuentas</EmptyTitle>
-              <EmptyDescription>Crea una cuenta para registrar saldos y movimientos</EmptyDescription>
+              <EmptyTitle>Aún no tienes cuentas</EmptyTitle>
+              <EmptyDescription>Agrega la primera para empezar a registrar movimientos.</EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
               <Button size="sm" onClick={() => { setEditingAccount(null); openSheet('account-edit') }}>
@@ -279,7 +279,7 @@ export function CuentasView() {
  */
 export function CuentaView() {
   const { db, getAccounts } = useFinanceStore()
-  const { detailAccountId, setView } = useUIStore()
+  const { detailAccountId, setView, openSheet } = useUIStore()
   const accounts = getAccounts()
   const account = accounts.find(a => a.id === detailAccountId)
 
@@ -350,11 +350,18 @@ export function CuentaView() {
             <Empty className="border-0 py-6">
               <EmptyHeader>
                 <EmptyMedia variant="icon"><Landmark size={14} /></EmptyMedia>
-                <EmptyTitle>Cuenta sin configurar</EmptyTitle>
+                <EmptyTitle>Sin movimientos todavía</EmptyTitle>
                 <EmptyDescription>
-                  Configura el saldo inicial en la tarjeta de la cuenta para activar el historial
+                  Los ingresos, gastos y transferencias de esta cuenta aparecerán aquí.
                 </EmptyDescription>
               </EmptyHeader>
+              {/* An empty state without a way out is a dead end. This one had none: it
+                  explained what was missing and left the user to find the door. */}
+              <EmptyContent>
+                <Button size="sm" variant="outline" onClick={() => openSheet('transfer')}>
+                  Registrar movimiento
+                </Button>
+              </EmptyContent>
             </Empty>
           ) : (
             <>

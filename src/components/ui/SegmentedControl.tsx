@@ -74,7 +74,11 @@ export function SegmentedControl<T extends string>({ options, value, onChange, a
       style={{ gridTemplateColumns: `repeat(${options.length}, minmax(0, 1fr))` }}
       className={cn(
         'grid items-center gap-0.5 p-1 rounded-full',
-        'bg-[var(--bg-chrome)] border border-[var(--border-subtle)]',
+        // `border/emphasis`, not the old `border/subtle`. The name was the thing that was
+        // wrong: measured against a card, default is 1.13:1 and this one 1.36 — what was
+        // called subtle was the MORE prominent of the two, and a prominence ladder running
+        // backwards reads as a promise. The value did not move.
+        'bg-[var(--bg-chrome)] border border-[var(--border-emphasis)]',
         className,
       )}
     >
