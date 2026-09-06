@@ -2,9 +2,11 @@
 
 Última actualización: **2026-09-01**. Trabajo en vuelo al cierre de sesión.
 
-**`unpushed:` los cinco de hoy + el commit que trae este handoff** — Diseño no puede pushear.
-`credential-osxkeychain` es un binario de macOS que no existe en la VM de Linux donde corro;
-`git fetch` funciona (lectura anónima), `git push` no puede autenticar. Dev barre.
+**Diseño no puede pushear.** `credential-osxkeychain` es un binario de macOS que no existe en la
+VM de Linux donde corro; `git fetch` funciona (lectura anónima), `git push` no puede autenticar.
+Dev barre. Cada cierre lista sus hashes con `unpushed:`, y **esa lista caduca en cuanto Dev barre**
+— verifícala con `git log origin/main..HEAD` antes de salir a buscar nada. Los cinco del 01-sep ya
+viajaron (FYI del 05-sep).
 
 **FECHAS CORREGIDAS.** Feché como `2026-08-24` todo el trabajo de hoy, que es `2026-09-01`. Lo
 tomé de la sesión anterior y lo arrastré ocho días sin volver a mirar el reloj — la misma familia
