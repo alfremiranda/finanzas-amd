@@ -2030,21 +2030,6 @@
           "account-summary-card/meta-chip/border",
           "#cbd5e1",
           "#475569"
-        ],
-        [
-          "nav/border",
-          "#e2e8f0",
-          "rgba(255,255,255,0.2)"
-        ],
-        [
-          "nav/item/foreground",
-          "#334155",
-          "#cbd5e1"
-        ],
-        [
-          "nav/item/foreground-selected",
-          "#0e7490",
-          "#06b6d4"
         ]
       ]
     }
@@ -7550,45 +7535,6 @@
       "aliases": {
         "Light": "color/slate/300",
         "Dark": "color/slate/600"
-      }
-    },
-    {
-      "collection": "Component",
-      "name": "nav/border",
-      "type": "COLOR",
-      "values": {
-        "Light": "#e2e8f0",
-        "Dark": "rgba(255,255,255,0.2)"
-      },
-      "aliases": {
-        "Light": "border/default",
-        "Dark": "border/default"
-      }
-    },
-    {
-      "collection": "Component",
-      "name": "nav/item/foreground",
-      "type": "COLOR",
-      "values": {
-        "Light": "#334155",
-        "Dark": "#cbd5e1"
-      },
-      "aliases": {
-        "Light": "fg/subtle",
-        "Dark": "fg/subtle"
-      }
-    },
-    {
-      "collection": "Component",
-      "name": "nav/item/foreground-selected",
-      "type": "COLOR",
-      "values": {
-        "Light": "#0e7490",
-        "Dark": "#06b6d4"
-      },
-      "aliases": {
-        "Light": "fg/net",
-        "Dark": "fg/net"
       }
     },
     {
