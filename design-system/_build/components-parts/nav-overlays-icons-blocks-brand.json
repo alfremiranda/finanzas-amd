@@ -55,16 +55,16 @@
   ],
   "w": 92,
   "h": 168,
-  "d": "A single bottom-nav tab."
+  "d": "A single tab of bottom-nav. State=Default|Selected. Default is fg/subtle, Selected is fg/brand — colour is the whole state, there is no background behind a selected tab."
  },
  {
   "g": "Navigation",
   "n": "bottom-nav",
   "v": 1,
   "p": [],
-  "w": 412,
+  "w": 370,
   "h": 58,
-  "d": "Mobile tab bar, 412×58. The FAB with its speed-dial sits above it, not inside it."
+  "d": "Mobile tab bar. A floating capsule, 370×58, inset 21 from the left, right and bottom edges of the screen — the iOS 26 shape, per Apple’s HIG for tab bars.\n\nFour rules that are decisions rather than styling:\n\nInset on three sides. The 21 all round is what makes it read as floating over the content instead of as the edge of the screen. Content scrolls underneath it; nothing else fixed may live in that band.\n\nSelected is the brand colour. Icon and label both take fg/brand — cyan/700 in Light, cyan/500 in Dark; the rest take fg/subtle. Colour is the entire selected state: no pill, no underline, no background behind the selected tab.\n\nTwo to five tabs, never more, and never an action. Four are drawn here. A tab is a top-level destination you come back to; the plus lives in the FAB above the bar, not in it.\n\nEven segments. 370 minus 12 of padding each side, split four ways: 86.5 per tab, well over the 44 minimum target. Icons are 24 (Icon size=L). The label is Control/XS at 10 — Apple specifies 11, and that single point is the only place this bar knowingly departs from the HIG.\n\nOn scroll the real bar minimises (tabBarMinimizeBehavior on iOS). Not drawn as a variant yet."
  },
  {
   "g": "Navigation",

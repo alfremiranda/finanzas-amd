@@ -147,6 +147,7 @@
   --currency-cop-foreground: #047857;
   --fg-on-inverse-subtle: rgba(255,255,255,0.7);
   --border-on-inverse: rgba(255,255,255,0.2);
+  --fg-brand: #0e7490;
   --action-chip-selected-background: rgba(6,182,212,0.1);
   --action-chip-selected-foreground: #0e7490;
   --action-chip-selected-border: #06b6d4;
@@ -687,6 +688,7 @@
   --currency-cop-foreground: #6ee7b7;
   --fg-on-inverse-subtle: #64748b;
   --border-on-inverse: rgba(0,0,0,0.2);
+  --fg-brand: #06b6d4;
   --action-chip-selected-background: rgba(6,182,212,0.2);
   --action-chip-selected-foreground: #22d3ee;
   --action-chip-selected-border: #164e63;

@@ -348,6 +348,35 @@ source. `C11` catches the entity, but the rule that prevents it is the punctuati
 that flags what a fixer cannot fix is only useful if the fixer is retired at the same time — which
 is why there is no entity-fixer in the build.
 
+### A6g. A component someone else drew is theirs; a redesign is a proposal until they say otherwise (2026-09-06)
+
+Twice in one session I replaced a drawing of Alfredo’s with one of my own and reported it as done:
+the `AccountSummaryCard`, restructured on my reading of an earlier answer, and `bottom-nav`, rebuilt
+as a flat iOS-18 bar when what he asked for was a bar closer to iOS. Both were defensible. Both were
+reverted, and the second one cost a full revert of tokens, registry, docs and a handoff note that had
+already been written.
+
+The line is not between good and bad taste, it is between two jobs. **Keeping the system honest is
+mine**: tokens that resolve, ramps that climb, docs that match their component, checks that catch the
+class rather than the site. **Deciding what the thing draws is his.** When a request touches the
+second — shape, colour, hierarchy, what is on screen — the deliverable is a proposal he can see, not
+a component already changed.
+
+Two practical consequences:
+
+**Record what you are about to overwrite, in full, before you overwrite it.** Reverting `bottom-nav`
+needed radii, paddings, gaps, sizes, bindings and two drop shadows. I had noted the shadows only as
+`DROP_SHADOW:12` and `:24` — no offset, spread or opacity — and Figma keeps no per-node history the
+Plugin API can read, so those two values were simply gone. What saved it was that the system already
+had an `elevation/floating` pair; the restored bar wears the system’s own elevation, not my
+reconstruction of his. **A note that records a property without its value is not a record.**
+
+**A citation is not a mandate.** He answered the revert with a link to Apple’s HIG. That link read
+two ways — *the original was already right* and *do it properly this time* — and the difference was
+one question. Ask it. When he did say “redesign per the HIG”, the redesign wrote itself, because by
+then the HIG was supplying the decisions (2–5 tabs, inset from three edges, colour as the whole
+selected state, no pill) instead of me.
+
 ## A7. The three-piece shape
 
 | Piece | What it is | Where it lives |

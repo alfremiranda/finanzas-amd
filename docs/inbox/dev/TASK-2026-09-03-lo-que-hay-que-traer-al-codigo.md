@@ -1,16 +1,43 @@
-# TASK — lo que hay que traer al código: flujos y tokens
+# TASK — lo que hay que traer al código: nav, flujos y tokens
 
-Dos bloques: lo que quedó dibujado en Figma y todavía no está implementado, y los tokens que se
-movieron.
-
-**El bottom nav no cambia.** Hubo un rediseño tipo iOS en esta rama; Alfredo lo revirtió, así que
-la barra sigue siendo la píldora flotante de siempre —`radius 9999`, dos sombras, márgenes
-laterales, 412×58, icono de 20— y no hay nada que hacer ahí. Si viste una versión anterior de esta
-nota con una tabla de "antes / ahora", ignórala.
+Tres bloques, ordenados por lo que le cambia la cara a la app.
 
 ---
 
-## 1 · Los flujos redibujados que faltan en código
+## 1 · El bottom nav: cápsula flotante, según la HIG
+
+Hubo un intento anterior mío —barra plana pegada al borde, estilo iOS 18— que Alfredo revirtió.
+**Si viste una versión de esta nota con esa tabla, ignórala entera.** La forma que él ya tenía
+(píldora flotante) era la correcta; lo que faltaba era lo que la HIG sí especifica.
+
+| | Antes | Ahora |
+|---|---|---|
+| ancho | 412, de borde a borde | **370, centrada** |
+| margen | 10 a los lados, 10 abajo | **21 a los lados y abajo** |
+| icono | 20 | **24** (`Icon size=L`) |
+| tab activa | `sidebar/accent-foreground` → #0f172a, casi igual a las otras | **`fg/brand`**, cian 700 / 500 |
+| sombra | dos sombras a ojo | **`elevation/floating`**, la del sistema |
+
+**Cinco reglas de la HIG que se implementan mal si no se dicen:**
+
+- **De 2 a 5 tabs, y un tab es un destino, nunca una acción.** Son cuatro. El `+` sigue en el FAB,
+  encima de la barra, no dentro.
+- **El color ES la selección.** No hay píldora, ni subrayado, ni fondo detrás de la tab activa.
+  Por eso importaba que el color se distinguiera: antes activa e inactiva eran casi el mismo gris.
+- **La banda de 21 de abajo es de la barra.** Ningún otro elemento fijo vive ahí. El contenido pasa
+  por debajo de la cápsula, no se corta contra ella.
+- **Se minimiza al hacer scroll** (`tabBarMinimizeBehavior(.onScrollDown)` en iOS). No está dibujado
+  como variante todavía; si lo vas a implementar, dime y lo dibujo antes.
+- **Etiqueta de 10, no de 11.** Apple pide 11pt; el sistema tiene `Control/XS` a 10. Se queda en 10 y
+  queda anotado — es el único punto donde la barra se aparta de la HIG a propósito.
+
+**Token nuevo: `--fg-brand`** (cian 700 en claro, 500 en oscuro; sigue a `bg/brand`). El sistema tenía
+`bg/brand` y `fg/on-brand`, pero no tenía la marca como color de texto, así que la tab activa estaba
+pintando con un token del sidebar.
+
+---
+
+## 2 · Los flujos redibujados que faltan en código
 
 ### Cuentas — dos pantallas (`Flow - Accounts`)
 
@@ -33,7 +60,7 @@ el estado, y retención sin la línea duplicada.
 
 ---
 
-## 2 · Los tokens que cambiaron
+## 3 · Los tokens que cambiaron
 
 Todos están en `tokens.css` y firmados en `token-ledger.json`. **Nada exige refactor**: los
 valores se mueven solos. Lo que sí conviene revisar es dónde tu código pinta a mano lo que ahora
@@ -50,7 +77,7 @@ la escalera de peligro corre en la misma dirección en los dos temas · **`borde
 `border/emphasis`** (alias en el ledger; migra el único consumidor cuando pases).
 
 **Tokens nuevos por componente:** `readout/swatch/*` (7), `fg/on-inverse-subtle`,
-`border/on-inverse`, `progress/track` y `account-summary-card/meta-chip/border`.
+`border/on-inverse`, `progress/track`, `account-summary-card/meta-chip/border` y **`fg/brand`**.
 
-POINTER: design-system/tokens/tokens.css,
-design-system/_build/token-ledger.json; Figma `Flow - Accounts`, `Flow - Obligaciones`.
+POINTER: design-system/components/bottom-nav.html, design-system/tokens/tokens.css,
+design-system/_build/token-ledger.json; Figma `76:3520`, `Flow - Accounts`, `Flow - Obligaciones`.

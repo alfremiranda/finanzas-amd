@@ -502,11 +502,17 @@ def mock(n, c):
                     f'<span style="padding:12px;border-radius:var(--radius-xl);{ts("Body/Base-Emphasis")}{st}">{dl}</span></div></div>')
         return '<div class="row">' + ras(False) + ras(True) + '</div>'
     if n == "bottom-nav" or n == "bottom-nav-button":
-        items = "".join(f'<span style="display:flex;flex-direction:column;align-items:center;gap:3px;'
-                        f'color:var({"--interactive-primary" if i == 0 else "--foreground-subtle"})">{sq(16,"--interactive-primary" if i==0 else "--foreground-subtle")}'
-                        f'<span style="{ts("Detail/Nano")}">{l}</span></span>' for i, l in enumerate(["Mes", "Resumen", "Cuentas", "Config"]))
-        return (f'<div style="width:300px;display:flex;justify-content:space-around;padding:10px 0;background:var(--nav-background);'
-                f'border:1px solid var(--border-default);border-radius:var(--radius-lg)">{items}</div>')
+        items = "".join(f'<span style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;'
+                        f'color:var({"--fg-brand" if i == 0 else "--foreground-subtle"})">'
+                        f'{sq(24, "--fg-brand" if i == 0 else "--foreground-subtle")}'
+                        f'<span style="{ts("Control/XS")}">{l}</span></span>'
+                        for i, l in enumerate(["Mes", "Resumen", "Cuentas", "Config"]))
+        sombra = ("0 var(--elevation-floating-key-offset-y) var(--elevation-floating-key-blur) "
+                  "var(--elevation-floating-key-spread) var(--shadow-key),"
+                  "0 var(--elevation-floating-ambient-offset-y) var(--elevation-floating-ambient-blur) "
+                  "var(--elevation-floating-ambient-spread) var(--shadow-ambient)")
+        return (f'<div style="width:370px;display:flex;padding:4px 12px;background:var(--nav-background);'
+                f'border-radius:999px;box-shadow:{sombra}">{items}</div>')
     if n == "menu-item":
         def mi(sel, exp):
             bg = 'background:var(--sidebar-item-background-selected);color:var(--sidebar-item-foreground-selected);' if sel else 'color:var(--sidebar-item-foreground);'
