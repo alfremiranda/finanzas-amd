@@ -60,11 +60,13 @@
  {
   "g": "Navigation",
   "n": "bottom-nav",
-  "v": 1,
-  "p": [],
-  "w": 370,
-  "h": 58,
-  "d": "Mobile tab bar. A floating capsule, 370×58, inset 21 from the left, right and bottom edges of the screen — the iOS 26 shape, per Apple’s HIG for tab bars.\n\nFour rules that are decisions rather than styling:\n\nInset on three sides. The 21 all round is what makes it read as floating over the content instead of as the edge of the screen. Content scrolls underneath it; nothing else fixed may live in that band.\n\nSelected is the brand colour. Icon and label both take fg/brand — cyan/700 in Light, cyan/500 in Dark; the rest take fg/subtle. Colour is the entire selected state: no pill, no underline, no background behind the selected tab.\n\nTwo to five tabs, never more, and never an action. Four are drawn here. A tab is a top-level destination you come back to; the plus lives in the FAB above the bar, not in it.\n\nEven segments. 370 minus 12 of padding each side, split four ways: 86.5 per tab, well over the 44 minimum target. Icons are 24 (Icon size=L). The label is Control/XS at 10 — Apple specifies 11, and that single point is the only place this bar knowingly departs from the HIG.\n\nOn scroll the real bar minimises (tabBarMinimizeBehavior on iOS). Not drawn as a variant yet."
+  "v": 2,
+  "p": [
+   "State=Expanded|Minimized"
+  ],
+  "w": 418,
+  "h": 188,
+  "d": "Mobile tab bar. A floating capsule inset 21 from the left, right and bottom edges of the screen — the iOS 26 shape, per Apple’s HIG for tab bars.\n\nState=Expanded is the bar at rest: 370×58, four tabs sharing the width evenly (86.5 each, well over the 44 minimum target), icons at 24, labels at Control/XS.\n\nState=Minimized is the bar while the page scrolls down: 58×58, only the current tab survives, as a round button. Label gone, siblings gone. It expands again when the page returns to the top or the button is tapped; a long press and a swipe moves between tabs without expanding. Same fill, same elevation, same 21 of inset — only the width collapses, so it reads as the same object shrinking rather than a different control appearing.\n\nFour rules that are decisions rather than styling:\n\nInset on three sides. The 21 all round is what makes it read as floating over the content instead of as the edge of the screen. Content scrolls underneath it; nothing else fixed may live in that band.\n\nSelected is the brand colour. Icon and label both take fg/brand — cyan/700 in Light, cyan/500 in Dark; the rest take fg/subtle. Colour is the entire selected state: no pill, no underline, no background behind the selected tab. It is also the only thing the minimized state has left to say where you are.\n\nTwo to five tabs, never more, and never an action. Four are drawn here. A tab is a top-level destination you come back to; the plus lives in the FAB above the bar, not in it.\n\nThe label is Control/XS at 10 — Apple specifies 11, and that single point is the only place this bar knowingly departs from the HIG."
  },
  {
   "g": "Navigation",

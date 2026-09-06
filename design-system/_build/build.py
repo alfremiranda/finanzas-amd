@@ -502,17 +502,21 @@ def mock(n, c):
                     f'<span style="padding:12px;border-radius:var(--radius-xl);{ts("Body/Base-Emphasis")}{st}">{dl}</span></div></div>')
         return '<div class="row">' + ras(False) + ras(True) + '</div>'
     if n == "bottom-nav" or n == "bottom-nav-button":
+        sombra = ("0 var(--elevation-floating-key-offset-y) var(--elevation-floating-key-blur) "
+                  "var(--elevation-floating-key-spread) var(--shadow-key),"
+                  "0 var(--elevation-floating-ambient-offset-y) var(--elevation-floating-ambient-blur) "
+                  "var(--elevation-floating-ambient-spread) var(--shadow-ambient)")
+        capsula = (f'background:var(--nav-background);border-radius:999px;box-shadow:{sombra}')
         items = "".join(f'<span style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;'
                         f'color:var({"--fg-brand" if i == 0 else "--foreground-subtle"})">'
                         f'{sq(24, "--fg-brand" if i == 0 else "--foreground-subtle")}'
                         f'<span style="{ts("Control/XS")}">{l}</span></span>'
                         for i, l in enumerate(["Mes", "Resumen", "Cuentas", "Config"]))
-        sombra = ("0 var(--elevation-floating-key-offset-y) var(--elevation-floating-key-blur) "
-                  "var(--elevation-floating-key-spread) var(--shadow-key),"
-                  "0 var(--elevation-floating-ambient-offset-y) var(--elevation-floating-ambient-blur) "
-                  "var(--elevation-floating-ambient-spread) var(--shadow-ambient)")
-        return (f'<div style="width:370px;display:flex;padding:4px 12px;background:var(--nav-background);'
-                f'border-radius:999px;box-shadow:{sombra}">{items}</div>')
+        expandida = f'<div style="width:370px;display:flex;padding:4px 12px;{capsula}">{items}</div>'
+        minimizada = (f'<div style="width:58px;height:58px;display:flex;align-items:center;justify-content:center;'
+                      f'{capsula}">{sq(24, "--fg-brand")}</div>')
+        return (f'<div style="display:flex;flex-direction:column;gap:16px;align-items:flex-start">'
+                f'{expandida}{minimizada}</div>')
     if n == "menu-item":
         def mi(sel, exp):
             bg = 'background:var(--sidebar-item-background-selected);color:var(--sidebar-item-foreground-selected);' if sel else 'color:var(--sidebar-item-foreground);'

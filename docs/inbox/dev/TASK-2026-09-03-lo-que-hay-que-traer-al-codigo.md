@@ -17,6 +17,7 @@ Hubo un intento anterior mío —barra plana pegada al borde, estilo iOS 18— q
 | icono | 20 | **24** (`Icon size=L`) |
 | tab activa | `sidebar/accent-foreground` → #0f172a, casi igual a las otras | **`fg/brand`**, cian 700 / 500 |
 | sombra | dos sombras a ojo | **`elevation/floating`**, la del sistema |
+| estados | uno | **`State=Expanded` / `State=Minimized`** |
 
 **Cinco reglas de la HIG que se implementan mal si no se dicen:**
 
@@ -26,8 +27,13 @@ Hubo un intento anterior mío —barra plana pegada al borde, estilo iOS 18— q
   Por eso importaba que el color se distinguiera: antes activa e inactiva eran casi el mismo gris.
 - **La banda de 21 de abajo es de la barra.** Ningún otro elemento fijo vive ahí. El contenido pasa
   por debajo de la cápsula, no se corta contra ella.
-- **Se minimiza al hacer scroll** (`tabBarMinimizeBehavior(.onScrollDown)` en iOS). No está dibujado
-  como variante todavía; si lo vas a implementar, dime y lo dibujo antes.
+- **Se minimiza al hacer scroll.** Ya está dibujado: `bottom-nav` ahora tiene
+  `State=Expanded|Minimized`. Al bajar, la barra se encoge a **58×58**, un botón redondo con el
+  icono de la tab actual — se van la etiqueta y las otras tres. Vuelve a expandirse al llegar arriba
+  o al tocarla; con pulsación larga y arrastre se cambia de tab sin expandir. Mismo fondo, misma
+  elevación, mismos 21 de margen: es el mismo objeto encogiéndose, no otro control. En iOS es
+  `tabBarMinimizeBehavior(.onScrollDown)`; en la PWA hay que hacerlo a mano con el scroll.
+  Frame de referencia: `Flow - Accounts` → `Mobile · 1 · Cuentas · scrolled (nav minimizado)`.
 - **Etiqueta de 10, no de 11.** Apple pide 11pt; el sistema tiene `Control/XS` a 10. Se queda en 10 y
   queda anotado — es el único punto donde la barra se aparta de la HIG a propósito.
 

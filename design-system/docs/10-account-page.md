@@ -326,8 +326,8 @@ that names the quantity can be, and Dev checked it in one sentence.
 ## 12. El flujo dibujado (2026-09-02)
 
 `Flow - Accounts` quedó con la misma forma que `Flow - Onboarding`: cuatro secciones — Desktop y
-Mobile, claro y oscuro — cada una con el camino feliz y los casos límite. **36 frames**, nueve por
-sección.
+Mobile, claro y oscuro — cada una con el camino feliz y los casos límite. **38 frames**: nueve por sección
+de escritorio y diez por sección móvil — el caso `scrolled` solo existe en móvil.
 
 ### Camino feliz
 
@@ -348,6 +348,7 @@ dibujado en ninguna parte.
 | `un solo día` | hay movimientos pero la gráfica necesita **dos días distintos**, así que aún no dibuja |
 | `tarjeta de crédito` | el saldo es una deuda y la meta lleva el chip de fechas |
 | `sin configurar` | cuenta sin `startingBalance` |
+| `scrolled (nav minimizado)` | al bajar, la tab bar se encoge a un botón redondo (`State=Minimized`). Solo móvil: en escritorio no hay tab bar |
 
 **`un solo día` es el que no se me habría ocurrido sin leer el código.** Hay filas en el ledger y
 aun así no hay gráfica, porque una serie necesita dos puntos. Sin dibujarlo, quien lo implemente
