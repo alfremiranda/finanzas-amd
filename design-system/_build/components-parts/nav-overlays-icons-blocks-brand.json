@@ -63,8 +63,8 @@
   "v": 1,
   "p": [],
   "w": 412,
-  "h": 58,
-  "d": "Mobile tab bar, 412×58. The FAB with its speed-dial sits above it, not inside it."
+  "h": 84,
+  "d": "The mobile tab bar. Full width, flush to the bottom edge of the screen.\n\nREBUILT 2026-09-02 IN THE iOS SHAPE, on Alfredo's call. It used to be a floating pill — radius 9999, two drop shadows, inset from the sides — which reads as a control hovering over the page. A tab bar is not hovering: it is the edge of the screen, and every phone the app runs on says so with a flat bar, a hairline and nothing else.\n\nWhat that changes, and each one is a decision rather than a style:\n\nThe hairline replaces the shadow. A shadow says floating; a rule says edge. nav/border does the separating now, and the two drop shadows are gone.\n\nNo radius and no side inset. The bar meets the three edges of the screen it sits in.\n\nNo pill behind the selected tab. Colour is the selection — icon and label both take nav/item/foreground-selected — which is what lets four tabs fit 412 without the bar turning into furniture.\n\n34px of bottom padding is the home indicator. The bar is 49 of content plus that inset; on a device without one the inset collapses and the bar is 49. Do not centre the content in the full height — it belongs in the top 49.\n\nThe items now use nav/* instead of sidebar/*. They were borrowing another component's tokens, so a change to the sidebar would have moved the tab bar for no reason either side could see."
  },
  {
   "g": "Navigation",
