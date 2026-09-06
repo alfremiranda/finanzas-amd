@@ -17,7 +17,20 @@ export interface MonthlySS {
   paid:    number
   /** True once the period is payable — you cannot be late on a month not yet due. */
   due:     boolean
+  /** What is owed on this month, frozen figure first. */
+  owed:    number
+  /**
+   * The four states a month can be in.
+   *
+   * `partial` is not decoration: a month with something paid and something left reads very
+   * differently from one nobody has touched, and folding both into "pendiente" hid that.
+   * The data always had it — only the label did not.
+   */
+  state:   'upcoming' | 'pending' | 'partial' | 'settled'
 }
+
+/** A payment almost never equals the accrual to the peso: the PILA rounds. */
+const TOLERANCE = 1000
 
 /** Reads the IBC a period's payments declared, latest wins. */
 function declaredIbc(db: FinanceDB, period: string): number | null {
@@ -54,15 +67,25 @@ export function ssByMonth(
     const paid = settledFor(db, 'ss', period)
     if (derived.ss <= 0 && paid <= 0) continue
 
+    const frozen = frozenAccrual(db, 'ss', period)
+    const owed = frozen ?? derived.ss
+    const due = nextMonthKey(period) <= today
+    const open = owed - paid > TOLERANCE
+
     out.push({
       period,
       dueKey: nextMonthKey(period),
       suggested: derived.ss,
       suggestedIbc: derived.ibc,
-      frozen: frozenAccrual(db, 'ss', period),
+      frozen,
       paidIbc: declaredIbc(db, period),
       paid,
-      due: nextMonthKey(period) <= today,
+      due,
+      owed,
+      state: !open ? 'settled'
+        : !due    ? 'upcoming'
+        : paid > 0 ? 'partial'
+        : 'pending',
     })
   }
   return out

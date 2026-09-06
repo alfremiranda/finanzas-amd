@@ -7,13 +7,54 @@ import { COP, USD, fmtDate } from '@/lib/format'
 import { MONTHS } from '@/data/defaults'
 import { ssByMonth, retencionByYear } from '@/lib/obligationsYear'
 import { settlementsFor } from '@/lib/obligations'
-import { isOutstanding } from '@/components/cards/ObligacionesCard'
 import { SectionCard } from '@/components/ui/SectionCard'
-import { Badge } from '@/components/ui/Badge'
+import { Separator } from '@/components/ui/separator'
 import { Progress } from '@/components/ui/Progress'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/components/ui/empty'
 import { cn } from '@/lib/utils'
+
+
+/**
+ * The page's own answer, above the two cards.
+ *
+ * The two figures are NOT summed, and that is the point. Social security is money owed to
+ * an operator; retención is money that should be set ASIDE. A single total would assert a
+ * debt that does not exist.
+ *
+ * The social security note counts overdue MONTHS rather than pesos: "two months late" is
+ * the fact you act on, and the amount is already the figure beside it.
+ */
+function StatusStrip({ ssOwed, overdueMonths, ret }: {
+  ssOwed: number
+  overdueMonths: number
+  ret: { accrued: number; reserved: number; gap: number }
+}) {
+  const pct = ret.accrued > 0 ? Math.round((ret.reserved / ret.accrued) * 100) : 0
+  return (
+    <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-4 flex flex-col sm:flex-row gap-4 sm:gap-0">
+      <div className="flex-1 sm:pr-4">
+        <div className="ts-label-micro uppercase text-muted-foreground/70">Seguridad social</div>
+        <div className={cn('ts-amount-hero', ssOwed > 0 ? 'text-[var(--color-tax-txt)]' : 'text-foreground')}>
+          {COP(ssOwed)}
+        </div>
+        <div className="ts-body-small text-muted-foreground">
+          {overdueMonths === 0
+            ? 'Al día'
+            : `${overdueMonths} ${overdueMonths === 1 ? 'mes vencido' : 'meses vencidos'}`}
+        </div>
+      </div>
+      <Separator orientation="vertical" className="hidden sm:block" />
+      <div className="flex-1 sm:pl-4">
+        <div className="ts-label-micro uppercase text-muted-foreground/70">Retención {new Date().getFullYear()}</div>
+        <div className="ts-amount-hero text-foreground">{COP(ret.reserved)}</div>
+        <div className="ts-body-small text-muted-foreground">
+          {pct}% reservado de {COP(ret.accrued)}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 /**
  * The tax obligations, read down a year instead of across a month.
@@ -37,8 +78,11 @@ export function TributariasView() {
   const ss  = ssByMonth(db, Number(year), deductions, getSMMLV)
   const ret = retencionByYear(db, Number(year), deductions, getSMMLV)
 
-  const totalSuggested = ss.reduce((a, r) => a + (r.frozen ?? r.suggested), 0)
-  const totalPaid      = ss.reduce((a, r) => a + r.paid, 0)
+  // What is still owed, and over how many months — not what has been paid, which is the
+  // one figure that cannot tell you whether to act.
+  const ssOwed = ss.filter(r => r.state === 'pending' || r.state === 'partial')
+                   .reduce((a, r) => a + (r.owed - r.paid), 0)
+  const overdueMonths = ss.filter(r => r.state === 'pending' || r.state === 'partial').length
 
   function openMonth(period: string) {
     setCurKey(period)
@@ -69,16 +113,13 @@ export function TributariasView() {
         </Select>
       </div>
 
-      <SectionCard
-        icon={Landmark}
-        title="Seguridad social"
-        action={
-          <div className="text-right">
-            <div className="ts-amount-large">{COP(totalPaid)}</div>
-            <div className="ts-amount-micro text-muted-foreground">de {COP(totalSuggested)}</div>
-          </div>
-        }
-      >
+      {/* The page answers first, then the cards detail it. Before this the two cards
+          headlined opposite quantities — SS with what was PAID, retención with what was
+          MISSING — so the same question in the same place got two different answers and
+          the reader had to combine them. */}
+      <StatusStrip ssOwed={ssOwed} overdueMonths={overdueMonths} ret={ret} />
+
+      <SectionCard icon={Landmark} title="Seguridad social">
         {ss.length === 0 ? (
           <Empty className="border-0 py-2">
             <EmptyHeader>
@@ -90,8 +131,6 @@ export function TributariasView() {
         ) : (
           <div>
             {ss.map(r => {
-              const owed = r.frozen ?? r.suggested
-              const open = r.due && isOutstanding(owed, r.paid)
               const monthName = MONTHS[Number(r.period.slice(5)) - 1]
               const payments = settlementsFor(db, 'ss', r.period)
               const isOpen = expanded === r.period
@@ -104,26 +143,29 @@ export function TributariasView() {
                     type="button"
                     aria-expanded={isOpen}
                     onClick={() => setExpanded(isOpen ? null : r.period)}
-                    className="w-full text-left flex items-center gap-2 py-2 px-1 rounded-lg hover:bg-muted/50 transition-colors"
+                    className="w-full text-left flex items-stretch gap-2 py-2 px-1 rounded-lg hover:bg-muted/50 transition-colors"
                   >
+                    {/* The rail is on all four states, never absent. If it vanished on one
+                        the label column would shift for that row and the list would read
+                        as ragged rather than as a state changing. */}
+                    <span
+                      aria-hidden
+                      className={cn('w-[3px] rounded-full shrink-0',
+                        r.state === 'settled' ? 'bg-[var(--color-provision)]'
+                        : r.state === 'upcoming' ? 'bg-[var(--border)]'
+                        : 'bg-[var(--color-tax)]')}
+                    />
                     <ChevronDown
                       size={14}
                       aria-hidden
-                      className={cn('shrink-0 text-muted-foreground transition-transform duration-fast',
+                      className={cn('shrink-0 self-center text-muted-foreground transition-transform duration-fast',
                         isOpen && 'rotate-180', payments.length === 0 && 'opacity-0')}
                     />
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="ts-body-base-emphasis">{monthName}</span>
-                        {!r.due
-                          ? <Badge tone="neutral">Aún no vence</Badge>
-                          : open
-                            ? <Badge tone="warning">Pendiente</Badge>
-                            : <Badge tone="neutral">Pagado</Badge>}
-                      </div>
-                      {/* The base is shown only when the payment declared a different one:
-                          saying "IBC $X" on every row would imply a choice was made where
-                          the suggestion was simply accepted. */}
+                      <div className="ts-body-base-emphasis">{monthName}</div>
+                      {/* The base is shown only when a payment declared a different one:
+                          printing "IBC $X" on every row would imply a choice was made
+                          where the suggestion was simply accepted. */}
                       <div className="ts-body-small text-muted-foreground">
                         {r.paidIbc != null
                           ? `IBC facturado ${COP(r.paidIbc)}`
@@ -131,16 +173,26 @@ export function TributariasView() {
                         {payments.length > 1 && ` · ${payments.length} pagos`}
                       </div>
                     </div>
+                    {/* ONE figure, and its colour is the state — so the list can be read
+                        down the right edge without stopping at twelve badges. The figure
+                        is the actionable one: on an open month that is what is LEFT, which
+                        used to be the small grey number under a large "$0". */}
                     <div className="text-right shrink-0">
-                      <div className="ts-amount-base">{COP(r.paid)}</div>
-                      {owed !== r.paid && (
-                        <div className="ts-amount-micro text-muted-foreground">
-                          {open ? `faltan ${COP(owed - r.paid)}` : `causado ${COP(owed)}`}
-                        </div>
-                      )}
+                      <div className={cn('ts-amount-base',
+                        r.state === 'settled' ? 'text-[var(--color-provision)]'
+                        : r.state === 'upcoming' ? 'text-muted-foreground'
+                        : 'text-[var(--color-tax-txt)]')}>
+                        {r.state === 'settled' ? COP(r.paid)
+                          : r.state === 'upcoming' ? COP(r.owed)
+                          : COP(r.owed - r.paid)}
+                      </div>
+                      <div className="ts-detail-base text-muted-foreground">
+                        {r.state === 'settled' ? 'pagado'
+                          : r.state === 'upcoming' ? 'causado'
+                          : 'faltan'}
+                      </div>
                     </div>
                   </button>
-
                   {isOpen && (
                     <div className="pl-6 pr-1 pb-2 space-y-1">
                       {payments.map(pay => (
@@ -182,7 +234,6 @@ export function TributariasView() {
       <SectionCard
         icon={PiggyBank}
         title={`Retención ${year}`}
-        action={<div className="ts-amount-large text-[var(--color-tax-txt)]">{COP(ret.gap)}</div>}
       >
         <div className="space-y-3">
           {/* Retención is not a monthly payment, so it gets a running total rather than a
@@ -209,8 +260,12 @@ export function TributariasView() {
                 tone="provision"
                 label={`${Math.round((ret.reserved / ret.accrued) * 100)}% de la retención del año reservado`}
               />
-              <div className="ts-body-small text-muted-foreground">
-                Faltante {COP(ret.gap)} · {Math.round((ret.reserved / ret.accrued) * 100)}% reservado
+              {/* No "Faltante X · Y% reservado" here: the strip above says the
+                  percentage and the bar draws it, so this said the same thing a third
+                  time. What is left is the pair the other rows use. */}
+              <div className="flex items-baseline justify-between pt-1 border-t border-[var(--border)]">
+                <span className="ts-body-base-emphasis">Faltante por reservar</span>
+                <span className="ts-amount-base text-[var(--color-tax-txt)]">{COP(ret.gap)}</span>
               </div>
             </>
           )}
