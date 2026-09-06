@@ -10,6 +10,10 @@ import { useFinanceStore } from '@/store/financeStore'
 import { useSettingsStore } from '@/store/settingsStore'
 import { useAuthStore } from '@/store/authStore'
 import { useUIStore } from '@/store/uiStore'
+import { useLiveTRM } from '@/hooks/useLiveTRM'
+import { computeAccountBalance } from '@/lib/calc'
+import { COP, USD } from '@/lib/format'
+import { DEFAULTS } from '@/data/defaults'
 import { SectionCard } from '@/components/ui/SectionCard'
 import { ReservaCard } from '@/components/cards/ReservaCard'
 import { Button } from '@/components/ui/button'
@@ -79,9 +83,25 @@ function DashboardHeader() {
 // ─── Accounts overview ────────────────────────────────────────────────────────
 
 function AccountsOverview() {
-  const { getAccounts } = useFinanceStore()
+  const { getAccounts, db } = useFinanceStore()
   const { setView, openSheet, setEditingAccount } = useUIStore()
+  const primaryCurrency = useSettingsStore(s => s.primaryCurrency) ?? 'COP'
+  const { trm: liveTRM } = useLiveTRM()
   const accounts = getAccounts()
+
+  // Same rate the TRM badge shows, falling back to the latest month's when offline — the
+  // two must never disagree on screen about what a dollar is worth today.
+  const allKeys = Object.keys(db).filter(k => k !== '_settings').sort()
+  const latestKey = allKeys[allKeys.length - 1] ?? ''
+  const trmUsed = liveTRM ?? (db[latestKey] as { trm?: number } | undefined)?.trm ?? DEFAULTS.trm
+  const mixedCurrencies = new Set(accounts.map(a => a.currency)).size > 1
+
+  const netWorth = accounts.reduce((sum, a) => {
+    const bal = computeAccountBalance(a.id, a, db, latestKey)
+    if (a.currency === primaryCurrency) return sum + bal
+    return sum + (a.currency === 'USD' ? bal * trmUsed : bal / trmUsed)
+  }, 0)
+  const fmtTotal = (n: number) => primaryCurrency === 'USD' ? USD(n) : COP(n)
   const userAccounts = accounts.filter(a => !a.locked)
   const favorites = accounts.filter(a => a.favorite)
 
@@ -118,6 +138,28 @@ function AccountsOverview() {
         </Button>
       }
     >
+      {/* One figure over EVERY account, not over a type.
+          The question this answers is "how much do I have", and that question has no type —
+          which is why it is not the savings total that used to live on the Ahorros page.
+          Bringing that back would reintroduce the account type as the organising idea,
+          which is exactly what retiring that page removed.
+          It is PATRIMONIO: a credit card's balance is negative, so what is owed subtracts.
+          "How much do I have" includes what you owe, and the label says so rather than
+          leaving the reader to guess which of the two readings this is.
+          And it is a CONVERSION, not a sum — accounts are in COP and in USD — so it says
+          it converted and at which rate. A total that mixes currencies silently is worse
+          than no total. */}
+      <div className="mb-3">
+        <div className="ts-detail-base text-muted-foreground">Patrimonio · todas las cuentas</div>
+        <div className="ts-amount-hero text-foreground">{fmtTotal(netWorth)}</div>
+        <div className="ts-body-small text-muted-foreground">
+          {accounts.length} {accounts.length === 1 ? 'cuenta' : 'cuentas'}
+          {mixedCurrencies && trmUsed
+            ? ` · convertido a ${primaryCurrency} · TRM ${trmUsed.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`
+            : ''}
+          {' · la deuda resta'}
+        </div>
+      </div>
       {favorites.length === 0 ? (
         <Empty className="border-0 py-2">
           <EmptyHeader>

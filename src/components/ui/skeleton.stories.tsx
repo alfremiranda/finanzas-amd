@@ -8,14 +8,14 @@ type Story = StoryObj<typeof meta>
 /**
  * ## Acceptance criteria
  *
+ * - **It uses `bg/disabled`**, the same token as a disabled control, because both mean
+ *   "here but not usable yet". That token collided with `bg/surface` until 2026-09-03 — the
+ *   placeholder was invisible on any card — and it was a CLASS, not a case: five neutral
+ *   tokens shared that value. Alfredo moved the family a rung, so the argument and the
+ *   value now agree.
  * - **It takes the shape of what is coming**, never a generic spinner: if what is loading
  *   is a row with an avatar and two lines, the placeholder is that.
  * - It announces nothing on its own; the container communicates the loading state.
- *
- * **Open with Design (Q-2026-09-02):** the component specifies `bg/disabled`, which is
- * `#f1f5f9` — the same value as `bg/surface`, every card in the app. Built to spec and
- * measured, the placeholder vanished on any card, so the code stays on `bg-muted`: not the
- * right token, but the only visible one.
  */
 export const ShapeOfWhatIsComing: Story = {
   render: () => (
