@@ -10510,6 +10510,13 @@
       "letterSpacing": 0
     },
     {
+      "name": "Detail/Large-Strong",
+      "weight": "Bold",
+      "size": 12,
+      "lineHeight": 18,
+      "letterSpacing": 0
+    },
+    {
       "name": "Amount/Small",
       "weight": "SemiBold",
       "size": 14,
