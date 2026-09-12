@@ -213,13 +213,12 @@ button { font: inherit; color: inherit; }
    - In the hero, .cta-row is a child of a column with `align-items: flex-start`, so the row is
      only as wide as its buttons and `justify-content: center` has no free space to use. It has
      to stretch to the column first.
-   - The calculator link and the footer button are single buttons in a wrapping or column flex
-     container, so they centre themselves on their own line with auto margins / align-self.
+   - The footer button is a single button in a column flex container, so it centres itself on
+     its own line with align-self.
    Text above them stays as it is; only the buttons move. Scoped to content — the nav's actions
    are pinned to the end of the bar and must stay there. */
 @media (max-width: 759px) {
   .cta-row { align-self: stretch; justify-content: center; }
-  .crosslink > .btn { margin-inline: auto; }
   .footer__pitch > .btn { align-self: center; }
 }
 
@@ -804,38 +803,116 @@ html.dark [data-icon='moon'] { display: none; }
 .privacy__card h3 { margin-bottom: var(--spacing-8); }
 .privacy__card p { color: var(--fg-subtle); }
 
-/* ── §9. Calculator cross-link ──────────────────────────────────────────────────────── */
-.crosslink {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-20);
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--spacing-24);
-  border: var(--border-width-default) solid var(--border-default);
-  border-radius: var(--radius-2xl);
-  background: var(--bg-surface-subtle);
-}
-
-/* ── §10. Founders / Pro ────────────────────────────────────────────────────────────── */
-.pro {
+/* ── §9. Calculator — a protagonist block ─────────────────────────────────────────────
+   A warm panel so it stands apart from the cool privacy stage above it: the surface leaning
+   toward --bg-tax, mixed from tokens so it flips with the theme. The result card inside is
+   built from the landing's own tokens rather than a screenshot of the calculator page, whose
+   hand-copied tokens still render it in a different typeface. */
+.calc {
   display: grid;
   gap: var(--block-gap);
-  align-items: start;
+  align-items: center;
+  padding: clamp(var(--spacing-24), 5vw, var(--spacing-64));
+  border-radius: var(--radius-2xl);
+  /* `in oklab`, not `in oklch`. oklch interpolates HUE, and in dark mode the surface is a
+     blue slate with real chroma (hue ~260°) while the amber sits near 95° — the short way
+     round between them runs through cyan, so the "warm" panel rendered teal in dark and
+     stopped standing apart from the cyan stage above it. In light the surface is nearly
+     achromatic, its hue barely weighs, and the bug was invisible. oklab mixes on the a/b
+     axes with no hue arc, so the tint stays amber in both themes. */
+  background: linear-gradient(
+    135deg,
+    var(--bg-surface-default) 0%,
+    color-mix(in oklab, var(--bg-surface-default), var(--bg-tax) 22%) 100%
+  );
 }
-@media (min-width: 900px) { .pro { grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr); } }
-.plan {
+@media (min-width: 900px) { .calc { grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr); } }
+.calc__copy { display: flex; flex-direction: column; align-items: flex-start; gap: var(--spacing-16); }
+.calc__copy .lead { max-width: 40ch; }
+.calc__copy .cta-row { margin-top: var(--spacing-8); }
+
+.calc__card {
+  margin: 0;
+  display: grid;
+  gap: var(--spacing-20);
+  padding: var(--spacing-24);
   border: var(--border-width-default) solid var(--border-default);
   border-radius: var(--radius-2xl);
   background: var(--bg-surface-subtle);
-  padding: var(--spacing-24);
+  color: var(--fg-subtle);
+  box-shadow:
+    0 var(--elevation-floating-key-offset-y) var(--elevation-floating-key-blur)
+      var(--elevation-floating-key-spread) var(--shadow-key),
+    0 var(--elevation-floating-ambient-offset-y) var(--elevation-floating-ambient-blur)
+      var(--elevation-floating-ambient-spread) var(--shadow-ambient);
+}
+.calc__inputs { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--spacing-12); }
+.calc__field {
   display: flex;
   flex-direction: column;
+  gap: var(--spacing-4);
+  padding: var(--spacing-12) var(--spacing-16);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface-default);
+}
+.calc__field .ts-amount-large { color: var(--fg-default); }
+.calc__result {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  padding-top: var(--spacing-16);
+  border-top: var(--border-width-default) solid var(--border-default);
+}
+/* The total is the only figure on this card that should pull the eye. --fg-tax on the card
+   measures 4.97:1 in light and 10.15:1 in dark — large text needs 3. */
+.calc__total {
+  font-weight: 700;
+  font-size: var(--display-lg);
+  line-height: 1.05;
+  letter-spacing: -1px;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-tax);
+}
+
+/* One hue in three strengths, not three hues. The three parts are all social security — one
+   kind of money — and --bg-tax and --fg-tax happen to share a value in dark mode, so two
+   separate tokens would have merged pensión and salud into one colour there. An alpha ramp of
+   one token stays distinct in both themes. Colour is never the only carrier: every row names
+   its part. */
+.calc__bar {
+  display: flex;
+  gap: 2px;
+  height: var(--spacing-12);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+.calc__seg { width: var(--pct); }
+.calc [data-part='pension'] { --part: var(--fg-tax); }
+.calc [data-part='salud'] { --part: color-mix(in oklch, var(--fg-tax) 62%, transparent); }
+.calc [data-part='arl'] { --part: color-mix(in oklch, var(--fg-tax) 32%, transparent); }
+.calc__seg, .calc__dot { background: var(--part); }
+
+.calc__rows { display: grid; gap: var(--spacing-8); }
+.calc__rows li {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--spacing-10);
+  color: var(--fg-default);
+}
+.calc__dot { width: 10px; height: 10px; border-radius: var(--radius-full); }
+.calc__rate { color: var(--fg-subtle); }
+
+/* ── §10. Pro ───────────────────────────────────────────────────────────────────────────
+   One short column now. The second column was the "Qué llevará Pro" list, which came out with
+   the promise it sat beside (see the section's HTML comment). */
+.pro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   gap: var(--spacing-16);
 }
-.plan__list { display: grid; gap: var(--spacing-8); color: var(--fg-subtle); }
-.plan__list li { display: flex; gap: var(--spacing-8); }
-.plan__list svg { color: var(--fg-provision); flex: none; margin-top: 3px; }
+.pro .cta-row { margin-top: var(--spacing-8); }
 .badge {
   display: inline-flex;
   align-items: center;
