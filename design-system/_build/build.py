@@ -442,11 +442,12 @@ def mock(n, c):
         anillo = ("background:conic-gradient(" + ", ".join(paradas) + ");"
                   "-webkit-mask:radial-gradient(circle, transparent 58%, #000 58.5%);"
                   "mask:radial-gradient(circle, transparent 58%, #000 58.5%)")
-        return (f'<div style="position:relative;width:180px;height:180px;border-radius:999px;{anillo}">'
-                f'</div><div style="position:absolute;inset:0;display:flex;flex-direction:column;'
-                f'align-items:center;justify-content:center;pointer-events:none">'
+        return (f'<div style="position:relative;width:180px;height:180px">'
+                f'<div style="width:180px;height:180px;border-radius:999px;{anillo}"></div>'
+                f'<div style="position:absolute;inset:0;display:flex;flex-direction:column;'
+                f'align-items:center;justify-content:center;gap:2px;pointer-events:none">'
                 f'<span style="{ts("Amount/Large")}color:var(--foreground-default)">$54.574.000</span>'
-                f'<span style="{ts("Detail/Base")}color:var(--foreground-subtle)">Bruto</span></div>')
+                f'<span style="{ts("Detail/Base")}color:var(--foreground-subtle)">Bruto</span></div></div>')
     if n == "category-bar":
         segs = [("home", "Vivienda", "34,2"), ("food", "Alimentación", "21,5"),
                 ("bank", "Deudas y Crédito", "15,8"), ("transit", "Movilidad", "11,4"),
