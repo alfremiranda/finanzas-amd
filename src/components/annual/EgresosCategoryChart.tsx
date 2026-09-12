@@ -75,14 +75,23 @@ export function EgresosCategoryChart({ year }: EgresosCategoryChartProps) {
 
   const hasData = data.some(d => d.hasData)
 
-  // Only render months that have egreso data
-  const visibleData = useMemo(() => data.filter(d => d.hasData), [data])
+  /**
+   * Every month of the year is drawn, empty ones included — they get a 4px stub rather than
+   * nothing. A year that hides its empty months compresses time and stands March next to June
+   * as if they ran together; and the gap is itself information, since it says the app was not
+   * in use yet.
+   *
+   * The AVERAGE is a different question, so it keeps a different basis: it is the average of
+   * the months that have data. Dividing by twelve would make a half-used year report a spend
+   * it never had.
+   */
+  const monthsWithData = useMemo(() => data.filter(d => d.hasData), [data])
 
   const avg = useMemo(() => {
-    return visibleData.length > 0
-      ? visibleData.reduce((a, d) => a + d.total, 0) / visibleData.length
+    return monthsWithData.length > 0
+      ? monthsWithData.reduce((a, d) => a + d.total, 0) / monthsWithData.length
       : 0
-  }, [visibleData])
+  }, [monthsWithData])
 
 
   useEffect(() => {
@@ -109,10 +118,10 @@ export function EgresosCategoryChart({ year }: EgresosCategoryChartProps) {
 
     const g = svg.append('g').attr('transform', `translate(${mg.left},${mg.top})`)
 
-    const maxVal = max(visibleData, d => d.total) ?? 1
+    const maxVal = max(data, d => d.total) ?? 1
 
     const xScale = scaleBand<string>()
-      .domain(visibleData.map(d => d.label))
+      .domain(data.map(d => d.label))
       .range([0, w])
       .padding(0.28)
 
@@ -147,7 +156,7 @@ export function EgresosCategoryChart({ year }: EgresosCategoryChartProps) {
       .call(ax => ax.selectAll('text').attr('fill', tickColor).attr('font-size', '10.5px').attr('dy', '1.2em'))
 
     // Current month highlight column
-    const curDatum = visibleData.find(d => d.monthKey === curKey)
+    const curDatum = data.find(d => d.monthKey === curKey)
     if (curDatum) {
       g.append('rect')
         .attr('x', (xScale(curDatum.label) ?? 0) - 3)
@@ -158,23 +167,8 @@ export function EgresosCategoryChart({ year }: EgresosCategoryChartProps) {
         .attr('rx', 4)
     }
 
-    // Average line
-    if (avg > 0) {
-      const ay = yScale(avg)
-      g.append('line')
-        .attr('x1', 0).attr('x2', w)
-        .attr('y1', ay).attr('y2', ay)
-        .attr('stroke', avgColor)
-        .attr('stroke-dasharray', '4,4')
-        .attr('stroke-width', 1.5)
-      g.append('text')
-        .attr('x', 2).attr('y', ay - 4)
-        .attr('font-size', '9px').attr('fill', tickColor).attr('opacity', 0.7)
-        .text('promedio')
-    }
-
     // Stacked bars by category
-    visibleData.forEach(d => {
+    data.forEach(d => {
       const x = xScale(d.label) ?? 0
       const bw = xScale.bandwidth()
 
@@ -206,9 +200,27 @@ export function EgresosCategoryChart({ year }: EgresosCategoryChartProps) {
       })
     })
 
+    // The average sits ON TOP of the bars, not under them: it is a figure the bars are read
+    // against, so a tall stack must not swallow it. That is also why chart/average is six rungs
+    // above chart/grid.
+    // Average line
+    if (avg > 0) {
+      const ay = yScale(avg)
+      g.append('line')
+        .attr('x1', 0).attr('x2', w)
+        .attr('y1', ay).attr('y2', ay)
+        .attr('stroke', avgColor)
+        .attr('stroke-dasharray', '4,4')
+        .attr('stroke-width', 1.5)
+      g.append('text')
+        .attr('x', 2).attr('y', ay - 4)
+        .attr('font-size', '9px').attr('fill', tickColor).attr('opacity', 0.7)
+        .text('promedio')
+    }
+
     // Invisible hover targets
     g.selectAll<SVGRectElement, Datum>('.hover-target')
-      .data(visibleData)
+      .data(data)
       .join('rect')
       .attr('class', 'hover-target')
       .attr('x', d => xScale(d.label) ?? 0)
@@ -228,7 +240,7 @@ export function EgresosCategoryChart({ year }: EgresosCategoryChartProps) {
       .on('mouseleave', () => setTooltip(null))
       .on('click', (_: MouseEvent, d) => { if (d.hasData) setCurKey(d.monthKey) })
 
-  }, [visibleData, dark, curKey, containerW, hasData, avg, setCurKey, year])
+  }, [data, dark, curKey, containerW, hasData, avg, setCurKey, year])
 
   if (!hasData) {
     return (

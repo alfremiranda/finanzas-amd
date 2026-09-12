@@ -185,10 +185,21 @@ export function TrendChart() {
       .call(ax => ax.selectAll('.tick line').remove())
       .call(ax => ax.selectAll('text').attr('fill', tickColor).attr('font-size', '10.5px'))
 
-    // X axis
+    /**
+     * X axis. Eight labels of `sep '26` do not fit in a phone's width and d3 does not wrap, so
+     * they overlap into each other. The year is what goes, because the month is the part that
+     * distinguishes one tick from the next.
+     *
+     * The rule is the measurement, not a device: show the year while a band is wide enough to
+     * hold the label. `label` itself keeps the year either way — it is the datum's identity and
+     * the tooltip's title, and a tooltip has room.
+     */
+    const YEAR_NEEDS = 44
+    const withYear = xScale.step() >= YEAR_NEEDS
+
     g.append('g')
       .attr('transform', `translate(0,${h})`)
-      .call(axisBottom(xScale).tickSize(0))
+      .call(axisBottom(xScale).tickSize(0).tickFormat(d => withYear ? d : d.split(' ')[0]))
       .call(ax => ax.select('.domain').attr('stroke', gridColor))
       .call(ax => ax.selectAll('text').attr('fill', tickColor).attr('font-size', '10.5px').attr('dy', '1.2em'))
 
