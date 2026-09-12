@@ -16,6 +16,11 @@ const dev = spawn('npx', ['vite', '--port', '5199', '--strictPort'], {
   cwd: ROOT, stdio: 'pipe', detached: true,
 })
 const base = 'http://localhost:5199'
+// The app is served under /panel/ since the landing took `/`. In dev `/` is a 404 — Vite does
+// not serve public/index.html at the root — so polling the origin waited the full 120s and
+// then reported "el dev server no respondió", which was true of the URL and false of the
+// server. Everything below addresses the app, not the origin.
+const app = `${base}/panel`
 
 // Polls the URL rather than watching stdout for a banner. Parsing the log made this depend
 // on Vite's output format and on a cold CI runner printing it inside 30s — it did not, and
@@ -26,7 +31,7 @@ dev.stderr.on('data', d => { log += d })
 const ready = await (async () => {
   for (let i = 0; i < 120; i++) {
     try {
-      const r = await fetch(base, { signal: AbortSignal.timeout(1000) })
+      const r = await fetch(app + '/', { signal: AbortSignal.timeout(1000) })
       if (r.ok) return true
     } catch { /* not up yet */ }
     await new Promise(r => setTimeout(r, 1000))
@@ -61,7 +66,7 @@ const browser = await chromium.launch()
 // though every frame of it is "correct".
 {
   const p = await browser.newPage({ viewport: { width: 1440, height: 900 } })
-  await p.goto(`${base}/?preview=onboarding`, { waitUntil: 'networkidle' })
+  await p.goto(`${app}/?preview=onboarding`, { waitUntil: 'networkidle' })
   const col = () => p.evaluate(() => {
     const c = document.querySelector('[class*="max-w-sm"]')
     return getComputedStyle(c).transform
@@ -88,7 +93,7 @@ const browser = await chromium.launch()
 // the only signal that an operation is still running.
 {
   const p = await browser.newPage({ viewport: { width: 1280, height: 900 }, reducedMotion: 'reduce' })
-  await p.goto(`${base}/?preview=consent`, { waitUntil: 'networkidle' })
+  await p.goto(`${app}/?preview=consent`, { waitUntil: 'networkidle' })
   const width = () => p.evaluate(() => {
     const b = [...document.querySelectorAll('button')].find(x => /Autorizar/.test(x.textContent))
     return Math.round(b.getBoundingClientRect().width)
@@ -107,7 +112,7 @@ const browser = await chromium.launch()
   // And movement really is gone: the step column keeps its opacity transition but loses
   // the transform.
   const p2 = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' })
-  await p2.goto(`${base}/?preview=onboarding`, { waitUntil: 'networkidle' })
+  await p2.goto(`${app}/?preview=onboarding`, { waitUntil: 'networkidle' })
   await p2.getByRole('button', { name: /Comenzar/ }).click(); await p2.waitForTimeout(400)
   const rm = await p2.evaluate(() => {
     const c = document.querySelector('[class*="max-w-sm"]')

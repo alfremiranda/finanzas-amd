@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import { useFinanceStore } from '@/store/financeStore'
 import { useUIStore } from '@/store/uiStore'
 import { computeAccountBalance, creditCardStats } from '@/lib/calc'
-import { COP, COPShort, fmtDate } from '@/lib/format'
+import { COP, fmtDate } from '@/lib/format'
 import { CurrencyBadge } from '@/components/ui/Badge'
 import { AccountAvatar } from '@/components/ui/AccountAvatar'
 import { ACCOUNT_TYPE_LABEL } from '@/data/defaults'
@@ -37,22 +37,10 @@ export function AccountCardView({ account, size = 'lg', selected = false, onClic
   const balance = computeAccountBalance(account.id, account, db, latestKey)
   // The card already carries a currency badge, so amounts use "$" for both currencies instead
   // of the redundant "USD " prefix.
-  //
-  // The headline is SHORTENED, because this tile cannot hold the long form: at two columns on a
-  // 390px phone the card gives 139px of content and `$3.708.000` at Amount/Hero needs 166 — it
-  // was clipped by 27px here and ran 97px off the screen on Resumen. COP abbreviates the way
-  // the donut's centre does; USD drops its cents instead, since "$13,00 k" says less than
-  // "$13.000" about a balance of thirteen thousand dollars. The exact figure is one tap away on
-  // the account's own page, which is what this tile opens.
   const fmt = (n: number) =>
     account.currency === 'USD'
       ? '$' + (Math.round(n * 100) / 100).toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       : COP(n)
-
-  const fmtHeadline = (n: number) =>
-    account.currency === 'USD'
-      ? '$' + Math.round(n).toLocaleString('es-CO')
-      : COPShort(n)
 
   const isCredit  = account.type === 'credit'
   const isSavings = account.type === 'savings'
@@ -67,7 +55,7 @@ export function AccountCardView({ account, size = 'lg', selected = false, onClic
   // never moves, so on the small tile — where the debt and %-used lines are
   // hidden — the card showed a static number and looked like it ignored every
   // purchase. Available is the analogue of the balance every other type shows.
-  const amountStr    = !hasConfig ? null : isCredit ? fmtHeadline(cc!.available) : fmtHeadline(balance)
+  const amountStr    = !hasConfig ? null : isCredit ? fmt(cc!.available) : fmt(balance)
 
   // Meta line parts after the currency badge (pipe-separated)
   // The account TYPE reads here as text. It used to live only in the avatar's glyph,
@@ -96,7 +84,11 @@ export function AccountCardView({ account, size = 'lg', selected = false, onClic
         'text-left rounded-xl p-4 flex flex-col gap-2 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]',
         selected
           ? 'border-2 border-[var(--primary)] bg-[var(--color-income-bg)]'
-          : 'border border-[var(--border)] bg-card hover:border-[var(--primary)]/40',
+          // Default/Hover sit on bg/surface/subtle, a rung above the page — not on the card
+          // surface, which is what the grid's own container already uses. And hover marks with
+          // border/strong, a neutral: the brand tint said "this one is chosen", which is the
+          // Selected state's job and the reason the two read alike on a touch device.
+          : 'border border-[var(--border)] bg-[var(--bg-surface-subtle)] hover:border-[var(--border-strong)]',
       )}
     >
       {/* Header: icon · name · favorite (gap 6) */}
@@ -121,8 +113,14 @@ export function AccountCardView({ account, size = 'lg', selected = false, onClic
         </button>
       </div>
 
-      {/* Info block — meta · amount · primary sub-lines, tight (gap 0) */}
-      <div className="flex flex-col">
+      {/* info — 4px between the meta row and the amount, which is where Figma puts it.
+          The gap was 0 since 1e4f4fb9 ("card spacing to match Figma"), and the reason it was
+          wrong is instructive: this container holds THREE things in code — meta, the amount
+          and the yield/debt sub-lines — where Figma's `info` frame holds two. A uniform gap-1
+          would have pushed the sub-lines off the amount, which they belong to. So the fix is
+          not a gap on this block, it is a group: the amount and its sub-lines become one
+          child with no gap of their own. */}
+      <div className="flex flex-col gap-1">
         {/* Meta: currency badge | kind | number */}
         <div className="flex items-center gap-1.5 min-w-0">
           <CurrencyBadge currency={account.currency} />
@@ -134,9 +132,10 @@ export function AccountCardView({ account, size = 'lg', selected = false, onClic
           ))}
         </div>
 
-        {/* Amount */}
+        {/* amount-block — no gap of its own: the sub-lines hang off the figure. */}
+        <div className="flex flex-col">
         {amountStr
-          ? <div className="ts-amount-hero text-foreground">{amountStr}</div>
+          ? <div className="ts-amount-large text-foreground">{amountStr}</div>
           : <div className="ts-body-base text-muted-foreground">Sin configurar</div>}
 
         {/* Primary sub-lines (large only) */}
@@ -160,6 +159,7 @@ export function AccountCardView({ account, size = 'lg', selected = false, onClic
             ≈ {fmt(monthlyYield)}/mes · {account.rate}% E.A.
           </div>
         )}
+        </div>
       </div>
 
       {/* Secondary block — separated by the card gap (8px) */}
