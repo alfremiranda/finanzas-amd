@@ -409,10 +409,15 @@ def mock(n, c):
         for i, (mes, vals) in enumerate(datos):
             fondo = ("background:var(--chart-highlight);border-radius:4px;" if i == actual else "")
             if vals is None:
-                barra = '<span style="display:block;height:4px;border-radius:3px;background:var(--chart-empty)"></span>'
+                barra = ('<span style="display:block;height:4px;border-radius:var(--radius-4);'
+                         'background:var(--chart-empty)"></span>')
             else:
+                # Sólo el bloque de arriba se redondea (Alfredo, 12-sep): redondear cada
+                # segmento convierte una barra en una pila de pastillas sueltas.
+                arriba = len(vals) - 1
                 barra = "".join(
-                    f'<span style="display:block;height:{round(v / ymax * alto)}px;border-radius:{3 if k in (0, 3) else 0}px;'
+                    f'<span style="display:block;height:{round(v / ymax * alto)}px;'
+                    f'border-radius:{"var(--radius-4) var(--radius-4) 0 0" if k == arriba else "0"};'
                     f'background:var({toks[k]})"></span>'
                     for k, v in reversed(list(enumerate(vals))))
             cols += (f'<span style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;'
@@ -446,7 +451,7 @@ def mock(n, c):
                 f'<div style="width:180px;height:180px;border-radius:999px;{anillo}"></div>'
                 f'<div style="position:absolute;inset:0;display:flex;flex-direction:column;'
                 f'align-items:center;justify-content:center;gap:2px;pointer-events:none">'
-                f'<span style="{ts("Amount/Large")}color:var(--foreground-default)">$54.574.000</span>'
+                f'<span style="{ts("Amount/Hero")}color:var(--foreground-default)">$54,57 m</span>'
                 f'<span style="{ts("Detail/Base")}color:var(--foreground-subtle)">Bruto</span></div></div>')
     if n == "category-bar":
         segs = [("home", "Vivienda", "34,2"), ("food", "Alimentación", "21,5"),
