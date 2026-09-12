@@ -122,10 +122,15 @@ Each phase is independently shippable and leaves the product functional. Do not 
       still future work — v1 is the **manual channel** (`privacidad@netofinanzas.app` → delete the
       Supabase auth user, cascades via the confirmed `months` FK); the self-service button + Edge Function
       is later (see [[project-w3-erasure-vs-localfirst]]). (b) **Lawyer-review items** stand: RNBD
-      registration, international-transfer wording, minors clause — the drafter is not a lawyer. (c) A
-      **dev-only consent re-prompt** exists (local `_settings.privacyConsent` transiently drops during the
-      auth cycle); prod is masked by the login pull (both need network), so no prod re-prompt. Closable
-      offline-bulletproof with a dedicated local consent key if ever wanted — judged marginal.
+      registration, international-transfer wording, minors clause — the drafter is not a lawyer. (c) ~~A
+      **dev-only consent re-prompt** exists … prod is masked by the login pull … judged marginal.~~
+      **WRONG, corrected 2026-09-12.** There WAS a prod re-prompt: after an OAuth callback the consent
+      screen flashed for ~2s and vanished on its own. Alfredo saw it on Chrome mobile, Safari mobile
+      and the installed PWA. It was never visible from a desktop, which is why "masked by the login
+      pull" looked true — there the pull wins the race. And the cause was not the one this note
+      assumed (a local consent record dropping): `cloudReady` went true down two paths where no pull
+      had happened, so App's gate chain evaluated `needsConsent` against empty `_settings`. Fixed in
+      `authStore.ts` and pinned by `authStore.test.ts`, which fails against the old code.
 - [x] **Sentry.** ✅ 2026-07-25 (2nd attempt). Error tracking for web (later native), in prod + mobile-safe.
       **ROOT CAUSE OF THE MOBILE-LOGIN REGRESSION CONFIRMED: the PWA service worker's `autoUpdate` reload.**
       First attempt (PR #5, `d235b8a2`) shipped + verified working, but broke fresh OAuth login on mobile
