@@ -4,6 +4,14 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
   base: '/',
+  // The SPA's entry moved to app/index.html so `/` can be the landing page. `base` stays '/'
+  // on purpose: assets keep emitting to /assets/* and resolve from either path, so nothing
+  // about the bundle has to know which route served the shell.
+  build: {
+    rollupOptions: {
+      input: 'app/index.html',
+    },
+  },
   // Sentry release: the commit SHA in CI (GitHub Actions sets GITHUB_SHA), else
   // 'dev' locally. Ties every captured error to a build so minified stacks stay
   // legible until source-map upload lands (W4 D2, deferred).
@@ -31,13 +39,19 @@ export default defineConfig({
         // 'landing/**' joins them: the marketing page is a standalone static page with its
         // own fonts and token mirror. Precaching it would add ~110 kB to every install for a
         // page an installed user never opens.
-        globIgnores: ['calculadoras/**', 'storybook/**', 'landing/**'],
+        // 'index.html' is the LANDING, not the app shell — the app's is app/index.html and
+        // enters the precache on its own. Without this the marketing page would be precached
+        // into every install and then served by the SW to a user who asked for the app.
+        globIgnores: ['calculadoras/**', 'storybook/**', 'landing/**', 'index.html'],
         // Network-first for navigation (SPA shell)
-        navigateFallback: '/index.html',
+        navigateFallback: '/app/index.html',
         // Keep the static pages out of the SPA navigation fallback — a direct
         // navigation to /privacidad.html or /calculadoras/... must serve that page,
         // not the app shell. (They must also load pre-login and without the SW.)
-        navigateFallbackDenylist: [/^\/api/, /privacidad\.html$/, /^\/calculadoras\//, /^\/storybook\//, /^\/landing\//],
+        // `/^\/$/` joins them: the root is the landing page now, and the SPA fallback must
+        // not shadow it. It is an exact match on purpose — /app/ and everything under it
+        // still falls back to the shell.
+        navigateFallbackDenylist: [/^\/api/, /^\/$/, /privacidad\.html$/, /^\/calculadoras\//, /^\/storybook\//, /^\/landing\//],
         // Network-only for external APIs
         runtimeCaching: [
           {

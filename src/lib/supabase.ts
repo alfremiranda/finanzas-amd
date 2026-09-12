@@ -22,7 +22,10 @@ export function sbReady(): boolean { return true }
 
 // ─── Auth ────────────────────────────────────────────────────────────────────
 
-const REDIRECT_URL = `${window.location.origin}/`
+// `/app/`, not `/`: the root is the landing page. Supabase's Redirect URLs must list the
+// same path in BOTH projects, and that side is configured by hand — a mismatch there fails
+// the callback with no error in this code.
+const REDIRECT_URL = `${window.location.origin}/app/`
 
 export async function signInWithGitHub(): Promise<void> {
   await sbClient().auth.signInWithOAuth({

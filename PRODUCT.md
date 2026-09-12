@@ -50,8 +50,11 @@ Cinco superficies (la navegación expone cuatro; Configuración y Perfil viven e
 
 \* Tabs condicionales: solo aparecen si el usuario tiene ese grupo de deducciones habilitado.
 
-**Superficies públicas** (fuera de la app, sin login y sin cargar el bundle): la política de
-privacidad (`/privacidad.html`), las calculadoras SEO (`/calculadoras/…`, ver 4.12) y el
+**Rutas.** La app vive en `netofinanzas.app/app/`; la raíz `/` es el landing. El manifest y el
+`scope` de la PWA apuntan a `/app/`, y el callback de OAuth también.
+
+**Superficies públicas** (fuera de la app, sin login y sin cargar el bundle): el landing (`/`), la
+política de privacidad (`/privacidad.html`), las calculadoras SEO (`/calculadoras/…`, ver 4.12) y el
 **sistema de diseño en vivo** (`/storybook/`) — cada componente con todos sus estados, en claro
 y oscuro, en móvil y escritorio. Se puede abrir desde cualquier dispositivo sin tener el repo.
 
