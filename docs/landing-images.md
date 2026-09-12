@@ -50,6 +50,9 @@ bloque se ve completo sin la foto. La imagen añade atmósfera, nunca informaci�
 | `como-trabajas.webp` | Fondo del bloque «¿Cómo trabajas?» (panel oscuro, píldoras encima) | ✅ 2026-09-12 · 1254×1254 · 111 kB |
 
 | `cta-final.webp` | Fondo del cierre «Sabe cuánto es tuyo antes de gastarlo» (foto + overlay) | ✅ 2026-09-12 · 1536×1024 · 71 kB |
+| `como-trabajas-independiente.webp` | Fondo de «¿Cómo trabajas?» con **Independiente** elegido | **pendiente** |
+| `como-trabajas-empleado.webp` | Fondo de «¿Cómo trabajas?» con **Empleado** elegido | **pendiente** |
+| `como-trabajas-ambos.webp` | Fondo de «¿Cómo trabajas?» con **Ambos** elegido | **pendiente** |
 
 **Nota sobre la que ya está:** llegó cuadrada, no 16:9. No se recortó — `background-size: cover`
 la encuadra y el CSS la centra, y la composición aguanta porque el tercio tranquilo recorre toda la
@@ -152,3 +155,64 @@ Vuelto a medir: **12.60 · 5.96 · 5.90**, las tres con margen. La atmósfera de
 **La lección para la próxima imagen con texto encima:** un overlay que se degrada hacia abajo es
 decorativo; uno que es más fuerte donde está el texto es funcional. Y mide el peor píxel, no el
 promedio — el promedio de la bajada daba 6.04 y habría pasado.
+
+
+---
+
+### La serie de «¿Cómo trabajas?» — tres imágenes, una por perfil · 1600×900
+
+Ya están cableadas: al elegir un perfil, su foto se pone detrás de las píldoras. Cada una va apilada
+**sobre** `como-trabajas.webp`, así que mientras un archivo no exista su perfil sigue mostrando el
+escritorio de siempre. Sueltas el `.webp` con su nombre y aparece.
+
+**Lo que más importa: se intercambian en el mismo sitio.** Si cambian el ángulo, la luz o la mesa, el
+cambio de perfil se ve como un salto y no como «el escritorio cambia según quién eres». Por eso las
+tres comparten una base y sólo cambian los objetos.
+
+**Truco práctico:** adjunta `~/Projects/Neto/assets/landing/como-trabajas-original.png` como imagen de
+referencia en Gemini o ChatGPT. Mantiene la mesa, el ángulo y la luz mucho mejor que el texto solo.
+
+**Base compartida** (va al inicio de los tres prompts):
+
+> Fotografía editorial realista, vista en ángulo de tres cuartos desde arriba sobre una mesa de madera
+> clara, con luz natural cálida de media mañana entrando de lado desde la izquierda y sombras suaves.
+> Encuadre horizontal 16:9. El tercio izquierdo del cuadro es mesa vacía y tranquila; los objetos se
+> agrupan en la mitad derecha. Paleta sobria de maderas, blancos y gris pizarra, con un acento turquesa
+> apagado. Sin personas, sin texto, sin logos, sin pantallas legibles ni interfaces.
+
+**1 · `como-trabajas-independiente.webp`**
+
+> [base] El espacio de trabajo en casa de un diseñador independiente en Latinoamérica: una laptop
+> abierta vista desde atrás, una taza de café de cerámica, un cuaderno abierto con un bolígrafo encima,
+> una calculadora de escritorio y un teléfono boca abajo. Al fondo, una planta y una ventana
+> desenfocadas. Un lugar propio, flexible y ordenado a su manera.
+
+**2 · `como-trabajas-empleado.webp`**
+
+> [base] Un escritorio en una oficina luminosa en Latinoamérica: un teclado, el borde de un monitor con
+> la pantalla fuera de cuadro, un carné corporativo completamente en blanco con su cordón sobre la
+> mesa, un café en vaso para llevar y un organizador de escritorio con lápices. Al fondo, paneles de
+> vidrio de oficina desenfocados. Un lugar estructurado, de rutina.
+
+**3 · `como-trabajas-ambos.webp`**
+
+> [base] La misma mesa sostiene los dos trabajos a la vez. A un lado, un carné corporativo completamente
+> en blanco con su cordón y un vaso de café para llevar, recién dejados. Al otro, una laptop personal
+> abierta vista desde atrás y un cuaderno con bocetos a lápiz. Los dos grupos comparten la mesa sin
+> mezclarse: alguien que terminó su jornada de empleo y sigue con sus proyectos propios.
+
+**Las trampas de esta serie:**
+
+1. **El carné.** Los generadores le imprimen casi siempre un nombre, un logo o una foto de persona. Por
+   eso el prompt dice «completamente en blanco». Si sale con texto, descártala: un logo inventado de una
+   empresa es justo lo que no puede aparecer.
+2. **La coherencia entre las tres.** Genera las tres en la misma conversación y con la misma foto de
+   referencia. Si una sale con otra mesa o con la luz del otro lado, vuelve a pedirla antes de
+   convertirla: el salto se nota al cambiar de perfil.
+3. **Personas colándose al fondo** en la de empleado («oficina» invita a meter compañeros). La base dice
+   «sin personas»; si aparecen, descártala.
+4. **Sin pantallas**, como siempre.
+
+**Al agregarlas se vuelve a medir.** Las píldoras tienen su propio fondo y no dependen de la foto, pero
+el pie del bloque sí va sobre el velo oscuro. Si alguna sale muy clara en el lado izquierdo, puede
+tumbar ese contraste.

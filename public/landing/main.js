@@ -243,6 +243,7 @@
   var answer = document.querySelector('[data-router-answer]')
   var pills = document.querySelectorAll('[data-pills] [data-tab]')
   var caption = document.querySelector('[data-router-caption]')
+  var media = document.querySelector('[data-media]')
 
   if (router && answer) {
     var options = router.querySelectorAll('[data-profile]')
@@ -261,6 +262,10 @@
         pill.setAttribute('data-on', String(on.indexOf(pill.getAttribute('data-tab')) !== -1))
       })
       if (caption) caption.textContent = btn.getAttribute('data-caption')
+      // Each profile has its own photograph behind the pills. The attribute only picks the layer;
+      // the stylesheet stacks it over the default photo, so a file that is not there yet falls
+      // through to the one that is.
+      if (media) media.setAttribute('data-profile', btn.getAttribute('data-profile'))
 
       var profile = btn.getAttribute('data-profile')
       try {

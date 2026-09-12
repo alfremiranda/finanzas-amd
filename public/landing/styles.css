@@ -530,6 +530,20 @@ html.dark [data-icon='moon'] { display: none; }
   background-size: cover;
   background-position: center;
 }
+/* One photograph per profile, swapped as a choice is made. Each rule lists the profile's image
+   FIRST and the default photo SECOND: background layers paint top to bottom, and a layer whose
+   file fails to load is skipped. So the three can ship before their images exist — until a file
+   lands, its profile keeps showing the shared desk. Drop the file in and it appears. The set is
+   specified in docs/landing-images.md so the three read as one series when they swap. */
+.router__media[data-profile='independiente'] {
+  background-image: url('/landing/images/como-trabajas-independiente.webp'), url('/landing/images/como-trabajas.webp');
+}
+.router__media[data-profile='empleado'] {
+  background-image: url('/landing/images/como-trabajas-empleado.webp'), url('/landing/images/como-trabajas.webp');
+}
+.router__media[data-profile='ambos'] {
+  background-image: url('/landing/images/como-trabajas-ambos.webp'), url('/landing/images/como-trabajas.webp');
+}
 .router__media::before {
   content: '';
   position: absolute;
@@ -954,15 +968,55 @@ html.dark [data-icon='moon'] { display: none; }
 .pro h2 { color: var(--marketing-panel-foreground); }
 .pro .lead { max-width: 44ch; }
 .pro .cta-row { justify-content: center; margin-top: var(--spacing-8); }
-.badge {
+/* The status chip. It was the system Badge — #1e293b on a panel that is itself near #0f172a, so it
+   all but disappeared into the mesh. Brand cyan now, on the only tokens measured for this ground:
+   a tinted fill and rim from --marketing-accent-on-panel, the word Pro in that accent, the rest in
+   the panel foreground.
+
+   The dot is cyan and NOT --bg-live. That token exists and is green, and it is what the header's
+   "TRM en vivo" dot wears — it means live data. "En construcción" is not live data, and borrowing
+   the status colour would claim a state that is not true.
+
+   It pulses once every two seconds: a cycle, not a transition, so its period comes off
+   --motion-duration-spin like the Spinner's. Reduced motion keeps the dot and drops the pulse —
+   less movement, same information. */
+.pro-chip {
   display: inline-flex;
   align-items: center;
-  height: var(--badge-size);
-  padding-inline: var(--spacing-8);
+  gap: var(--spacing-8);
+  height: var(--spacing-32);
+  padding-inline: var(--spacing-12) var(--spacing-16);
   border-radius: var(--radius-full);
-  background: var(--badge-accent-background);
-  color: var(--badge-accent-foreground);
-  font-weight: 500;
+  border: var(--border-width-default) solid color-mix(in oklab, var(--marketing-accent-on-panel) 55%, transparent);
+  /* OPAQUE, mixed into the panel ground — not a translucent tint. Translucent, the chip let the
+     mesh through, and on a 375px panel the corner blobs crowd the centre: the word Pro, cyan on a
+     cyan-washed backdrop, measured 4.20:1 against the 4.5 its 14px needs (4.96 at 1280). An opaque
+     fill makes the chip's contrast independent of wherever the blobs happen to land. */
+  background: color-mix(in oklab, var(--marketing-panel-background), var(--marketing-accent-on-panel) 14%);
+  color: var(--marketing-panel-foreground);
+}
+.pro-chip strong { color: var(--marketing-accent-on-panel); font-weight: 600; }
+.pro-chip__dot {
+  position: relative;
+  width: var(--spacing-8);
+  height: var(--spacing-8);
+  border-radius: var(--radius-full);
+  background: var(--marketing-accent-on-panel);
+}
+.pro-chip__dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--marketing-accent-on-panel);
+  animation: pro-chip-pulse calc(var(--motion-duration-spin) * 2) var(--motion-easing-enter) infinite;
+}
+@keyframes pro-chip-pulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  70%, 100% { transform: scale(2.6); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pro-chip__dot::after { animation: none; opacity: 0; }
 }
 
 /* ── §11. FAQ ───────────────────────────────────────────────────────────────────────── */
@@ -1045,9 +1099,10 @@ html.dark [data-icon='moon'] { display: none; }
   align-items: center;
   gap: var(--spacing-16);
 }
-.cta-final .lead { color: var(--fg-subtle); max-width: 46ch; }
+/* No measure cap: Alfredo wants this on one line. 46ch was wrapping it in two with room to spare.
+   The .wrap--narrow column still bounds it; on a phone it cannot fit 64 characters and wraps. */
+.cta-final .lead { color: var(--fg-subtle); max-width: none; }
 .cta-final .cta-row { justify-content: center; margin-top: var(--spacing-8); }
-.cta-final__note { color: var(--fg-subtle); }
 
 /* ── §12. Footer ────────────────────────────────────────────────────────────────────────
    A marketing panel, so it carries data-theme="dark" like the others: dark whatever the page
