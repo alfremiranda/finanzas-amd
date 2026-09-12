@@ -190,9 +190,9 @@
            value is copied and none is invented. Measured on #0f172a: income 9.90, expense
            6.45, provision 9.29, tax 12.38, neutral 12.02 — all above AA for text, and these
            are glyphs. -->
-      <section class="section" id="como-funciona">
-        <div class="wrap">
-          <div class="panel" data-theme="dark" data-reveal>
+      <section class="section panel" id="como-funciona" data-theme="dark">
+        <div class="wrap" data-reveal>
+          <div class="panel__inner">
             <div class="panel__head">
               <h2 class="display-lg">¿Cómo trabajas?</h2>
               <p class="lead">
@@ -448,7 +448,7 @@
       </section>
 
       <!-- ── 8. Privacy ────────────────────────────────────────────────────────────── -->
-      <section class="section privacy" id="privacidad">
+      <section class="section privacy" id="privacidad" data-theme="dark">
         <div class="wrap">
           <div class="section-head" data-reveal>
             <h2 class="display-lg">Funciona sin conexión. Tus datos son tuyos.</h2>
@@ -615,14 +615,14 @@
 
     <!-- ── 13. Footer — the bounding-box panel ───────────────────────────────────────
          An inset rounded panel rather than a rule across the page, in the shape Alfredo
-         uses on alfremiranda.com. The gesture that makes it work is the oversized wordmark
-         cropped by the panel's own bottom edge — the colour is secondary, which is why this
-         one keeps the marketing panel the rest of the page already established instead of
-         inventing a brand-coloured block.
+         uses on alfremiranda.com. It keeps the marketing panel the rest of the page already
+         established instead of inventing a brand-coloured block.
 
-         The wordmark is aria-hidden and the <img> has an empty alt: the name is already the
-         first thing in the header and the link above it. Repeating it to a screen reader at
-         the end of the page is noise, not branding. -->
+         The oversized cropped wordmark that reference carries was built and then removed:
+         at this panel's size the crop only ate the font's descender space and a sliver of
+         the glyphs, so it read as a watermark sitting low rather than a deliberate cut —
+         and the mark beside it, which brings its own colours, never balanced against a word
+         set at 15%. A gesture that has to be explained is not landing. -->
     <footer class="footer">
       <div class="wrap">
         <div class="footer__panel" data-theme="dark" data-reveal>
@@ -670,11 +670,6 @@
           <div class="footer__legal ts-detail-large">
             <p>© <span data-year>2026</span> Neto · netofinanzas.app</p>
             <p>Herramienta de planeación. No constituye asesoría tributaria ni contable.</p>
-          </div>
-
-          <div class="footer__wordmark" aria-hidden="true">
-            <img src="/icon.svg" alt="" width="180" height="180" />
-            <span>Neto</span>
           </div>
         </div>
       </div>

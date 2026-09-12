@@ -388,14 +388,17 @@ html.dark [data-icon='moon'] { display: none; }
    That is not shorthand — they are the ONLY values in the system measured against an
    always-dark surface. The semantic accents (fg/income, fg/tax…) flip with the theme, so on
    a panel that never flips, half of them would land unreadable in one mode. */
+/* Full-bleed, like the privacy band and the closing block. The dark surface runs edge to
+   edge and only the CONTENT is bounded — `.section` already owns the vertical rhythm and
+   `.wrap` the gutter and the max-width, so the panel adds neither. A panel that stops at
+   1120px is a card; a band that runs out of the viewport is a change of ground, which is
+   what this section is doing. */
 .panel {
   position: relative;
   isolation: isolate;
   overflow: clip;
-  border-radius: var(--radius-2xl);
   background: var(--marketing-panel-background);
   color: var(--marketing-panel-foreground);
-  padding: clamp(var(--spacing-24), 4vw, var(--spacing-64));
 }
 .panel::before {
   content: '';
@@ -806,7 +809,6 @@ html.dark [data-icon='moon'] { display: none; }
   background: var(--marketing-panel-background);
   color: var(--marketing-panel-foreground-subtle);
   padding: clamp(var(--spacing-24), 4vw, var(--spacing-64));
-  padding-bottom: 0;
 }
 .footer__top {
   display: grid;
@@ -839,33 +841,6 @@ html.dark [data-icon='moon'] { display: none; }
   border-top: var(--border-width-default) solid color-mix(in oklch, var(--marketing-panel-foreground) 12%, transparent);
 }
 
-/* Cropped by the panel, on purpose. The negative bottom margin is how much of the letters
-   the panel eats; the line-height is pinned to 1 so the crop is the glyphs and not the font's
-   own descender space, which would vary by family. */
-.footer__wordmark {
-  display: flex;
-  align-items: center;
-  gap: 0.1em;
-  margin-top: clamp(var(--spacing-32), 5vw, var(--spacing-64));
-  /* How much of the letters the panel eats. −0.22em only grazed the baseline and read as a
-     wordmark that happened to sit low; the crop has to be unmistakably deliberate or it
-     looks like a mistake. */
-  margin-bottom: -0.3em;
-  font-size: clamp(72px, 17vw, 260px);
-  line-height: 1;
-  font-weight: 800;
-  letter-spacing: -0.05em;
-  color: color-mix(in oklch, var(--marketing-panel-foreground) 15%, transparent);
-  user-select: none;
-}
-/* The mark carries its own colours, so at full strength it outweighed a word set at 15% and
-   the two stopped reading as one lockup. Knocked back to sit at the same visual weight. */
-.footer__wordmark img {
-  width: 0.74em;
-  height: 0.74em;
-  border-radius: 0.17em;
-  opacity: 0.3;
-}
 
 /* ── §13. Reveal ────────────────────────────────────────────────────────────────────────
    Opacity + 16px of travel, staggered between siblings. What leaves goes one step faster
