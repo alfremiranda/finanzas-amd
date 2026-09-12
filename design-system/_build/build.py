@@ -388,6 +388,65 @@ def mock(n, c):
             f'<div style="{ts("Label/Micro")}text-transform:uppercase;color:var(--kpi-{k}-foreground)">{l}</div>'
             f'<div style="{ts("Amount/Hero")}color:var(--foreground-on-card)">{v}</div></div>'
             for k, l, v in [("income", "Ingreso bruto", "$ 8.800.000"), ("net", "Neto libre", "$ 2.640.000")]) + '</div>')
+    if n in ("TrendChart", "EgresosCategoryChart"):
+        cat = n == "EgresosCategoryChart"
+        # Las mismas cifras del componente de Figma, para que la página y el archivo
+        # no se contradigan: si una cambia, la otra falla a la vista.
+        datos = ([("ene", None), ("feb", None), ("mar", [1.9, 1.2, 0.9, 0.6]), ("abr", [1.9, 1.0, 0.9, 0.5]),
+                  ("may", [2.0, 1.4, 1.1, 0.7]), ("jun", [1.9, 1.1, 0.9, 0.6]), ("jul", [2.1, 1.5, 1.2, 0.8]),
+                  ("ago", [2.0, 1.3, 1.0, 0.7]), ("sep", [2.2, 1.4, 1.1, 0.7]), ("oct", None), ("nov", None), ("dic", None)]
+                 if cat else
+                 [("feb", [1.2, 0.9, 2.4, 3.1]), ("mar", [1.3, 1.0, 2.6, 3.4]), ("abr", [1.1, 0.8, 2.2, 2.7]),
+                  ("may", [1.4, 1.1, 2.9, 3.8]), ("jun", [1.2, 0.9, 2.5, 3.2]), ("jul", [1.5, 1.2, 3.1, 4.0]),
+                  ("ago", [1.3, 1.0, 2.7, 3.5]), ("sep", [1.4, 1.1, 2.8, 3.6])])
+        toks = (["--category-home-accent", "--category-food-accent", "--category-bank-accent", "--category-transit-accent"]
+                if cat else
+                ["--chart-categorical-1", "--chart-categorical-2", "--chart-categorical-3", "--chart-categorical-4"])
+        etiquetas = ["Obligaciones", "Provisiones", "Gastos", "Neto libre"]
+        ymax, alto = (8, 172) if cat else (12, 180)
+        actual = len(datos) - 4 if cat else len(datos) - 1
+        cols = ""
+        for i, (mes, vals) in enumerate(datos):
+            fondo = ("background:var(--chart-highlight);border-radius:4px;" if i == actual else "")
+            if vals is None:
+                barra = '<span style="display:block;height:4px;border-radius:3px;background:var(--chart-empty)"></span>'
+            else:
+                barra = "".join(
+                    f'<span style="display:block;height:{round(v / ymax * alto)}px;border-radius:{3 if k in (0, 3) else 0}px;'
+                    f'background:var({toks[k]})"></span>'
+                    for k, v in reversed(list(enumerate(vals))))
+            cols += (f'<span style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;'
+                     f'{fondo}"><span style="width:68%;display:flex;flex-direction:column;justify-content:flex-end">{barra}</span></span>')
+        promedio = ('<span style="position:absolute;left:0;right:0;top:88px;border-top:1.5px dashed var(--chart-average)"></span>'
+                    '<span style="position:absolute;left:2px;top:72px;' + ts("Detail/Nano") + 'color:var(--foreground-subtle)">promedio</span>') if cat else ""
+        rejilla = "".join(f'<span style="position:absolute;left:0;right:0;top:{round(alto - t / ymax * alto)}px;'
+                          f'border-top:1px dashed var(--chart-grid)"></span>' for t in range(0, ymax + 1, ymax // 4))
+        ejeX = "".join(f'<span style="flex:1;text-align:center;{ts("Detail/Base")}color:var(--foreground-subtle)">{m}</span>'
+                       for m, _ in datos)
+        leyenda = "" if cat else ('<div style="display:flex;gap:28px;margin-top:14px">' + "".join(
+            f'<span style="display:inline-flex;align-items:center;gap:6px">'
+            f'<span style="width:8px;height:8px;border-radius:2px;background:var({toks[k]})"></span>'
+            f'<span style="{ts("Detail/Nano")}color:var(--foreground-subtle)">{etiquetas[k]}</span></span>'
+            for k in range(4)) + '</div>')
+        return (f'<div style="width:100%;max-width:560px">'
+                f'<div style="position:relative;height:{alto}px;display:flex;align-items:flex-end;gap:0">'
+                f'{rejilla}{cols}{promedio}</div>'
+                f'<div style="display:flex;margin-top:8px">{ejeX}</div>{leyenda}</div>')
+    if n == "AnnualDonut":
+        segs = [("--chart-categorical-1", 14), ("--chart-categorical-2", 11),
+                ("--chart-categorical-3", 33), ("--chart-categorical-4", 42)]
+        paradas, acc = [], 0
+        for t, p_ in segs:
+            paradas.append(f'var({t}) {acc}% {acc + p_}%')
+            acc += p_
+        anillo = ("background:conic-gradient(" + ", ".join(paradas) + ");"
+                  "-webkit-mask:radial-gradient(circle, transparent 58%, #000 58.5%);"
+                  "mask:radial-gradient(circle, transparent 58%, #000 58.5%)")
+        return (f'<div style="position:relative;width:180px;height:180px;border-radius:999px;{anillo}">'
+                f'</div><div style="position:absolute;inset:0;display:flex;flex-direction:column;'
+                f'align-items:center;justify-content:center;pointer-events:none">'
+                f'<span style="{ts("Amount/Large")}color:var(--foreground-default)">$54.574.000</span>'
+                f'<span style="{ts("Detail/Base")}color:var(--foreground-subtle)">Bruto</span></div>')
     if n == "category-bar":
         segs = [("home", "Vivienda", "34,2"), ("food", "Alimentación", "21,5"),
                 ("bank", "Deudas y Crédito", "15,8"), ("transit", "Movilidad", "11,4"),

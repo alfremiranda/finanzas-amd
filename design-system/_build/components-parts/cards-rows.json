@@ -48,6 +48,17 @@
  },
  {
   "g": "Cards",
+  "n": "AnnualDonut",
+  "v": 2,
+  "p": [
+   "State=Default|Selected"
+  ],
+  "w": 520,
+  "h": 268,
+  "d": "The year’s gross, split into what it turned into: Obligaciones · Provisiones · Gastos · Neto libre. Four segments of chart/categorical/1–4 — the same four as TrendChart and DistribucionCard, so the three say the same thing with the same colours.\n\n220 across with a 30 ring. The track underneath is bg/surface/subtle, so the ring still reads as a whole when one segment is a sliver.\n\nThe centre is the readout, which is why this donut needs neither legend nor tooltip: by default it holds the gross, and selecting a segment moves that segment’s amount into the centre in its own colour while the others drop to 25%. Dimming the rest rather than lighting the one keeps the selected colour true — the colour is what names the segment.\n\nEach segment is a control with a name, a role and a key. Without that the amounts it reveals are mouse-only: unreachable by keyboard and unannounced to a screen reader.\n\nIt appears only when there is more than one segment with an amount. A donut of one colour is a circle."
+ },
+ {
+  "g": "Cards",
   "n": "Card",
   "v": 2,
   "p": [
@@ -77,6 +88,17 @@
   "w": 420,
   "h": 70,
   "d": "Where the gross income of the month went, as one bar. Not a chart component — it always shows the same four segments in the same order: Obligaciones · Provisiones · Gastos · Neto libre.\n\nSegments come from chart/categorical/*, so a segment can never drift from the KPI card it corresponds to. Hovering one dims the rest to 40% and reveals its amount on the right.\n\nSegments with a zero amount are not rendered, so the bar can have between one and four."
+ },
+ {
+  "g": "Cards",
+  "n": "EgresosCategoryChart",
+  "v": 2,
+  "p": [
+   "Device=Desktop|Mobile"
+  ],
+  "w": 688,
+  "h": 520,
+  "d": "The year month by month, each bar stacked by expense CATEGORY rather than by KPI — this is what the money was spent ON; TrendChart is what the month was made of.\n\n220 tall over 172 of plot, twelve bands, segments in category/<name>/accent so a category is the same colour here, in its row and in category-bar.\n\nEmpty months are drawn as a 4px stub on chart/empty, not left out. A year that hides its empty months compresses time and puts March next to June as though they were adjacent — and the gap IS information: it says the app was not being used yet.\n\nThe code cannot draw that today. visibleData filters months without data before the branch that draws the stub, so the branch is unreachable and chart/empty has no consumer until the filter goes. That is the one behavioural change this drawing asks for.\n\nThe average line sits ON TOP of the bars, dashed 4,4 at 1.5, on chart/average — six rungs above the grid because it is a figure you read against. The code draws it before the bars, so a tall stack swallows it.\n\nIts tooltip is not TooltipReadout: it is a hand-built panel with a per-category list and a «Promedio» footer. Two charts on one page with two different tooltips is a defect, and the fix belongs in the library rather than in either chart."
  },
  {
   "g": "Cards",
@@ -219,5 +241,16 @@
   "w": 651,
   "h": 1046,
   "d": "One entry in an account’s ledger. The five sibling rows each show one KIND of thing in its own view; this one shows whatever the account did, in date order, so a single row has to carry an income, an expense, both legs of a transfer and a social-security payment.\n\nThat is why the leading mark is a nested LedgerEntryIcon swap and not an axis. Six entry types times the axes below would be sixty variants for a fact the entry already carries.\n\nThree axes, and the matrix is deliberately sparse:\n· Device — Desktop edits and deletes in place; Mobile opens RowActionsSheet behind one button.\n· Flow — Credit prints the sign and paints the amount fg/provision; Debit leaves it fg/default. This is the one thing the siblings never needed, because each of them only ever moves money one way.\n· State — Default, Scheduled, Confirming, Opening. Confirming is Desktop only: it is the inline delete confirmation, and Mobile confirms inside the sheet. There is no Pressed, which the siblings do have, because this row has no pressed styling in code — the mobile tap opens the sheet and nothing else happens.\n\nScheduled is a state of the ENTRY, not of the row: the whole row drops to 60%, the mark becomes the clock whatever the type underneath, and the “Programado” badge appears on the metadata line.\n\nTHE BADGE SITS ON THE METADATA LINE, not beside the description, and that is the row family’s answer rather than a preference. The first build put it next to the description and capped the description with maxWidth so the badge could never be squeezed. That cap cannot survive: maxWidth is one of the few properties Figma refuses to override per instance, so a cap authored for a 603 row still truncated at 942, where the account page actually uses it. outcome-itemrow had already solved it — description alone on its line, FILL, truncating, no cap; badges and date below as chips that hug. It adapts to any width because nothing is pinned.\n\nState=Opening is the account’s STARTING balance, and it is a row rather than the strip it used to be above the list. That is the whole change: as a strip it had its own background and its own edges and read as a lid on the table; as a row it takes the same rules, the same left rail and the same right edge as the movements it explains, so the card is one table. It sits LAST, because the ledger runs newest first.\n\nIt carries the same mark and the same trailing actions as every other row — Alfredo’s call on 2026-09-01, and the right one. The first build replaced both with blank spacers on the reasoning that a starting balance is not a movement, which kept the columns aligned but made the row read as a footer that had lost its furniture. Giving it a mark of its own (LedgerEntryIcon Type=opening: a wallet on the neutral tint) says what it is instead of saying what it is missing, and keeping the actions means the whole column behaves the same way down the card.\n\nIt still carries no date and no running balance: at the opening, the amount IS the balance.\n\nOPEN for Dev — “eliminar” has no target here. A starting balance is a FIELD on the account (Account.startingBalance), not a ledger entry, so the pencil should open the account edit sheet and the bin has nothing to delete; clearing it means setting the field to null, which is an edit. Either the bin goes on this row or it means “borrar el saldo inicial”, and that is a product decision, not a design one.\n\nFlow is INERT on Opening and it is minted only at Flow=Debit. A starting balance has no direction. The alternative was two identical variants to keep the matrix square, which is a variant nobody maintains.\n\nMobile RESTACKS into three lines — amounts, description, metadata — and again the family got there first. At the account page’s 346 the single-line desktop shape has to fit a description, a date, an amount column, the mark and an action: it cannot, and something has to truncate. Stacking gives the text the full width instead. Desktop keeps one line.\n\nMobile’s action is Icon Button Size=XL (44), not LG. 44 is the 2.5.5 touch target and it is what the sibling rows use on Mobile. Desktop stays LG (36), where there is a pointer.\n\nOn Desktop the amount block HUGS its content and its children are right-aligned. It was pinned to 104 until 2026-09-01 on my reasoning that a leading “+” would otherwise shift the column between neighbouring rows. That reasoning was wrong and I never measured it: with right alignment the “+” extends LEFTWARD, so the right edge never moves. Measured after Alfredo changed it — every Default, Scheduled and Opening row lands its right edge at the same x, and the pin was solving a problem the alignment already solved.\n\nThe pin also had a cost it could not pay: `-USD 12.534,00` at Amount/Base measures 116 and wrapped to two lines inside 104, so a USD account got a different row height from a COP one. Hugging fixes that for free, at any currency and any string length. On Mobile the amounts move into the stack and none of this applies.\n\nCLOSED 2026-09-01 — the six differences this row opened against the code are all implemented (`a082dbfa`, `03173232`): the mobile restack, the 44px mobile target, Body/Base-Emphasis, Amount/Micro, the LG desktop actions and the badge on the metadata line. Dev flagged three of them as stale here; it was six. Verified in the source, not taken on trust.\n\nOne difference is left and it is small: the metadata line orders it [date][badge], the family and this component order it [badge][date] — outcome-itemrow puts its chips before the date. Not worth a ticket on its own; fold it into the next thing that touches the row."
+ },
+ {
+  "g": "Cards",
+  "n": "TrendChart",
+  "v": 2,
+  "p": [
+   "Device=Desktop|Mobile"
+  ],
+  "w": 688,
+  "h": 584,
+  "d": "The last eight months, each one a stacked bar: Obligaciones · Provisiones · Gastos · Neto libre, bottom to top — the order in which a month stops being yours.\n\n252 tall over 180 of plot; each bar takes 68% of its band. Series bind to chart/categorical/1–4 rather than to the KPI tokens directly. Same value today, and that is the point: the indirection is what stops a series drifting from the card it corresponds to.\n\nThe band behind a column is the month the rest of the app is showing (chart/highlight), and clicking a bar moves the app to that month. These bars are a control, not a picture — which is why the current one has to be marked at all.\n\nFour dashed rungs on chart/grid, faint on purpose: the bars are the figure and the grid is only there when you look for it. Hover opens a Tooltip with TooltipReadout, whose swatches are readout/swatch/*, a separate rung chosen to clear 3:1 on the inverted surface — the chart colours do not (tax measures 1.44 there).\n\nOn Mobile the labels drop the year. Eight «sep ’26» do not fit in 346 and nothing wraps them: they overlap. Measured on the real width, not assumed.\n\nTwo series disappear for an employee profile (Obligaciones, Provisiones), leaving two. Not drawn as a variant: it is the same bar with fewer segments, and an axis for it would double the set to say nothing new."
  }
 ]

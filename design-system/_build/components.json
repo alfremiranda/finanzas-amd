@@ -242,6 +242,17 @@
  },
  {
   "g": "Cards",
+  "n": "AnnualDonut",
+  "v": 2,
+  "p": [
+   "State=Default|Selected"
+  ],
+  "w": 520,
+  "h": 268,
+  "d": "The year’s gross, split into what it turned into: Obligaciones · Provisiones · Gastos · Neto libre. Four segments of chart/categorical/1–4 — the same four as TrendChart and DistribucionCard, so the three say the same thing with the same colours.\n\n220 across with a 30 ring. The track underneath is bg/surface/subtle, so the ring still reads as a whole when one segment is a sliver.\n\nThe centre is the readout, which is why this donut needs neither legend nor tooltip: by default it holds the gross, and selecting a segment moves that segment’s amount into the centre in its own colour while the others drop to 25%. Dimming the rest rather than lighting the one keeps the selected colour true — the colour is what names the segment.\n\nEach segment is a control with a name, a role and a key. Without that the amounts it reveals are mouse-only: unreachable by keyboard and unannounced to a screen reader.\n\nIt appears only when there is more than one segment with an amount. A donut of one colour is a circle."
+ },
+ {
+  "g": "Cards",
   "n": "Card",
   "v": 2,
   "p": [
@@ -271,6 +282,17 @@
   "w": 420,
   "h": 70,
   "d": "Where the gross income of the month went, as one bar. Not a chart component — it always shows the same four segments in the same order: Obligaciones · Provisiones · Gastos · Neto libre.\n\nSegments come from chart/categorical/*, so a segment can never drift from the KPI card it corresponds to. Hovering one dims the rest to 40% and reveals its amount on the right.\n\nSegments with a zero amount are not rendered, so the bar can have between one and four."
+ },
+ {
+  "g": "Cards",
+  "n": "EgresosCategoryChart",
+  "v": 2,
+  "p": [
+   "Device=Desktop|Mobile"
+  ],
+  "w": 688,
+  "h": 520,
+  "d": "The year month by month, each bar stacked by expense CATEGORY rather than by KPI — this is what the money was spent ON; TrendChart is what the month was made of.\n\n220 tall over 172 of plot, twelve bands, segments in category/<name>/accent so a category is the same colour here, in its row and in category-bar.\n\nEmpty months are drawn as a 4px stub on chart/empty, not left out. A year that hides its empty months compresses time and puts March next to June as though they were adjacent — and the gap IS information: it says the app was not being used yet.\n\nThe code cannot draw that today. visibleData filters months without data before the branch that draws the stub, so the branch is unreachable and chart/empty has no consumer until the filter goes. That is the one behavioural change this drawing asks for.\n\nThe average line sits ON TOP of the bars, dashed 4,4 at 1.5, on chart/average — six rungs above the grid because it is a figure you read against. The code draws it before the bars, so a tall stack swallows it.\n\nIts tooltip is not TooltipReadout: it is a hand-built panel with a per-category list and a «Promedio» footer. Two charts on one page with two different tooltips is a defect, and the fix belongs in the library rather than in either chart."
  },
  {
   "g": "Cards",
@@ -334,6 +356,17 @@
   "w": 792,
   "h": 136,
   "d": "THE most used container in the product — 10 files import it. Action = True/False.\n\nA Card with an icon + title header and an optional action on the right. The title uses Heading/Group, which is the most common header in the app precisely because of this component.\n\nEvery list section in the Mes view is one of these: Ingresos, Gastos, Movimientos, Tributarias, Provisiones."
+ },
+ {
+  "g": "Cards",
+  "n": "TrendChart",
+  "v": 2,
+  "p": [
+   "Device=Desktop|Mobile"
+  ],
+  "w": 688,
+  "h": 584,
+  "d": "The last eight months, each one a stacked bar: Obligaciones · Provisiones · Gastos · Neto libre, bottom to top — the order in which a month stops being yours.\n\n252 tall over 180 of plot; each bar takes 68% of its band. Series bind to chart/categorical/1–4 rather than to the KPI tokens directly. Same value today, and that is the point: the indirection is what stops a series drifting from the card it corresponds to.\n\nThe band behind a column is the month the rest of the app is showing (chart/highlight), and clicking a bar moves the app to that month. These bars are a control, not a picture — which is why the current one has to be marked at all.\n\nFour dashed rungs on chart/grid, faint on purpose: the bars are the figure and the grid is only there when you look for it. Hover opens a Tooltip with TooltipReadout, whose swatches are readout/swatch/*, a separate rung chosen to clear 3:1 on the inverted surface — the chart colours do not (tax measures 1.44 there).\n\nOn Mobile the labels drop the year. Eight «sep ’26» do not fit in 346 and nothing wraps them: they overlap. Measured on the real width, not assumed.\n\nTwo series disappear for an employee profile (Obligaciones, Provisiones), leaving two. Not drawn as a variant: it is the same bar with fewer segments, and an axis for it would double the set to say nothing new."
  },
  {
   "g": "Containers",

@@ -1,0 +1,53 @@
+<!-- @dsCard group="Components · Cards" name="AnnualDonut" subtitle="State" -->
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Neto · AnnualDonut</title>
+<link href="https://fonts.googleapis.com/css2?family=Rethink+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;font-family:'Rethink Sans',ui-sans-serif,system-ui,sans-serif;background:var(--surface-wrap-default);
+ color:var(--foreground-default);font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.page{max-width:1000px;margin:0 auto;padding:40px 28px 64px}
+h1{margin:0 0 4px;font-weight:800;font-size:24px;line-height:32px;letter-spacing:.5px}
+.crumb{margin:0 0 32px;font-size:11px;line-height:17px;color:var(--foreground-subtle)}
+.spec{display:flex;gap:32px;align-items:flex-start;flex-wrap:wrap;margin-bottom:28px}
+.axes{flex:0 0 200px}
+.axis{margin-bottom:8px}
+.axis .k{display:block;font-weight:600;font-size:10px;line-height:15px;letter-spacing:.5px;text-transform:uppercase;color:var(--foreground-subtle)}
+.axis .v{display:block;font-size:10px;line-height:15px;color:var(--foreground-default)}
+.count{font-size:10px;line-height:15px;color:var(--foreground-placeholder);margin-top:10px}
+.desc{flex:1 1 420px;min-width:280px;font-size:14px;line-height:21px;white-space:pre-line}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:820px){.modes{grid-template-columns:1fr}}
+.lbl{display:block;font-weight:600;font-size:10px;line-height:15px;letter-spacing:.5px;text-transform:uppercase;
+ color:var(--foreground-subtle);margin-bottom:6px}
+.stage{background:var(--surface-wrap-subtle);border-radius:var(--radius-lg);padding:20px;
+ display:flex;flex-direction:column;gap:14px;align-items:flex-start;min-height:90px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.note{font-size:10px;color:var(--foreground-placeholder)}
+</style>
+</head>
+<body>
+<main class="page">
+  <h1>AnnualDonut</h1>
+  <p class="crumb">Cards — Neto design system</p>
+  <div class="spec">
+    <div class="axes"><div class="axis"><span class="k">State</span><span class="v">Default · Selected</span></div><div class="count">2 variantes</div></div>
+    <div class="desc">The year’s gross, split into what it turned into: Obligaciones · Provisiones · Gastos · Neto libre. Four segments of chart/categorical/1–4 — the same four as TrendChart and DistribucionCard, so the three say the same thing with the same colours.
+
+220 across with a 30 ring. The track underneath is bg/surface/subtle, so the ring still reads as a whole when one segment is a sliver.
+
+The centre is the readout, which is why this donut needs neither legend nor tooltip: by default it holds the gross, and selecting a segment moves that segment’s amount into the centre in its own colour while the others drop to 25%. Dimming the rest rather than lighting the one keeps the selected colour true — the colour is what names the segment.
+
+Each segment is a control with a name, a role and a key. Without that the amounts it reveals are mouse-only: unreachable by keyboard and unannounced to a screen reader.
+
+It appears only when there is more than one segment with an amount. A donut of one colour is a circle.</div>
+  </div>
+  <div class="modes">
+    <div><span class="lbl">Light</span><div data-theme="light" style="border-radius:var(--radius-lg)"><div class="stage"><div style="position:relative;width:180px;height:180px;border-radius:999px;background:conic-gradient(var(--chart-categorical-1) 0% 14%, var(--chart-categorical-2) 14% 25%, var(--chart-categorical-3) 25% 58%, var(--chart-categorical-4) 58% 100%);-webkit-mask:radial-gradient(circle, transparent 58%, #000 58.5%);mask:radial-gradient(circle, transparent 58%, #000 58.5%)"></div><div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none"><span style="font-family:var(--font-sans);font-weight:600;font-size:22px;line-height:26px;letter-spacing:0.0px;font-variant-numeric:tabular-nums;color:var(--foreground-default)">$54.574.000</span><span style="font-family:var(--font-sans);font-weight:400;font-size:11px;line-height:16px;letter-spacing:0.0px;color:var(--foreground-subtle)">Bruto</span></div></div></div></div>
+    <div><span class="lbl">Dark</span><div data-theme="dark" style="border-radius:var(--radius-lg)"><div class="stage"><div style="position:relative;width:180px;height:180px;border-radius:999px;background:conic-gradient(var(--chart-categorical-1) 0% 14%, var(--chart-categorical-2) 14% 25%, var(--chart-categorical-3) 25% 58%, var(--chart-categorical-4) 58% 100%);-webkit-mask:radial-gradient(circle, transparent 58%, #000 58.5%);mask:radial-gradient(circle, transparent 58%, #000 58.5%)"></div><div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none"><span style="font-family:var(--font-sans);font-weight:600;font-size:22px;line-height:26px;letter-spacing:0.0px;font-variant-numeric:tabular-nums;color:var(--foreground-default)">$54.574.000</span><span style="font-family:var(--font-sans);font-weight:400;font-size:11px;line-height:16px;letter-spacing:0.0px;color:var(--foreground-subtle)">Bruto</span></div></div></div></div>
+  </div>
+</main>
+</body></html>
