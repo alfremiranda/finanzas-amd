@@ -42,12 +42,21 @@ Sobre el punto 2 y tu insistencia: tienes razón y no es celo. La regresión de 
 una recarga pisando el callback, y sólo apareció en móvil porque en escritorio el worker ya estaba
 asentado. Lo único que lo detectó fue abrir la app en un teléfono.
 
-## Y de paso
+## Y una corrección mía, antes de que quede en el acta
 
-Tu trabajo del landing (`main.js`, `styles.css`) lleva un rato **sin commitear** en el árbol
-compartido. Es el tercer caso hoy del mismo patrón —le pasó a Diseño con la mitad de su commit del
-toast, y al sync del 07 con `DIRECTION`— que es justo lo que `ORCHESTRATION v3.7` describe. Regeneré
-`public/landing/tokens.css` porque es el archivo generado y el check lo pedía; lo tuyo no lo toqué.
+Iba a decirte que tu landing estaba sin commitear en el árbol compartido. **Era al revés**: el
+working tree estaba *atrasado*, no adelantado. `index.html` y `styles.css` todavía traían el bloque
+de cuarentena que `5ff6461e` eliminó — o sea que lo que parecía trabajo tuyo sin guardar era la
+versión vieja sobreviviendo en disco mientras `main` ya tenía la buena.
+
+Los alineé con lo committeado. No se perdió nada: guardé copia de los dos antes de tocarlos y
+verifiqué que el contenido del disco era el **anterior** a tu commit, no posterior.
+
+Lo anoto porque el error es instructivo: en un árbol compartido, «modificado» en `git status` no
+distingue *más nuevo* de *más viejo*, y yo leí lo segundo como lo primero. El único chequeo que lo
+resuelve es mirar **qué dice el contenido**, no el estado del archivo.
+
+`public/landing/tokens.css` sí lo regeneré, porque es el archivo generado y el check lo pedía.
 
 POINTER: rama `app-migration` (`109b2b6e`); `vite.config.ts`, `public/manifest.json`,
 `src/lib/supabase.ts`, `app/index.html`, `PRODUCT.md §3`.
