@@ -298,22 +298,27 @@ html.dark [data-icon='moon'] { display: none; }
    (Design, 2026-09-12 §6) while inside the product cyan stays reserved for selected and
    focus. Pseudo-element and pointer-events:none — it is paint, never a target. */
 /* `overflow: clip` and not `hidden`: hidden would make the hero a scroll container, and the
-   blur bleeds ~96px past its box either way. Clipping it here — rather than leaning on the
-   body's overflow-x — is what keeps documentElement.scrollWidth equal to the viewport. */
+   glow bleeds past its box either way. Clipping it here — rather than leaning on the body's
+   overflow-x — is what keeps documentElement.scrollWidth equal to the viewport.
+
+   The glow is a RADIAL GRADIENT, not a solid disc behind a blur. The solid version left a
+   straight vertical edge where the clip met it — a blurred disc is still fully opaque at its
+   centre, so the clip was cutting through colour that was still there. A gradient that
+   reaches zero alpha at 70% of its own radius is transparent before the container ends, and
+   the clip has nothing left to cut. The blur only softens what is by then already faint. */
 .hero { position: relative; isolation: isolate; overflow: clip; }
 .hero::before {
   content: '';
   position: absolute;
   z-index: -1;
   pointer-events: none;
-  inset-block-start: -6%;
-  inset-inline-end: 6%;
-  width: min(560px, 80vw);
+  inset-block-start: -8%;
+  inset-inline-end: 0;
+  width: min(640px, 70%);
   aspect-ratio: 1;
-  border-radius: var(--radius-full);
-  background: var(--marketing-accent-glow);
-  filter: blur(var(--blur-xl));
-  opacity: 0.55;
+  background: radial-gradient(closest-side, var(--marketing-accent-glow), transparent 70%);
+  filter: blur(var(--blur-lg));
+  opacity: 0.85;
 }
 /* ── §5. The flow — the hero's animated distribution of one month's gross ───────────── */
 .flow {
@@ -377,40 +382,201 @@ html.dark [data-icon='moon'] { display: none; }
   color: var(--fg-subtle);
 }
 
-/* ── §6. Intent router ──────────────────────────────────────────────────────────────── */
-.router__options {
+/* ── §6. Intent router — the dark panel ────────────────────────────────────────────────
+   An inset marketing panel, not a full-bleed band: the page keeps its margin around it, the
+   way the reference does. Everything inside uses only the four --marketing-panel-* tokens.
+   That is not shorthand — they are the ONLY values in the system measured against an
+   always-dark surface. The semantic accents (fg/income, fg/tax…) flip with the theme, so on
+   a panel that never flips, half of them would land unreadable in one mode. */
+.panel {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  border-radius: var(--radius-2xl);
+  background: var(--marketing-panel-background);
+  color: var(--marketing-panel-foreground);
+  padding: clamp(var(--spacing-24), 4vw, var(--spacing-64));
+}
+.panel::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  inset-block-start: -25%;
+  inset-inline-start: 25%;
+  width: min(680px, 80%);
+  aspect-ratio: 1;
+  background: radial-gradient(closest-side, var(--marketing-accent-glow), transparent 70%);
+  filter: blur(var(--blur-lg));
+  opacity: 0.6;
+}
+.panel h2 { color: var(--marketing-panel-foreground); }
+.panel .lead { color: var(--marketing-panel-foreground-subtle); }
+.panel__head { max-width: 46ch; margin-bottom: var(--block-gap); }
+.panel__head .lead { margin-top: var(--spacing-16); }
+
+.router {
   display: grid;
   gap: var(--spacing-12);
-  margin-block: var(--spacing-24);
+  margin-bottom: var(--spacing-24);
 }
-@media (min-width: 700px) { .router__options { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 800px) { .router { grid-template-columns: repeat(3, 1fr); gap: var(--spacing-20); } }
+
 .router__opt {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-6);
+  gap: var(--spacing-8);
   align-items: flex-start;
   text-align: start;
-  padding: var(--spacing-16);
-  border: var(--border-width-default) solid var(--border-default);
+  padding: var(--spacing-20);
+  border: var(--border-width-default) solid transparent;
   border-radius: var(--radius-xl);
-  background: var(--bg-surface-subtle);
+  background: transparent;
+  color: var(--marketing-panel-foreground-subtle);
   cursor: pointer;
   transition:
     background-color var(--motion-duration-fast) var(--motion-easing-move),
-    border-color var(--motion-duration-fast) var(--motion-easing-move);
+    border-color var(--motion-duration-fast) var(--motion-easing-move),
+    color var(--motion-duration-fast) var(--motion-easing-move);
 }
-.router__opt:hover { background: var(--bg-hover); }
-/* Selected is the one place cyan belongs. */
+.router__opt strong { color: var(--marketing-panel-foreground); font-weight: 600; }
+/* Hover lifts with the panel's own foreground at low alpha, never with the brand: cyan on
+   this panel means selected, exactly as it does inside the product. */
+.router__opt:hover { background: color-mix(in oklch, var(--marketing-panel-foreground) 7%, transparent); }
 .router__opt[aria-pressed='true'] {
-  background: var(--bg-selected);
-  border-color: var(--border-brand-strong);
+  background: color-mix(in oklch, var(--marketing-panel-foreground) 10%, transparent);
+  border-color: var(--marketing-accent-line);
 }
-.router__opt strong { font-weight: 600; }
+.router__more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-6);
+  margin-top: var(--spacing-4);
+  color: var(--marketing-panel-foreground-subtle);
+  transition: color var(--motion-duration-fast) var(--motion-easing-move);
+}
+.router__opt[aria-pressed='true'] .router__more { color: var(--marketing-accent-on-panel); }
+.router__more svg { transition: transform var(--motion-duration-fast) var(--motion-easing-move); }
+.router__opt:hover .router__more svg { transform: translateX(2px); }
+
 .router__answer {
-  border-inline-start: var(--border-width-strong) solid var(--border-brand-strong);
+  border-inline-start: var(--border-width-strong) solid var(--marketing-accent-line);
   padding-inline-start: var(--spacing-16);
-  color: var(--fg-subtle);
+  color: var(--marketing-panel-foreground-subtle);
   min-height: var(--spacing-48);
+  max-width: 78ch;
+}
+
+/* ── The media ─────────────────────────────────────────────────────────────────────────
+   The photograph is the ground and the pills float on it, as in the reference. The image
+   is a background layer on purpose: it is decoration, it carries no information the text
+   does not, and this way the block renders complete before the file exists and stays
+   complete if it ever 404s — the gradient underneath is not a fallback bolted on, it is
+   the base layer. Drop a file at public/landing/images/ and it appears.
+   The scrim is NOT optional: it is what guarantees the pills stay legible over a
+   photograph nobody has measured yet. */
+.router__media {
+  position: relative;
+  margin: var(--block-gap) 0 0;
+  padding: clamp(var(--spacing-20), 3vw, var(--spacing-40));
+  border-radius: var(--radius-xl);
+  overflow: clip;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--spacing-24);
+  background-color: color-mix(in oklch, var(--marketing-panel-foreground) 6%, transparent);
+  background-image: url('/landing/images/como-trabajas.webp');
+  background-size: cover;
+  background-position: center;
+}
+.router__media::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    100deg,
+    var(--marketing-panel-background) 0%,
+    color-mix(in oklch, var(--marketing-panel-background) 82%, transparent) 42%,
+    color-mix(in oklch, var(--marketing-panel-background) 25%, transparent) 100%
+  );
+}
+.router__media > * { position: relative; }
+
+.pills { display: grid; gap: var(--spacing-8); justify-items: start; }
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-10);
+  padding: var(--spacing-8) var(--spacing-16) var(--spacing-8) var(--spacing-8);
+  border-radius: var(--radius-full);
+  border: var(--border-width-default) solid color-mix(in oklch, var(--marketing-panel-foreground) 14%, transparent);
+  background: color-mix(in oklch, var(--marketing-panel-background) 78%, transparent);
+  color: var(--marketing-panel-foreground-subtle);
+  transition:
+    opacity var(--motion-duration-moderate) var(--motion-easing-move),
+    color var(--motion-duration-moderate) var(--motion-easing-move),
+    border-color var(--motion-duration-moderate) var(--motion-easing-move),
+    transform var(--motion-duration-moderate) var(--motion-easing-move);
+}
+@supports (backdrop-filter: blur(1px)) {
+  .pill { backdrop-filter: blur(var(--blur-sm)); }
+}
+/* The organic stagger of the reference: each pill sits a little further in than the last. */
+.pill:nth-child(2) { transform: translateX(var(--spacing-8)); }
+.pill:nth-child(3) { transform: translateX(var(--spacing-16)); }
+.pill:nth-child(4) { transform: translateX(var(--spacing-8)); }
+.pill__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--spacing-28);
+  height: var(--spacing-28);
+  border-radius: var(--radius-full);
+  background: color-mix(in oklch, var(--marketing-panel-foreground) 12%, transparent);
+  flex: none;
+}
+.pill__label { font-weight: 500; }
+.pill__check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--spacing-20);
+  height: var(--spacing-20);
+  border-radius: var(--radius-full);
+  border: var(--border-width-default) solid color-mix(in oklch, var(--marketing-panel-foreground) 20%, transparent);
+  color: transparent;
+  flex: none;
+  transition:
+    color var(--motion-duration-moderate) var(--motion-easing-move),
+    background-color var(--motion-duration-moderate) var(--motion-easing-move),
+    border-color var(--motion-duration-moderate) var(--motion-easing-move);
+}
+/* Three states, not two. Before you choose, a tab is neither on nor off for you — it just
+   exists. Painting them all "on" by default would answer for the independiente profile
+   without being asked. */
+.pill[data-on='true'] {
+  color: var(--marketing-panel-foreground);
+  border-color: var(--marketing-accent-line);
+}
+.pill[data-on='true'] .pill__check {
+  color: var(--marketing-panel-background);
+  background: var(--marketing-accent-on-panel);
+  border-color: var(--marketing-accent-on-panel);
+}
+.pill[data-on='false'] { opacity: 0.4; }
+
+.router__caption {
+  color: var(--marketing-panel-foreground-subtle);
+  max-width: 52ch;
+}
+.router__caption strong { color: var(--marketing-panel-foreground); font-weight: 600; }
+
+@media (min-width: 900px) {
+  .router__media { min-height: 380px; }
+  .router__caption { max-width: 44ch; }
 }
 
 /* ── §7. Cards & feature blocks ─────────────────────────────────────────────────────── */

@@ -178,42 +178,111 @@
         </div>
       </section>
 
-      <!-- ── 5. Intent router ──────────────────────────────────────────────────────── -->
-      <section class="section section--tint" id="como-funciona">
-        <div class="wrap wrap--narrow">
-          <div class="section-head" data-reveal>
-            <h2 class="display-lg">¿Cómo trabajas?</h2>
-            <p class="lead">
-              Neto se adapta: si no tienes obligaciones tributarias, esa complejidad simplemente no
-              aparece en la interfaz. Elige y te digo qué cambia.
+      <!-- ── 5. Intent router — the dark panel ───────────────────────────────────────
+           The profile split is the product's own (PRODUCT.md §8), and the pill stack below
+           shows what it actually does: which tabs of the Mes view exist for you. Only the
+           four --marketing-panel-* tokens are used inside the panel. Nothing else in the
+           system has a measured value against an always-dark surface — the semantic accents
+           (income/expense/tax…) are theme-dependent and would land wrong here in light. -->
+      <section class="section" id="como-funciona">
+        <div class="wrap">
+          <div class="panel" data-reveal>
+            <div class="panel__head">
+              <h2 class="display-lg">¿Cómo trabajas?</h2>
+              <p class="lead">
+                Neto se adapta: si no tienes obligaciones tributarias, esa complejidad
+                simplemente no aparece en la interfaz. Elige y te muestro qué cambia.
+              </p>
+            </div>
+
+            <div class="router" role="group" aria-labelledby="router-label" data-router>
+              <span id="router-label" class="ts-label-micro" hidden>Perfil de trabajo</span>
+
+              <button class="router__opt" type="button" aria-pressed="false" data-profile="independiente"
+                data-tabs="ingresos,gastos,movimientos,tributarias,provisiones"
+                data-caption="Las cinco pestañas del mes, más la página de Obligaciones con el calendario PILA."
+                data-answer="Todo activo. Neto calcula tu IBC cada mes (40% de tus ingresos por servicios, con el piso del SMMLV y el tope de 25), liquida salud, pensión, ARL y el Fondo de Solidaridad, y provisiona primas, cesantías y vacaciones. La página de Obligaciones te dice si estás al día.">
+                <strong class="ts-heading-card">Independiente</strong>
+                <span class="ts-body-small">Facturo por prestación de servicios</span>
+                <span class="router__more ts-body-small">Ver qué cambia
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                </span>
+              </button>
+
+              <button class="router__opt" type="button" aria-pressed="false" data-profile="empleado"
+                data-tabs="ingresos,gastos,movimientos"
+                data-caption="Tres pestañas. Sin KPIs tributarios y sin barra de distribución: si no te toca, no lo ves."
+                data-answer="Neto se vuelve un gestor de ingresos, gastos y cuentas, y nada más. Sin pestañas de tributarias ni provisiones, sin esos KPIs, sin barra de distribución. Tu empleador ya aporta por ti; la app no te va a mostrar una cuenta que no te toca.">
+                <strong class="ts-heading-card">Empleado</strong>
+                <span class="ts-body-small">Tengo contrato laboral</span>
+                <span class="router__more ts-body-small">Ver qué cambia
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                </span>
+              </button>
+
+              <button class="router__opt" type="button" aria-pressed="false" data-profile="ambos"
+                data-tabs="ingresos,gastos,movimientos,tributarias,provisiones"
+                data-caption="Las cinco, y tu salario marcado como «otro» para que no entre a la base de aportes."
+                data-answer="Todo activo, y marcas tu salario como ingreso de tipo «otro» para que no entre a la base de aportes. Así lo que facturas aparte sí liquida seguridad social, y lo que ya te descuentan en nómina no se cuenta dos veces.">
+                <strong class="ts-heading-card">Ambos</strong>
+                <span class="ts-body-small">Sueldo y facturación aparte</span>
+                <span class="router__more ts-body-small">Ver qué cambia
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+                </span>
+              </button>
+            </div>
+
+            <p class="router__answer ts-body-base" data-router-answer aria-live="polite">
+              Elige una opción y te cuento qué ve cada perfil.
             </p>
+
+            <!-- The media. An <img> drops in here the day there is a real capture; until
+                 then the stack IS the visual, and it carries the actual answer rather than
+                 decorating it. -->
+            <figure class="router__media" data-media>
+              <ul class="pills" data-pills>
+              <li class="pill" data-tab="ingresos">
+                <span class="pill__icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V4M6 14l6 6 6-6"/></svg></span>
+                <span class="pill__label">Ingresos</span>
+                <span class="pill__check" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5" /></svg>
+                </span>
+              </li>
+              <li class="pill" data-tab="gastos">
+                <span class="pill__icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M6 10l6-6 6 6"/></svg></span>
+                <span class="pill__label">Gastos</span>
+                <span class="pill__check" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5" /></svg>
+                </span>
+              </li>
+              <li class="pill" data-tab="movimientos">
+                <span class="pill__icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h14l-3-3M21 16H7l3 3"/></svg></span>
+                <span class="pill__label">Movimientos</span>
+                <span class="pill__check" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5" /></svg>
+                </span>
+              </li>
+              <li class="pill" data-tab="tributarias">
+                <span class="pill__icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6"/></svg></span>
+                <span class="pill__label">Tributarias</span>
+                <span class="pill__check" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5" /></svg>
+                </span>
+              </li>
+              <li class="pill" data-tab="provisiones">
+                <span class="pill__icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V10l9-6 9 6v11M8 21v-5h8v5"/><circle cx="12" cy="13" r="1.5"/></svg></span>
+                <span class="pill__label">Provisiones</span>
+                <span class="pill__check" aria-hidden="true">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5" /></svg>
+                </span>
+              </li>
+              </ul>
+              <figcaption class="router__caption ts-body-small" data-router-caption>
+                Éstas son las cinco pestañas de la vista <strong>Mes</strong>. Elige arriba y te
+                muestro cuáles ves tú.
+              </figcaption>
+            </figure>
           </div>
-
-          <div class="router__options" role="group" aria-labelledby="router-label" data-router>
-            <span id="router-label" class="ts-label-micro muted" hidden>Perfil de trabajo</span>
-
-            <button class="router__opt" type="button" aria-pressed="false" data-profile="independiente"
-              data-answer="Todo activo. Neto calcula tu IBC cada mes (40% de tus ingresos por servicios, con el piso del SMMLV y el tope de 25), liquida salud, pensión, ARL y el Fondo de Solidaridad, y provisiona primas, cesantías y vacaciones. La página de Obligaciones te dice si estás al día.">
-              <strong class="ts-heading-group">Independiente</strong>
-              <span class="ts-body-small muted">Facturo por prestación de servicios</span>
-            </button>
-
-            <button class="router__opt" type="button" aria-pressed="false" data-profile="empleado"
-              data-answer="Neto se vuelve un gestor de ingresos, gastos y cuentas, y nada más. Sin pestañas de tributarias ni provisiones, sin esos KPIs, sin barra de distribución. Tu empleador ya aporta por ti; la app no te va a mostrar una cuenta que no te toca.">
-              <strong class="ts-heading-group">Empleado</strong>
-              <span class="ts-body-small muted">Tengo contrato laboral</span>
-            </button>
-
-            <button class="router__opt" type="button" aria-pressed="false" data-profile="ambos"
-              data-answer="Todo activo, y marcas tu salario como ingreso de tipo «otro» para que no entre a la base de aportes. Así lo que facturas aparte sí liquida seguridad social, y lo que ya te descuentan en nómina no se cuenta dos veces.">
-              <strong class="ts-heading-group">Ambos</strong>
-              <span class="ts-body-small muted">Sueldo y facturación aparte</span>
-            </button>
-          </div>
-
-          <p class="router__answer ts-body-base" data-router-answer aria-live="polite">
-            Elige una opción y te cuento qué ve cada perfil.
-          </p>
         </div>
       </section>
 

@@ -199,6 +199,8 @@
      anywhere: it is a query string on our own domain and a key in this browser. */
   var router = document.querySelector('[data-router]')
   var answer = document.querySelector('[data-router-answer]')
+  var pills = document.querySelectorAll('[data-pills] [data-tab]')
+  var caption = document.querySelector('[data-router-caption]')
 
   if (router && answer) {
     var options = router.querySelectorAll('[data-profile]')
@@ -208,6 +210,15 @@
         o.setAttribute('aria-pressed', String(o === btn))
       })
       answer.textContent = btn.getAttribute('data-answer')
+
+      // The pill stack shows what the profile actually does: which tabs of the Mes view
+      // exist for you (PRODUCT.md §3 — Tributarias and Provisiones are conditional). Three
+      // states, not two: before a choice, a tab is neither on nor off, it just exists.
+      var on = (btn.getAttribute('data-tabs') || '').split(',')
+      Array.prototype.forEach.call(pills, function (pill) {
+        pill.setAttribute('data-on', String(on.indexOf(pill.getAttribute('data-tab')) !== -1))
+      })
+      if (caption) caption.textContent = btn.getAttribute('data-caption')
 
       var profile = btn.getAttribute('data-profile')
       try {
