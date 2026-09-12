@@ -1,7 +1,26 @@
-# public/landing/images/
+# Imágenes del landing
+
+> Vive en `docs/` y no dentro de `public/landing/images/`, que es donde se dejan los archivos:
+> Vite copia `public/` entero a `dist/`, así que un README ahí se publicaría en
+> `netofinanzas.app/landing/images/README.md`. Notas internas de proceso en el dominio de
+> marketing.
 
 Imágenes del landing. Las genera Alfredo (Gemini / ChatGPT / Midjourney) y las deja aquí con el
 **nombre exacto** de la tabla — el CSS ya apunta a esas rutas, así que basta con soltar el archivo.
+
+**Suelta el original tal cual te lo dé el generador** (PNG, JPG, lo que sea) y corre:
+
+```
+node scripts/landing-image.mjs <original> <nombre>.webp
+```
+
+Esa es la pieza que faltaba la primera vez: esta máquina no tiene `cwebp`, ni ImageMagick, ni
+`sharp`, ni PIL, y el `sips` de macOS no escribe webp. El script usa el Chromium de Playwright —
+que ya está instalado para la regresión visual— como codificador. Pedir webp sin dar cómo hacerlo
+era pedir PNG.
+
+Después **mueve el original fuera de `public/`**, a `~/Projects/Neto/assets/landing/`. Vite copia
+`public/` entero a `dist/`: un PNG de 2 MB ahí viaja en cada deploy.
 
 Ninguna es obligatoria para que la página funcione: cada hueco tiene su capa base debajo y el
 bloque se ve completo sin la foto. La imagen añade atmósfera, nunca información.
@@ -28,7 +47,17 @@ bloque se ve completo sin la foto. La imagen añade atmósfera, nunca informaci�
 
 | Archivo | Dónde va | Estado |
 |---|---|---|
-| `como-trabajas.webp` | Fondo del bloque «¿Cómo trabajas?» (panel oscuro, píldoras encima) | **pendiente** |
+| `como-trabajas.webp` | Fondo del bloque «¿Cómo trabajas?» (panel oscuro, píldoras encima) | ✅ 2026-09-12 · 1254×1254 · 111 kB |
+
+**Nota sobre la que ya está:** llegó cuadrada, no 16:9. No se recortó — `background-size: cover`
+la encuadra y el CSS la centra, y la composición aguanta porque el tercio tranquilo recorre toda la
+altura. El original está en `~/Projects/Neto/assets/landing/como-trabajas-original.png`.
+
+**Contraste medido sobre esa foto, no estimado:** el pie del bloque es el único texto de la página
+que se apoya en una imagen. Replicando el composite (foto con `cover` + el mismo degradado) y
+muestreando justo donde cae el texto: **6.02 de media y 5.24 en su píxel más claro**, contra los 4.5
+que pide AA. El scrim aguanta *con esta foto*; una imagen mucho más clara en el lado izquierdo
+habría que volver a medirla.
 
 ---
 
