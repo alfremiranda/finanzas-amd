@@ -280,11 +280,15 @@ button { font: inherit; color: inherit; }
    JS version silently showed the wrong glyph. The class on <html> is already the truth. */
 html:not(.dark) [data-icon='sun'] { display: none; }
 html.dark [data-icon='moon'] { display: none; }
-.nav .btn--ghost { display: none; }
+/* Keyed off what the link IS, not what it looks like. It used to be `.nav .btn--ghost`,
+   which meant restyling "Entrar" to outlined would have silently freed it from both rules
+   and shown it at every width — including 320px, where the bar has 24px to spare. A layout
+   rule that depends on a visual variant breaks the first time someone changes the variant. */
+.nav__signin { display: none; }
 @media (min-width: 860px) {
   .nav__links { display: flex; }
   .nav__links + .nav__actions { margin-inline-start: var(--spacing-24); }
-  .nav .btn--ghost { display: inline-flex; }
+  .nav__signin { display: inline-flex; }
 }
 
 /* ── §4. Hero ───────────────────────────────────────────────────────────────────────── */
