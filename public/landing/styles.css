@@ -498,6 +498,20 @@ html.dark [data-icon='moon'] { display: none; }
 .router__more svg { transition: transform var(--motion-duration-fast) var(--motion-easing-move); }
 .router__opt:hover .router__more svg { transform: translateX(2px); }
 
+/* Stacked (below 800px) the three cards ran 128px each, and the answer and the photo they
+   change landed under the fold: a tap changed something the visitor could not see. So the
+   stack is tighter — the whole card is the target, and "Ver qué cambia" says what a tap on
+   a phone already does — and main.js scrolls the result into view after a choice. */
+@media (max-width: 799px) {
+  .router { gap: var(--spacing-8); }
+  .router__opt { padding: var(--spacing-12) var(--spacing-16); gap: var(--spacing-2); }
+  /* No hover on a phone to announce that these are buttons, and borderless they read as a list of
+     text. The pills' hairline rim gives each card an edge; selected still swaps to the accent line. */
+  .router__opt:not([aria-pressed='true']) { border-color: color-mix(in oklch, var(--marketing-panel-foreground) 14%, transparent); }
+  .router__more { display: none; }
+  .router__media { margin-top: var(--spacing-24); }
+}
+
 .router__answer {
   border-inline-start: var(--border-width-strong) solid var(--marketing-accent-line);
   padding-inline-start: var(--spacing-16);
@@ -555,9 +569,9 @@ html.dark [data-icon='moon'] { display: none; }
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  /* A light veil, only on the left where the pills sit. The pills and the caption carry their own
-     glass ground, so nothing on this photo depends on the veil for contrast any more — it was a
-     full-width darkening plus a bottom scrim, and the photos behind them barely showed. */
+  /* A light veil, only on the left where the pills sit. The pills carry their own glass ground,
+     so no text on this photo depends on the veil for contrast — it was a full-width darkening
+     plus a bottom scrim, and the photos behind them barely showed. */
   background: linear-gradient(
     100deg,
     color-mix(in oklch, var(--marketing-panel-background) 72%, transparent) 0%,
@@ -648,26 +662,9 @@ html.dark [data-icon='moon'] { display: none; }
 }
 .pill[data-on='false'] { opacity: 0.4; }
 
-/* The caption is a glass chip, same ground as the pills, so it reads on any photo instead of
-   asking the photo to be dark. On that ground the subtle foreground fell short on a light
-   background, so the text is the full panel foreground. */
-.router__caption {
-  align-self: flex-start;
-  max-width: 52ch;
-  padding: var(--spacing-8) var(--spacing-12);
-  border-radius: var(--radius-lg);
-  border: var(--border-width-default) solid color-mix(in oklch, var(--marketing-panel-foreground) 14%, transparent);
-  background: color-mix(in oklch, var(--marketing-panel-background) 78%, transparent);
-  color: var(--marketing-panel-foreground);
-}
-@supports (backdrop-filter: blur(1px)) {
-  .router__caption { backdrop-filter: blur(var(--blur-sm)); }
-}
-.router__caption strong { color: var(--marketing-panel-foreground); font-weight: 600; }
 
 @media (min-width: 900px) {
   .router__media { min-height: 380px; }
-  .router__caption { max-width: 44ch; }
 }
 
 /* ── §7. Cards & feature blocks ─────────────────────────────────────────────────────── */

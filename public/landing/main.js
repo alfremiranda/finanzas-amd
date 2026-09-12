@@ -312,7 +312,6 @@
   var router = document.querySelector('[data-router]')
   var answer = document.querySelector('[data-router-answer]')
   var pills = document.querySelectorAll('[data-pills] [data-tab]')
-  var caption = document.querySelector('[data-router-caption]')
   var media = document.querySelector('[data-media]')
 
   if (router && answer) {
@@ -331,7 +330,6 @@
       Array.prototype.forEach.call(pills, function (pill) {
         pill.setAttribute('data-on', String(on.indexOf(pill.getAttribute('data-tab')) !== -1))
       })
-      if (caption) caption.textContent = btn.getAttribute('data-caption')
       // Each profile has its own photograph behind the pills. The attribute only picks the layer;
       // the stylesheet stacks it over the default photo, so a file that is not there yet falls
       // through to the one that is.
@@ -350,9 +348,23 @@
       if (focusAnswer) answer.setAttribute('tabindex', '-1')
     }
 
+    // After a choice, bring what it changed into view. The least scroll that shows the photo's
+    // bottom edge, but never so much that the answer slides under the sticky nav: on a phone the
+    // stacked cards leave both below the fold; on a desktop this is usually zero and does nothing.
+    var reveal = function () {
+      var target = media || answer
+      var navBottom = nav ? nav.getBoundingClientRect().bottom : 0
+      var room = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--spacing-16')) || 16
+      var toShowAll = target.getBoundingClientRect().bottom - (window.innerHeight - room)
+      var toKeepAnswer = answer.getBoundingClientRect().top - (navBottom + room)
+      var delta = Math.min(toShowAll, toKeepAnswer)
+      if (delta > 0) window.scrollBy({ top: delta, behavior: reduced.matches ? 'auto' : 'smooth' })
+    }
+
     Array.prototype.forEach.call(options, function (btn) {
       btn.addEventListener('click', function () {
         select(btn, true)
+        reveal()
       })
     })
 

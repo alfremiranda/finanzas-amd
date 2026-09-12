@@ -245,3 +245,7 @@ y sólo a la izquierda. Medido en los tres perfiles a 1280, 768 y 375: píldoras
 Por eso **una foto nueva ya no puede tumbar el contraste**, sólo verse más o menos.
 El recorte de las fotos por perfil se ancla en la persona (`background-position: 72% 22%`): centrado
 cortaba frentes en escritorio y partía a la persona por la mitad en el teléfono.
+
+**Sin pie de foto (2026-09-12).** Alfredo lo quitó: repetía lo que ya dice la respuesta del perfil encima
+del bloque. Sobre las fotos ya sólo van las píldoras, y tienen su propio fondo; lo dicho arriba sobre
+el pie de foto y su velo queda como historia.
