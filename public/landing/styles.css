@@ -697,29 +697,96 @@ html.dark [data-icon='moon'] { display: none; }
   height: auto;
 }
 
-/* ── §8. Privacy block ────────────────────────────────────────────────────────────────
-   The marketing panel, coined for exactly this. NOT --bg-surface-inverse: that token means
-   "the opposite of the page", so in dark mode it is white — right for the thin announcement
-   bar, a light bomb across a full section, and worst of all in the one arguing that Neto is
-   calm. The panel family holds the SAME value in both themes on purpose; that is its
-   definition, not an oversight. Its background is what bg/surface/inverse already equals in
-   light, so this section is unchanged there — dark is where it stops flashing.
-   Contrast measured by Design on the panel: foreground 17.06, subtle 6.96, accent 9.88. */
-.privacy {
+/* ── §8. Privacy — the stage and three tall cards ────────────────────────────────────
+   Littio's shape. Light, and following the page theme: every colour here is a surface or
+   foreground token that flips on its own, so dark mode needs no second rule — and never gets a
+   light slab, the failure this section was once rebuilt to avoid.
+
+   It was the dark marketing panel. With the closing block now light as well, dark is left to
+   the two pieces that frame the page, and the panel's tokens stay in use there. */
+
+/* The stage. The gradient is the surface leaning toward the brand, mixed from tokens rather
+   than picked: Littio's lavender-to-blue, in Neto's own cyan. --marketing-accent-wash was the
+   obvious candidate and is deliberately not used — it holds the same value in both themes, so
+   on the dark page it would be a pale block. */
+.privacy__stage {
+  position: relative;
+  overflow: clip;
+  margin: 0 0 var(--spacing-16);
+  display: flex;
+  justify-content: center;
+  padding-top: clamp(var(--spacing-32), 5vw, var(--spacing-64));
+  border-radius: var(--radius-2xl);
+  background: linear-gradient(
+    135deg,
+    var(--bg-surface-default) 0%,
+    color-mix(in oklch, var(--bg-surface-default), var(--bg-brand) 16%) 100%
+  );
+}
+
+/* The phone runs off the bottom of the stage with no lower bezel, as in the reference. Where
+   it stops is decided by the capture, cropped just past "No acepto" — not by the stage's
+   height, which would move the cut at every width as the phone scales. */
+/* The status bar scales with the PHONE, not the page. In fixed px it was sized for the 320px
+   desktop phone and at 390px viewport, where the phone clamps to 230px, the 74px island ran
+   straight into the signal and wifi glyphs — 74 of island plus ~65 of icons into 172 of room.
+   `container-type` makes the phone the unit, so every part of the bar is a share of its width
+   and the proportions hold at every size. */
+.phone {
+  container-type: inline-size;
+  width: clamp(230px, 26vw, 320px);
+  border: 9px solid var(--bg-surface-chrome);
+  border-bottom: 0;
+  border-radius: 46px 46px 0 0;
+  background: var(--bg-surface-canvas);
+  overflow: hidden;
+  box-shadow:
+    0 var(--elevation-floating-key-offset-y) var(--elevation-floating-key-blur)
+      var(--elevation-floating-key-spread) var(--shadow-key),
+    0 var(--elevation-floating-ambient-offset-y) var(--elevation-floating-ambient-blur)
+      var(--elevation-floating-ambient-spread) var(--shadow-ambient);
+}
+.phone img { display: block; width: 100%; height: auto; }
+.phone__status {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: 12.5cqi;
+  padding-inline: 6.5cqi;
+  color: var(--fg-default);
+  background: var(--bg-surface-canvas);
+}
+.phone__time { font-weight: 600; font-size: 4.4cqi; font-variant-numeric: tabular-nums; }
+/* The island is hardware, and hardware does not change with the theme: black in both. Not
+   --bg-surface-inverse, which is "the opposite of the page" and so turns WHITE on the dark
+   page. The marketing panel ground is the one token that holds a dark value in both themes. */
+.phone__island {
+  width: 24cqi;
+  height: 7.2cqi;
+  border-radius: var(--radius-full);
   background: var(--marketing-panel-background);
-  color: var(--marketing-panel-foreground);
 }
-.privacy .lead, .privacy .muted { color: var(--marketing-panel-foreground-subtle); }
-.privacy h2, .privacy h3 { color: var(--marketing-panel-foreground); }
-.privacy .card {
-  background: transparent;
-  border-color: var(--marketing-accent-line);
+.phone__icons { display: flex; align-items: center; justify-content: flex-end; gap: 1.3cqi; }
+.phone__icons svg { height: 3.6cqi; width: auto; }
+
+/* Three tall cards: icon at the top, words at the bottom, air in between. The height is what
+   makes it read as a grid of objects rather than a list; `justify-content: space-between`
+   is what puts the text on the floor of the card whatever its length. */
+.privacy__cards { display: grid; gap: var(--spacing-16); }
+@media (min-width: 760px) { .privacy__cards { grid-template-columns: repeat(3, 1fr); } }
+.privacy__card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--spacing-32);
+  min-height: 230px;
+  padding: var(--spacing-24);
+  border-radius: var(--radius-2xl);
+  background: var(--bg-surface-default);
 }
-.privacy .card__icon {
-  background: var(--marketing-accent-glow);
-  color: var(--marketing-accent-on-panel);
-}
-.privacy .card p { color: var(--marketing-panel-foreground-subtle); }
+.privacy__icon { color: var(--fg-subtle); }
+.privacy__card h3 { margin-bottom: var(--spacing-8); }
+.privacy__card p { color: var(--fg-subtle); }
 
 /* ── §9. Calculator cross-link ──────────────────────────────────────────────────────── */
 .crosslink {

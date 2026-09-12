@@ -178,5 +178,39 @@ for (const shot of SHOTS) {
   )
 }
 
+/* ── Phone shots ─────────────────────────────────────────────────────────────────────
+   Screens shown inside a phone frame on the landing rather than as a desktop card. They get
+   their own viewport and their own URL, because the screen that makes the privacy section's
+   point — the Ley 1581 authorisation — is a gate, reachable only through ?preview=consent.
+
+   `clipHeight` crops the IMAGE, not the layout. The landing lets the frame run off the bottom
+   of its panel the way the reference does; if that crop were done with the panel's height it
+   would move at every width as the phone scales, and land somewhere different each time — at
+   one size through the middle of a button. Cropped here, it ends in the same place always:
+   just past "No acepto", before the small print. */
+const PHONE_SHOTS = [
+  { name: 'privacy-consent', url: '/panel/?preview=consent', clipHeight: 780,
+    label: 'pantalla de autorización (Ley 1581)' },
+]
+
+for (const shot of PHONE_SHOTS) {
+  const phone = await browser.newPage({
+    viewport: { width: 390, height: 844 },
+    deviceScaleFactor: 2,
+    colorScheme: THEME === 'dark' ? 'dark' : 'light',
+  })
+  await phone.addInitScript(t => { try { localStorage.setItem('neto-theme', t) } catch (e) {} }, THEME)
+  await phone.goto(`http://localhost:${PORT}${shot.url}`, { waitUntil: 'networkidle' })
+  await phone.evaluate(t => document.documentElement.classList.toggle('dark', t === 'dark'), THEME)
+  await phone.waitForTimeout(1200)
+  const png = await phone.screenshot({ type: 'png', clip: { x: 0, y: 0, width: 390, height: shot.clipHeight } })
+  await phone.close()
+  const webp = await encode(png)
+  const file = join(OUT, `${shot.name}${suffix}.webp`)
+  writeFileSync(file, Buffer.from(webp, 'base64'))
+  const size = statSync(file).size
+  console.log(`${size > BUDGET ? '⚠ ' : '  '}${shot.name}${suffix}.webp  ${Math.round(size / 1024)} kB  390×${shot.clipHeight} — ${shot.label}`)
+}
+
 await browser.close()
-console.log(`\n${SHOTS.length} capturas · tema ${THEME} · public/landing/images/`)
+console.log(`\n${SHOTS.length + PHONE_SHOTS.length} capturas · tema ${THEME} · public/landing/images/`)
