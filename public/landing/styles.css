@@ -779,10 +779,15 @@ html.dark [data-icon='moon'] { display: none; }
    a photograph nobody has measured. Two stops rather than a flat wash, so the top stays dark
    enough for the heading while the bottom lets more of the image through.
    Contrast is measured against the real photo (see docs/landing-images.md), not assumed. */
+/* The same near-full-bleed rounded panel as the profile block and the footer (see .panel for
+   the measured geometry). `overflow: clip` was already here for the overlay; it is also what
+   rounds the photograph and the scrim together, so neither pokes square out of the corners. */
 .cta-final {
   position: relative;
   isolation: isolate;
   overflow: clip;
+  margin: var(--spacing-12);
+  border-radius: var(--radius-2xl);
   text-align: center;
   color: var(--marketing-panel-foreground);
   background-color: var(--marketing-panel-background);
