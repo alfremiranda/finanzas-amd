@@ -156,7 +156,7 @@ function IngresosCardContent() {
     removeIncome(id)
     setConfirmId(null)
     setPendingDelete(null)
-    showToast('Ingreso eliminado')
+    showToast('Ingreso eliminado', 'success')
   }
 
   function handleDeleteDesktop(id: number) {

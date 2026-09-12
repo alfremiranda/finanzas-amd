@@ -81,7 +81,7 @@ export function ProfileView() {
   function handleSaveName() {
     const trimmed = nameInput.trim()
     setDisplayName(trimmed)
-    showToast(trimmed ? 'Nombre actualizado' : 'Nombre restablecido')
+    showToast(trimmed ? 'Nombre actualizado' : 'Nombre restablecido', 'success')
   }
 
   function handleSelectPrimary(c: Currency) {
@@ -92,7 +92,7 @@ export function ProfileView() {
 
   function handleSaveCurrency() {
     setDisplayCurrency(primary, secondary)
-    showToast('Preferencias guardadas')
+    showToast('Preferencias guardadas', 'success')
   }
 
   const providerLabel = provider === 'github' ? 'GitHub'

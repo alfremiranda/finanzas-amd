@@ -108,24 +108,24 @@ export function EgresoSheet() {
   function handleDelete() {
     if (editingEgresoId === null) return
     removeEgreso(editingEgresoId)
-    showToast('Egreso eliminado')
+    showToast('Egreso eliminado', 'success')
     setEditingEgreso(null)
     closeSheet()
   }
 
   function handleSubmit() {
-    if (!desc.trim()) { showToast('Escribe una descripción'); return }
-    if (!amt.numericValue && !isEditing) { showToast('Ingresa el valor'); return }
+    if (!desc.trim()) { showToast('Escribe una descripción', 'warning'); return }
+    if (!amt.numericValue && !isEditing) { showToast('Ingresa el valor', 'warning'); return }
     const payload = { desc: desc.trim(), category, amount: amt.numericValue, currency, date, recurring, account: account || undefined,
       settles: settles && ibcMode === 'other' && suggestedIbc != null
         ? { ...settles, ibc: ibcAmt.numericValue, accrued: ssOnChosenIbc }
         : settles }
     if (isEditing) {
       updateEgreso(editingEgresoId!, payload)
-      showToast('Egreso actualizado')
+      showToast('Egreso actualizado', 'success')
     } else {
       addEgreso(payload)
-      showToast(settles ? 'Pago registrado' : 'Egreso registrado')
+      showToast(settles ? 'Pago registrado' : 'Egreso registrado', 'success')
     }
     amt.setValue(0)
     setEditingEgreso(null)

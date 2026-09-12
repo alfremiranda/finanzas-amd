@@ -420,7 +420,7 @@ export function DeductionsPanel() {
 
   function handleReset() {
     resetDeductions()
-    showToast('Deducciones restablecidas')
+    showToast('Deducciones restablecidas', 'success')
   }
 
   return (

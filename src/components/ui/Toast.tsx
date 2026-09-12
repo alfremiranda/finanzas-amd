@@ -1,24 +1,35 @@
 import { useUIStore } from '@/store/uiStore'
 import { cn } from '@/lib/utils'
+import { FeedbackGlyph, feedbackSurface, FEEDBACK_SHADOW, FEEDBACK_BOTTOM } from './feedback'
 
+/**
+ * A transient confirmation that says WHICH kind it is.
+ *
+ * The channel used to carry three different sorts of message with one appearance: «Ingreso
+ * registrado» and «Ingresa descripción y monto» — a confirmation and a validation that
+ * blocks your save — arrived in the same grey pill. It did not need colour so much as it
+ * needed to say which one it was, which is why `tone` is required at every call site rather
+ * than defaulting: a default would quietly re-create the thing being fixed.
+ */
 export function Toast() {
-  const toastMsg = useUIStore(s => s.toastMsg)
+  const toast = useUIStore(s => s.toast)
 
   return (
     <div
+      role="status"
+      aria-live="polite"
+      style={{ boxShadow: FEEDBACK_SHADOW }}
       className={cn(
-        'fixed left-1/2 -translate-x-1/2 bg-[var(--foreground)] text-[var(--card)] px-5 py-2 rounded-full ts-body-small',
+        feedbackSurface(toast?.tone ?? 'info'),
+        'fixed left-1/2 -translate-x-1/2 py-2 pl-3 pr-4',
         // z above the drawer (overlay z-100 / content z-101) so toasts stay visible over an open sheet
         'opacity-0 translate-y-2 pointer-events-none transition-[opacity,transform] duration-slow z-[110]',
-        // Mobile: above bottom nav
-        // Above the tab bar's band on mobile. This used to hang off a `.has-mobile-nav`
-        // class that nothing ever set, so the offset never applied and the bar could cover
-        // the message it was confirming.
-        'bottom-[calc(58px+42px+env(safe-area-inset-bottom))] sm:bottom-6',
-        toastMsg && 'opacity-100 translate-y-0',
+        FEEDBACK_BOTTOM,
+        toast && 'opacity-100 translate-y-0',
       )}
     >
-      {toastMsg}
+      <FeedbackGlyph tone={toast?.tone ?? 'info'} />
+      <span className="ts-body-small text-[var(--foreground)]">{toast?.msg}</span>
     </div>
   )
 }

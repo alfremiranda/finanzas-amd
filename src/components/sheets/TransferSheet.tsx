@@ -165,13 +165,13 @@ export function TransferSheet() {
   function handleDelete() {
     if (editingTransferId == null) return
     removeTransfer(editingTransferId)
-    showToast('Movimiento eliminado')
+    showToast('Movimiento eliminado', 'success')
     closeSheet()
   }
 
   function handleSubmit() {
-    if (!amt.numericValue) { showToast('Ingresa el monto'); return }
-    if (fromId === toId)   { showToast('Las cuentas deben ser distintas'); return }
+    if (!amt.numericValue) { showToast('Ingresa el monto', 'warning'); return }
+    if (fromId === toId)   { showToast('Las cuentas deben ser distintas', 'warning'); return }
     if (!from || !to) return
 
     // Source account must have enough balance to cover the transfer.
@@ -183,7 +183,7 @@ export function TransferSheet() {
       const available = fromBalance + addBack
       if (amt.numericValue > available) {
         const fmtCcy = from.currency === 'USD' ? USD : COP
-        showToast(`Saldo insuficiente en ${from.label} · disponible ${fmtCcy(Math.max(available, 0))}`)
+        showToast(`Saldo insuficiente en ${from.label} · disponible ${fmtCcy(Math.max(available, 0))}`, 'warning')
         return
       }
     }
@@ -206,10 +206,10 @@ export function TransferSheet() {
 
     if (isEditing && editingTransferId != null) {
       updateTransfer(editingTransferId, payload)
-      showToast('Movimiento actualizado')
+      showToast('Movimiento actualizado', 'success')
     } else {
       addTransfer(payload)
-      showToast('Movimiento registrado')
+      showToast('Movimiento registrado', 'success')
     }
     closeSheet()
   }

@@ -82,7 +82,7 @@ export function SSPaymentSheet() {
 
   function handleSave() {
     if (!ssPayment) return
-    if (!paid.numericValue) { showToast('Ingresa el valor pagado'); return }
+    if (!paid.numericValue) { showToast('Ingresa el valor pagado', 'warning'); return }
 
     const payload = {
       desc: `Seguridad social · ${monthName} ${y}`,
@@ -106,10 +106,10 @@ export function SSPaymentSheet() {
       // current one, so go there first.
       if (editing.monthKey !== useFinanceStore.getState().curKey) setCurKey(editing.monthKey)
       updateEgreso(editing.id, payload)
-      showToast('Pago actualizado')
+      showToast('Pago actualizado', 'success')
     } else {
       addEgreso(payload)
-      showToast('Pago registrado')
+      showToast('Pago registrado', 'success')
     }
     closeSheet()
   }
@@ -118,7 +118,7 @@ export function SSPaymentSheet() {
     if (!editing) return
     if (editing.monthKey !== useFinanceStore.getState().curKey) setCurKey(editing.monthKey)
     removeEgreso(editing.id)
-    showToast('Pago eliminado')
+    showToast('Pago eliminado', 'success')
     closeSheet()
   }
 

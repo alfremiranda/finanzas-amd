@@ -423,7 +423,7 @@ function EgresosCardContent() {
 
   function handleDelete(id: number) {
     if (confirmId === id) {
-      removeEgreso(id); setConfirmId(null); showToast('Egreso eliminado')
+      removeEgreso(id); setConfirmId(null); showToast('Egreso eliminado', 'success')
     } else {
       setConfirmId(id)
     }

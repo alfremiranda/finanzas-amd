@@ -60,22 +60,22 @@ export function IncomeSheet() {
   function handleDelete() {
     if (editingIncomeId === null) return
     removeIncome(editingIncomeId)
-    showToast('Ingreso eliminado')
+    showToast('Ingreso eliminado', 'success')
     closeSheet()
   }
 
   function handleSubmit() {
     if (!desc.trim() || !amt.numericValue) {
-      showToast('Ingresa descripción y monto')
+      showToast('Ingresa descripción y monto', 'warning')
       return
     }
     const payload = { desc: desc.trim(), amount: amt.numericValue, currency, account, tipo, date, applyProvisions }
     if (isEdit && editingIncomeId !== null) {
       updateIncome(editingIncomeId, payload)
-      showToast('Ingreso actualizado')
+      showToast('Ingreso actualizado', 'success')
     } else {
       addIncome(payload)
-      showToast('Ingreso registrado')
+      showToast('Ingreso registrado', 'success')
     }
     closeSheet()
   }

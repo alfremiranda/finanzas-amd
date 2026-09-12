@@ -17,7 +17,10 @@ export function ConfigView() {
     setSyncing('push')
     try {
       const { pushed, errors } = await forcePushAll()
-      showToast(errors > 0 ? `Subidos ${pushed} — ${errors} errores` : `${pushed} registros subidos a la nube`)
+      showToast(
+        errors > 0 ? `Subidos ${pushed} — ${errors} errores` : `${pushed} registros subidos a la nube`,
+        errors > 0 ? 'warning' : 'info',
+      )
     } finally {
       setSyncing(null)
     }
@@ -27,7 +30,7 @@ export function ConfigView() {
     setSyncing('pull')
     try {
       await syncFromCloud()
-      showToast('Datos actualizados desde la nube')
+      showToast('Datos actualizados desde la nube', 'info')
     } finally {
       setSyncing(null)
     }

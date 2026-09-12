@@ -120,7 +120,7 @@ export function AccountEditSheet() {
   }, [activeSheet, editingAccountId])
 
   function handleSave() {
-    if (!label.trim()) { showToast('Ingresa el nombre'); return }
+    if (!label.trim()) { showToast('Ingresa el nombre', 'warning'); return }
     const accounts = getAccounts()
     const rateNum = isCash ? 0 : (parseFloat(rate.replace(',', '.')) || 0)
 
@@ -153,10 +153,10 @@ export function AccountEditSheet() {
     if (editingAccountId) {
       const idx = accounts.findIndex(a => a.id === editingAccountId)
       if (idx !== -1) accounts[idx] = { ...accounts[idx], ...payload }
-      showToast(isCredit ? 'Tarjeta actualizada' : isCash ? 'Bolsillo actualizado' : isSavings ? 'Ahorro actualizado' : 'Cuenta actualizada')
+      showToast(isCredit ? 'Tarjeta actualizada' : isCash ? 'Bolsillo actualizado' : isSavings ? 'Ahorro actualizado' : 'Cuenta actualizada', 'success')
     } else {
       accounts.push({ id: draftId || 'acc_' + Date.now(), ...payload } as Account)
-      showToast(isCredit ? 'Tarjeta agregada' : isCash ? 'Bolsillo agregado' : isSavings ? 'Ahorro agregado' : 'Cuenta agregada')
+      showToast(isCredit ? 'Tarjeta agregada' : isCash ? 'Bolsillo agregado' : isSavings ? 'Ahorro agregado' : 'Cuenta agregada', 'success')
     }
     saveAccountsConfig(accounts)
     setEditingAccount(null)
@@ -166,7 +166,7 @@ export function AccountEditSheet() {
   function handleDelete() {
     if (!editingAccountId) return
     saveAccountsConfig(getAccounts().filter(a => a.id !== editingAccountId))
-    showToast('Eliminado')
+    showToast('Eliminado', 'success')
     setEditingAccount(null)
     closeSheet()
   }

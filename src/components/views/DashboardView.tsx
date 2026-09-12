@@ -194,9 +194,9 @@ export function DashboardView() {
     setExporting(true)
     try {
       exportAnnualCSV(db as Record<string, MonthData>, year, getSMMLV, deductions)
-      showToast(`CSV ${year} descargado`)
+      showToast(`CSV ${year} descargado`, 'success')
     } catch {
-      showToast('Error al exportar')
+      showToast('Error al exportar', 'warning')
     } finally {
       setExporting(false)
     }

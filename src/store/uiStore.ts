@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import type { FeedbackTone } from '@/components/ui/feedback'
 import { persist } from 'zustand/middleware'
 import type { SheetId, ViewType, Settles } from '@/types'
 
@@ -40,7 +41,7 @@ interface UIState {
   prevView: ViewType | null
   activeSheet: SheetId
   pendingDeleteId: number | null
-  toastMsg: string | null
+  toast: { msg: string; tone: FeedbackTone } | null
   editingEgresoId: number | null
   editingIncomeId: number | null
   editingAccountId: string | null
@@ -71,7 +72,12 @@ interface UIState {
   openSheet: (id: SheetId) => void
   closeSheet: () => void
   setPendingDelete: (id: number | null) => void
-  showToast: (msg: string) => void
+  /**
+   * The tone is REQUIRED, not defaulted. One channel was carrying confirmations, blocking
+   * validations and system notices with one appearance; a default would let a call site
+   * stay silent about which it is and quietly re-create that.
+   */
+  showToast: (msg: string, tone: FeedbackTone) => void
   setEditingEgreso: (id: number | null) => void
   setEditingIncome: (id: number | null) => void
   setEditingAccount: (id: string | null) => void
@@ -103,7 +109,7 @@ export const useUIStore = create<UIState>()(persist((set) => ({
   prevView: null,
   activeSheet: null,
   pendingDeleteId: null,
-  toastMsg: null,
+  toast: null,
   editingEgresoId: null,
   editingIncomeId: null,
   editingAccountId: null,
@@ -134,10 +140,10 @@ export const useUIStore = create<UIState>()(persist((set) => ({
 
   setPendingDelete: (id) => set({ pendingDeleteId: id }),
 
-  showToast: (msg) => {
+  showToast: (msg, tone) => {
     if (toastTimer) clearTimeout(toastTimer)
-    set({ toastMsg: msg })
-    toastTimer = setTimeout(() => set({ toastMsg: null }), 2200)
+    set({ toast: { msg, tone } })
+    toastTimer = setTimeout(() => set({ toast: null }), 2200)
   },
 
   setEditingEgreso: (id) => set({ editingEgresoId: id }),

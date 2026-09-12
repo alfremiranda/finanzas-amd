@@ -130,7 +130,7 @@ export default function App() {
 
   const handleRefresh = useCallback(async () => {
     await syncFromCloud()
-    showToast('Sincronizado')
+    showToast('Sincronizado', 'info')
   }, [syncFromCloud, showToast])
 
   const { pullY, refreshing, isPulling } = usePullToRefresh(mainRef, handleRefresh, !user || !onboardingDone)

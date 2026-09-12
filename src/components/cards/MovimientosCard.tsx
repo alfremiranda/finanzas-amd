@@ -131,7 +131,7 @@ function MovimientosCardContent() {
               t={t}
               accounts={accounts}
               onEdit={() => { setEditingTransfer(t.id); openSheet('transfer') }}
-              onDelete={() => { removeTransfer(t.id); showToast('Movimiento eliminado') }}
+              onDelete={() => { removeTransfer(t.id); showToast('Movimiento eliminado', 'success') }}
             />
           ))}
         </div>
