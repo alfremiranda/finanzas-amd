@@ -80,7 +80,8 @@ habría que volver a medirla.
 **Por qué así:** el tercio izquierdo vacío es donde caen las cinco píldoras. Sin pantallas legibles
 porque cualquier UI inventada ahí se leería como una captura de Neto. Sin personas en ésta: la
 referencia de Deel sí lleva manos, pero una foto con persona compite con las píldoras y aquí el
-sujeto real es lo que la app te muestra, no quién la usa.
+sujeto real es lo que la app te muestra, no quién la usa. (Las tres versiones por perfil, más abajo, sí llevan
+persona: allí la composición la saca del camino de las píldoras.)
 
 **Variante si quieres persona** (más cercana a Deel): igual, pero con las manos y el torso de una
 persona latinoamericana adulta entrando por el borde derecho, sosteniendo un teléfono sin pantalla
@@ -122,7 +123,7 @@ titular grande en el medio.
    compite con él y ninguno de los dos gana.
 3. **El sesgo, otra vez y aquí más.** Pedir «freelancer» devuelve hombre joven en loft. El prompt
    pide mujer latinoamericana a propósito — y como la del bloque anterior no tiene personas, ésta es
-   la única cara de la página. Que no sea la cara por defecto de un generador gringo.
+   la primera cara que se diseñó para la página. Que no sea la cara por defecto de un generador gringo.
 4. **Sin pantallas.** Misma regla de siempre: una UI inventada que se parezca a Neto es una captura
    falsa de un producto financiero.
 
@@ -165,54 +166,73 @@ Ya están cableadas: al elegir un perfil, su foto se pone detrás de las píldor
 **sobre** `como-trabajas.webp`, así que mientras un archivo no exista su perfil sigue mostrando el
 escritorio de siempre. Sueltas el `.webp` con su nombre y aparece.
 
-**Lo que más importa: se intercambian en el mismo sitio.** Si cambian el ángulo, la luz o la mesa, el
-cambio de perfil se ve como un salto y no como «el escritorio cambia según quién eres». Por eso las
-tres comparten una base y sólo cambian los objetos.
+**Con personas, a pedido de Alfredo.** La foto por defecto no lleva gente, y la razón sigue en pie:
+una persona compite con las píldoras. Aquí se resuelve con la composición, no quitando a la persona.
+Va en la mitad derecha, de perfil o de tres cuartos, mirando su trabajo y nunca a cámara, así que el
+ojo no se queda en una cara que le devuelve la mirada. El tercio izquierdo sigue siendo fondo tranquilo.
 
-**Truco práctico:** adjunta `~/Projects/Neto/assets/landing/como-trabajas-original.png` como imagen de
-referencia en Gemini o ChatGPT. Mantiene la mesa, el ángulo y la luz mucho mejor que el texto solo.
+**Lo que más importa: se intercambian en el mismo sitio.** Al cambiar de perfil debe leerse como
+«cambia quién eres», no como un salto. Las tres comparten encuadre, altura de cámara, lado de la luz,
+tamaño de la persona en el cuadro y color. Cambian la persona, el lugar y los objetos.
+
+**Truco práctico:** genera las tres en la misma conversación y, cuando tengas la primera buena,
+adjúntala como referencia para las otras dos («mismo encuadre, luz y color que esta imagen»).
 
 **Base compartida** (va al inicio de los tres prompts):
 
-> Fotografía editorial realista, vista en ángulo de tres cuartos desde arriba sobre una mesa de madera
-> clara, con luz natural cálida de media mañana entrando de lado desde la izquierda y sombras suaves.
-> Encuadre horizontal 16:9. El tercio izquierdo del cuadro es mesa vacía y tranquila; los objetos se
-> agrupan en la mitad derecha. Paleta sobria de maderas, blancos y gris pizarra, con un acento turquesa
-> apagado. Sin personas, sin texto, sin logos, sin pantallas legibles ni interfaces.
+> Fotografía editorial documental y realista, encuadre medio a la altura de los ojos, formato
+> horizontal 16:9. Una sola persona sentada trabajando en la mitad derecha del cuadro, de perfil o de
+> tres cuartos, concentrada en lo que hace y sin mirar a cámara, con expresión tranquila y natural.
+> El tercio izquierdo del cuadro es fondo despejado y desenfocado (pared, ventana o espacio abierto),
+> sin objetos ni personas. Luz natural cálida entrando de lado desde la izquierda, sombras suaves,
+> profundidad de campo baja y grano sutil. Paleta sobria de maderas, blancos y gris pizarra, con un
+> acento turquesa apagado. Contexto colombiano real, no una sesión de catálogo. La pantalla de la
+> laptop mira en sentido contrario a la cámara. Sin texto, sin logos, sin pantallas legibles ni
+> interfaces.
 
 **1 · `como-trabajas-independiente.webp`**
 
-> [base] El espacio de trabajo en casa de un diseñador independiente en Latinoamérica: una laptop
-> abierta vista desde atrás, una taza de café de cerámica, un cuaderno abierto con un bolígrafo encima,
-> una calculadora de escritorio y un teléfono boca abajo. Al fondo, una planta y una ventana
-> desenfocadas. Un lugar propio, flexible y ordenado a su manera.
+> [base] Un hombre afrocolombiano de unos treinta años, diseñador independiente, trabajando desde su
+> casa a media mañana. Está sentado ante una mesa de madera clara con una laptop abierta, una taza de
+> café de cerámica y un cuaderno con bocetos. Viste ropa cómoda de casa, una camiseta lisa. Al fondo,
+> desenfocados, una planta y una ventana con luz de día. Un lugar propio, flexible y ordenado a su
+> manera.
 
 **2 · `como-trabajas-empleado.webp`**
 
-> [base] Un escritorio en una oficina luminosa en Latinoamérica: un teclado, el borde de un monitor con
-> la pantalla fuera de cuadro, un carné corporativo completamente en blanco con su cordón sobre la
-> mesa, un café en vaso para llevar y un organizador de escritorio con lápices. Al fondo, paneles de
-> vidrio de oficina desenfocados. Un lugar estructurado, de rutina.
+> [base] Una mujer colombiana de unos cuarenta años trabajando en su puesto de una oficina luminosa, a
+> media mañana. Está sentada ante un escritorio con un teclado y un monitor cuya pantalla queda fuera
+> de cuadro. A su lado, un vaso de café para llevar y un carné corporativo completamente en blanco
+> colgado de un cordón al cuello. Viste una blusa sencilla de oficina. Al fondo, desenfocados, paneles
+> de vidrio y luz de ventanal. Un lugar estructurado, de rutina.
 
 **3 · `como-trabajas-ambos.webp`**
 
-> [base] La misma mesa sostiene los dos trabajos a la vez. A un lado, un carné corporativo completamente
-> en blanco con su cordón y un vaso de café para llevar, recién dejados. Al otro, una laptop personal
-> abierta vista desde atrás y un cuaderno con bocetos a lápiz. Los dos grupos comparten la mesa sin
-> mezclarse: alguien que terminó su jornada de empleo y sigue con sus proyectos propios.
+> [base] Una mujer colombiana de unos veintiocho años, en casa al final de la tarde, con la luz dorada
+> y más baja. Acaba de volver del trabajo: el carné corporativo completamente en blanco y su cordón
+> están sobre la mesa, junto a un vaso de café para llevar. Ahora está concentrada en su laptop
+> personal abierta, con un cuaderno de proyectos al lado, en su propio proyecto. Viste ropa de oficina
+> con las mangas remangadas. Al fondo, desenfocada, una sala de casa. Alguien que terminó su jornada
+> de empleo y sigue con lo suyo.
 
 **Las trampas de esta serie:**
 
-1. **El carné.** Los generadores le imprimen casi siempre un nombre, un logo o una foto de persona. Por
-   eso el prompt dice «completamente en blanco». Si sale con texto, descártala: un logo inventado de una
+1. **La mirada a cámara.** Es lo primero que hace un generador con una persona. Si mira al
+   espectador, descártala: la cara gana la atención que deben tener las píldoras.
+2. **La sonrisa de stock.** Igual que en `cta-final`: nada de risa con dientes ni pulgares arriba.
+   Concentrada y tranquila.
+3. **Las manos.** Revisa los dedos sobre el teclado y la taza. Una mano de seis dedos en la sección
+   que habla de tu trabajo arruina la credibilidad de la página entera.
+4. **El carné.** Los generadores le imprimen casi siempre un nombre, un logo o una foto. Por eso el
+   prompt dice «completamente en blanco». Si sale con texto, descártala: un logo inventado de una
    empresa es justo lo que no puede aparecer.
-2. **La coherencia entre las tres.** Genera las tres en la misma conversación y con la misma foto de
-   referencia. Si una sale con otra mesa o con la luz del otro lado, vuelve a pedirla antes de
-   convertirla: el salto se nota al cambiar de perfil.
-3. **Personas colándose al fondo** en la de empleado («oficina» invita a meter compañeros). La base dice
-   «sin personas»; si aparecen, descártala.
-4. **Sin pantallas**, como siempre.
+5. **La coherencia entre las tres.** Si una sale con la persona más grande, centrada o con la luz del
+   otro lado, vuelve a pedirla antes de convertirla: el salto se nota al cambiar de perfil.
+6. **El sesgo del generador.** «Freelancer» devuelve hombre joven blanco en loft; «oficina» devuelve
+   un estudio de Silicon Valley. Por eso cada prompt fija quién es y dónde está. Con la foto del cierre
+   son cuatro personas en la página: que se vean como las personas de Colombia que usan Neto.
+7. **Sin pantallas**, como siempre.
 
 **Al agregarlas se vuelve a medir.** Las píldoras tienen su propio fondo y no dependen de la foto, pero
-el pie del bloque sí va sobre el velo oscuro. Si alguna sale muy clara en el lado izquierdo, puede
-tumbar ese contraste.
+el pie del bloque sí va sobre el velo oscuro. Si alguna sale muy clara en el lado izquierdo (ventana
+quemada, pared blanca), puede tumbar ese contraste.
