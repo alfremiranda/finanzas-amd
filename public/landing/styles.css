@@ -784,18 +784,19 @@ html.dark [data-icon='moon'] { display: none; }
    is what puts the text on the floor of the card whatever its length. */
 .privacy__cards { display: grid; gap: var(--spacing-16); }
 @media (min-width: 760px) { .privacy__cards { grid-template-columns: repeat(3, 1fr); } }
-/* Centred: icon, title and description on the card's axis. The text still sits on the floor of
-   the card — `space-between` is untouched — so the three cards keep their shared bottom edge
-   whatever their title's length. */
+/* Centred on both axes, with the icon held close to its text. It used to push the text to the
+   card's floor — `space-between` over a 230px min-height — which is Littio's layout, but with
+   the text centred as well it left the icon floating alone at the top, ~90px from the words it
+   labels. Alfredo asked for the gap to close. The grid still stretches the three cards to one
+   height, so they stay level; the group now sits in the middle of each. */
 .privacy__card {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  justify-content: space-between;
-  gap: var(--spacing-32);
-  min-height: 230px;
-  padding: var(--spacing-24);
+  justify-content: center;
+  gap: var(--spacing-16);
+  padding: var(--spacing-32) var(--spacing-24);
   border-radius: var(--radius-2xl);
   background: var(--bg-surface-default);
 }
