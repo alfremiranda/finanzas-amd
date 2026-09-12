@@ -770,6 +770,12 @@ html.dark [data-icon='moon'] { display: none; }
   background-size: cover;
   background-position: center 40%;
 }
+/* Strongest through the middle, where the text is — not weakest, which is what the first
+   version did. It ran 90% at the top down to 74% at the bottom, so it thinned out exactly
+   where the lead and the note sit, and over this photograph's blown-out window they measured
+   3.87 and 3.47 against the 4.5 they need. The heading was never at risk (10.42 against the
+   3 large text needs); it is the small copy that a photograph eats.
+   Measured again after this change — see docs/landing-images.md. */
 .cta-final::before {
   content: '';
   position: absolute;
@@ -778,8 +784,10 @@ html.dark [data-icon='moon'] { display: none; }
   pointer-events: none;
   background: linear-gradient(
     to bottom,
-    color-mix(in oklch, var(--marketing-panel-background) 90%, transparent) 0%,
-    color-mix(in oklch, var(--marketing-panel-background) 74%, transparent) 100%
+    color-mix(in oklch, var(--marketing-panel-background) 82%, transparent) 0%,
+    color-mix(in oklch, var(--marketing-panel-background) 94%, transparent) 45%,
+    color-mix(in oklch, var(--marketing-panel-background) 94%, transparent) 78%,
+    color-mix(in oklch, var(--marketing-panel-background) 80%, transparent) 100%
   );
 }
 .cta-final__inner {

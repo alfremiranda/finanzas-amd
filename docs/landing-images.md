@@ -49,7 +49,7 @@ bloque se ve completo sin la foto. La imagen añade atmósfera, nunca informaci�
 |---|---|---|
 | `como-trabajas.webp` | Fondo del bloque «¿Cómo trabajas?» (panel oscuro, píldoras encima) | ✅ 2026-09-12 · 1254×1254 · 111 kB |
 
-| `cta-final.webp` | Fondo del cierre «Sabe cuánto es tuyo antes de gastarlo» (foto + overlay) | **pendiente** |
+| `cta-final.webp` | Fondo del cierre «Sabe cuánto es tuyo antes de gastarlo» (foto + overlay) | ✅ 2026-09-12 · 1536×1024 · 71 kB |
 
 **Nota sobre la que ya está:** llegó cuadrada, no 16:9. No se recortó — `background-size: cover`
 la encuadra y el CSS la centra, y la composición aguanta porque el tercio tranquilo recorre toda la
@@ -127,3 +127,28 @@ titular grande en el medio.
 el overlay está calculado para una imagen de valor medio. Una foto clara (pared blanca, ventana
 quemada) puede tumbar el contraste del titular. El ajuste está en `.cta-final::before` de
 `styles.css`: los dos topes del degradado.
+
+
+---
+
+## Lo que pasó al agregar `cta-final.webp` — el aviso se cumplió
+
+El prompt terminaba diciendo «cuando la agregues, hay que volver a medir». Se midió, y **falló**.
+
+| | media | peor píxel | pide | |
+|---|---|---|---|---|
+| titular (48px) | 14.96 | **10.42** | 3 | ok |
+| bajada (20px) | 6.04 | **3.87** | 4.5 | ✗ |
+| nota (14px) | 5.48 | **3.47** | 4.5 | ✗ |
+
+La foto tiene una ventana quemada a la derecha, justo detrás del texto. Pero la causa no era la
+foto: **mi degradado iba de 90% arriba a 74% abajo, o sea se debilitaba exactamente donde vive el
+texto secundario.** El titular nunca estuvo en riesgo — el texto grande pide 3 y sacaba 10. Lo que
+una fotografía se come es la letra chica.
+
+Reformado a cuatro paradas, más fuerte en la franja del medio: `82% · 94% (45%) · 94% (78%) · 80%`.
+Vuelto a medir: **12.60 · 5.96 · 5.90**, las tres con margen. La atmósfera de la foto sobrevive.
+
+**La lección para la próxima imagen con texto encima:** un overlay que se degrada hacia abajo es
+decorativo; uno que es más fuerte donde está el texto es funcional. Y mide el peor píxel, no el
+promedio — el promedio de la bajada daba 6.04 y habría pasado.
