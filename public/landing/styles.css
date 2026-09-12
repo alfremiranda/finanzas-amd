@@ -528,6 +528,23 @@ html.dark [data-icon='moon'] { display: none; }
 .pill:nth-child(2) { transform: translateX(var(--spacing-8)); }
 .pill:nth-child(3) { transform: translateX(var(--spacing-16)); }
 .pill:nth-child(4) { transform: translateX(var(--spacing-8)); }
+/* Each tab wears the colour the app gives that kind of money, so the five read as five
+   things and not as one list repeated. The values come from the dark scale the panel
+   declares — the product's own semantics, not decoration invented for a landing.
+
+   Movimientos stays neutral, which is also the app's answer: a transfer between your own
+   accounts is neither income nor expense, it only moves money, and MovimientosCard gives
+   its icon no colour either.
+
+   The colour says WHICH tab. The check says whether you have it. Two meanings, two
+   encodings — the accent never doubles as the on/off signal, or a colour-blind reader
+   would be reading one channel for both. */
+.pill[data-tab='ingresos'] { --pill-accent: var(--fg-income); }
+.pill[data-tab='gastos'] { --pill-accent: var(--fg-expense); }
+.pill[data-tab='movimientos'] { --pill-accent: var(--fg-neutral); }
+.pill[data-tab='tributarias'] { --pill-accent: var(--fg-tax); }
+.pill[data-tab='provisiones'] { --pill-accent: var(--fg-provision); }
+
 .pill__icon {
   display: inline-flex;
   align-items: center;
@@ -535,7 +552,8 @@ html.dark [data-icon='moon'] { display: none; }
   width: var(--spacing-28);
   height: var(--spacing-28);
   border-radius: var(--radius-full);
-  background: color-mix(in oklch, var(--marketing-panel-foreground) 12%, transparent);
+  background: color-mix(in oklch, var(--pill-accent, var(--marketing-panel-foreground)) 18%, transparent);
+  color: var(--pill-accent, var(--marketing-panel-foreground));
   flex: none;
 }
 .pill__label { font-weight: 500; }
@@ -559,7 +577,7 @@ html.dark [data-icon='moon'] { display: none; }
    without being asked. */
 .pill[data-on='true'] {
   color: var(--marketing-panel-foreground);
-  border-color: var(--marketing-accent-line);
+  border-color: color-mix(in oklch, var(--pill-accent, var(--marketing-accent-on-panel)) 40%, transparent);
 }
 .pill[data-on='true'] .pill__check {
   color: var(--marketing-panel-background);

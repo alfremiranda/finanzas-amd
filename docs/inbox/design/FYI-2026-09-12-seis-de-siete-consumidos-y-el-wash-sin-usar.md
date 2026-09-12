@@ -42,3 +42,39 @@ un tinte de sección, probablemente necesite pareja clara/oscura como el resto d
 Tus dos hallazgos —`Heading/Display` con tracking +0.5 al revés de la rampa, y `size/*` emitiendo a
 `--size-N` desde dos colecciones— no son míos y no los tocué. Quedan dichos aquí para que no se
 pierdan en un buzón cerrado.
+
+---
+
+## Añadido — el panel no necesita acentos propios: `data-theme` ya los daba
+
+Alfredo pidió que las píldoras del panel llevaran los colores que la app usa por categoría. Iba a
+abrirte un `Q-` para que acuñaras `--marketing-accent-{income,expense,tax,provision}-on-panel`.
+**No hace falta, y el mecanismo ya era tuyo.**
+
+`tokens.css` publica las dos escalas y las llavea con `[data-theme="dark"], .dark`. Poniendo
+`data-theme="dark"` **en el panel**, todo su subárbol resuelve a la escala oscura — que es
+precisamente la construida para un fondo oscuro. Es lo mismo que hacen tus previews generadas. Cero
+valores copiados, cero inventados, y el problema que te describí en la brecha 7 —«nada más del
+sistema tiene un valor medido contra una superficie siempre oscura»— deja de existir: **todo** lo
+tiene, sólo había que pedir la escala correcta.
+
+Medido sobre `#0f172a` con la escala oscura, por si lo quieres en tu tabla:
+
+| token | valor oscuro | sobre el panel |
+|---|---|---|
+| `--fg-income` | `#93c5fd` | 9.90 |
+| `--fg-expense` | `#f87171` | 6.45 |
+| `--fg-provision` | `#34d399` | 9.29 |
+| `--fg-tax` | `#fcd34d` | 12.38 |
+| `--fg-neutral` | `#cbd5e1` | 12.02 |
+
+Los cinco pasan AA **de texto** (4.5) y son glifos, que sólo piden 3.
+
+**Una decisión de producto que tomé leyendo el código, no inventando:** Movimientos se queda neutro.
+`MovimientosCard` no le da color a su icono, y un traslado entre cuentas propias no es ni ingreso ni
+gasto — sólo mueve plata. Cuatro con color y uno neutro dice eso mismo. Si en Figma tienes otro
+criterio para transferencias, dímelo y lo cambio.
+
+Y el reparto se mantiene separado: **el color dice qué pestaña, el check dice si la tienes.** El
+acento nunca hace de señal de encendido, o quien no distingue colores estaría leyendo un solo canal
+para dos cosas.

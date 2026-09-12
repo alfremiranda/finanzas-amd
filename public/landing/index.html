@@ -180,13 +180,19 @@
 
       <!-- ── 5. Intent router — the dark panel ───────────────────────────────────────
            The profile split is the product's own (PRODUCT.md §8), and the pill stack below
-           shows what it actually does: which tabs of the Mes view exist for you. Only the
-           four --marketing-panel-* tokens are used inside the panel. Nothing else in the
-           system has a measured value against an always-dark surface — the semantic accents
-           (income/expense/tax…) are theme-dependent and would land wrong here in light. -->
+           shows what it actually does: which tabs of the Mes view exist for you.
+
+           data-theme="dark" is on the panel on purpose. The panel never flips, but every
+           semantic token does, so in light mode the page's --fg-income (a dark blue) would
+           be painted on a dark panel. The system publishes both scales and keys them by that
+           attribute — its own generated previews use it the same way — so declaring it here
+           resolves the whole subtree to the dark scale, the one built for a dark ground. No
+           value is copied and none is invented. Measured on #0f172a: income 9.90, expense
+           6.45, provision 9.29, tax 12.38, neutral 12.02 — all above AA for text, and these
+           are glyphs. -->
       <section class="section" id="como-funciona">
         <div class="wrap">
-          <div class="panel" data-reveal>
+          <div class="panel" data-theme="dark" data-reveal>
             <div class="panel__head">
               <h2 class="display-lg">¿Cómo trabajas?</h2>
               <p class="lead">
