@@ -800,15 +800,14 @@ html.dark [data-icon='moon'] { display: none; }
    The wordmark is the whole idea. It is sized in vw so it always reaches both edges, and the
    panel's `overflow: clip` is what crops it — the crop is the gesture, not an accident, and
    a fixed px size would stop reaching the edges the moment the viewport changed. */
-.footer { padding-block: 0 var(--section-y); }
-.footer__panel {
-  position: relative;
-  isolation: isolate;
-  overflow: clip;
-  border-radius: var(--radius-2xl);
+/* The band, not a box. A hairline on top because the closing block above is the same dark
+   ground: without the photograph in it the two would run together into one unreadable mass,
+   and the boundary should not depend on an image that may not have loaded. */
+.footer {
   background: var(--marketing-panel-background);
   color: var(--marketing-panel-foreground-subtle);
-  padding: clamp(var(--spacing-24), 4vw, var(--spacing-64));
+  padding-block: var(--section-y);
+  border-top: var(--border-width-default) solid color-mix(in oklch, var(--marketing-panel-foreground) 10%, transparent);
 }
 .footer__top {
   display: grid;
