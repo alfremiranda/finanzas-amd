@@ -23,29 +23,36 @@
     U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
 }
 
-/* ── §0. QUARANTINE — values the design system does not have yet ────────────────────────
-   tokens.css tops out at .ts-heading-display (28/36), --spacing-64 and
-   --motion-duration-slow (300ms). A landing needs a display scale, a section rhythm and a
-   reveal duration above all three. Design owns them; they are born in Figma, not here.
-   Asked in docs/inbox/design/Q-2026-09-12-la-escala-de-marketing-no-existe.md.
-   WHEN THAT LANDS: delete this block and swap the names. Nothing else changes. */
+/* ── §0. What the page owns, now that the system owns the rest ────────────────────────
+   The quarantine block that used to sit here is gone. All seven gaps came back coined from
+   Figma the same day (docs/inbox/web/done/A-2026-09-12-las-siete-brechas-*): the display
+   scale, the section rhythm, the reveal duration and its stagger, the blur ramp, the four
+   decorative-cyan tokens and the marketing panel. Not one of them is a value invented here.
+
+   What is left below is genuinely the page's own, and Design said so: a token is a STOP, and
+   the interpolation between stops is the landing's business — the design system has no
+   opinion about the viewport and should not grow one. Every clamp's two extremes are coined
+   stops; only the curve between them is local. */
 :root {
-  --tmp-display-xl: clamp(38px, 7.2vw, 68px);
-  --tmp-display-xl-lh: 1.04;
-  --tmp-display-lg: clamp(30px, 4.6vw, 44px);
-  --tmp-display-lg-lh: 1.12;
-  --tmp-display-md: clamp(24px, 3vw, 32px);
-  --tmp-display-md-lh: 1.2;
-  --tmp-lead: clamp(17px, 1.5vw, 20px);
+  /* ts-display-md (48) → ts-display-xl (72). Tracking is the tokens' own −1px at every stop. */
+  --display-xl: clamp(48px, 6vw, 72px);
+  /* ts-heading-display (28) → ts-display-md (48) */
+  --display-lg: clamp(28px, 4vw, 48px);
+  /* ts-heading-section (24) → ts-heading-display (28) */
+  --display-md: clamp(24px, 2.4vw, 28px);
+  /* ts-body-base (16) → ts-heading-subsection (20) */
+  --lead-size: clamp(16px, 1.5vw, 20px);
 
-  --tmp-section-y: clamp(64px, 9vw, 128px);
-  --tmp-block-gap: clamp(32px, 5vw, 64px);
-  --tmp-gutter: clamp(20px, 4vw, 32px);
-  --tmp-container: 1120px;
-  --tmp-container-narrow: 760px;
+  /* Section rhythm. Both extremes are the tokens themselves, not their values retyped:
+     spacing/64 is the product's ceiling, spacing/128 the marketing rung coined for this. */
+  --section-y: clamp(var(--spacing-64), 9vw, var(--spacing-128));
+  --block-gap: clamp(var(--spacing-32), 5vw, var(--spacing-64));
 
-  --tmp-duration-reveal: 520ms;
-  --tmp-stagger: 70ms;
+  /* Column geometry. Not tokens and not pretending to be: no component measures itself
+     against the width of a marketing page. */
+  --gutter: clamp(20px, 4vw, 32px);
+  --container: 1120px;
+  --container-narrow: 760px;
 }
 
 /* ── §1. Reset & base ───────────────────────────────────────────────────────────────── */
@@ -96,38 +103,38 @@ button { font: inherit; color: inherit; }
 
 .wrap {
   width: 100%;
-  max-width: var(--tmp-container);
+  max-width: var(--container);
   margin-inline: auto;
-  padding-inline: var(--tmp-gutter);
+  padding-inline: var(--gutter);
 }
-.wrap--narrow { max-width: var(--tmp-container-narrow); }
-.section { padding-block: var(--tmp-section-y); }
+.wrap--narrow { max-width: var(--container-narrow); }
+.section { padding-block: var(--section-y); }
 .section--tint { background: var(--bg-surface-default); }
 
 /* Type. The .ts-* classes from tokens.css cover everything at and below 28px; §0 covers
    what sits above it. Never write a raw font-size outside those two. */
 .display-xl {
-  font-weight: 800;
-  font-size: var(--tmp-display-xl);
-  line-height: var(--tmp-display-xl-lh);
-  letter-spacing: -0.03em;
+  font-weight: 700;
+  font-size: var(--display-xl);
+  line-height: 1.06;
+  letter-spacing: -1px;
   text-wrap: balance;
 }
 .display-lg {
   font-weight: 700;
-  font-size: var(--tmp-display-lg);
-  line-height: var(--tmp-display-lg-lh);
-  letter-spacing: -0.02em;
+  font-size: var(--display-lg);
+  line-height: 1.08;
+  letter-spacing: -1px;
   text-wrap: balance;
 }
 .display-md {
   font-weight: 700;
-  font-size: var(--tmp-display-md);
-  line-height: var(--tmp-display-md-lh);
-  letter-spacing: -0.01em;
+  font-size: var(--display-md);
+  line-height: 1.15;
+  letter-spacing: -0.25px;
 }
 .lead {
-  font-size: var(--tmp-lead);
+  font-size: var(--lead-size);
   line-height: 1.55;
   color: var(--fg-subtle);
   text-wrap: pretty;
@@ -207,7 +214,7 @@ button { font: inherit; color: inherit; }
   background: var(--bg-surface-inverse);
   color: var(--fg-on-inverse);
   text-align: center;
-  padding: var(--spacing-10) var(--tmp-gutter);
+  padding: var(--spacing-10) var(--gutter);
 }
 .announce a {
   color: inherit;
@@ -274,10 +281,10 @@ html.dark [data-icon='moon'] { display: none; }
 }
 
 /* ── §4. Hero ───────────────────────────────────────────────────────────────────────── */
-.hero { padding-block: clamp(48px, 7vw, 96px) var(--tmp-section-y); }
+.hero { padding-block: clamp(48px, 7vw, 96px) var(--section-y); }
 .hero__grid {
   display: grid;
-  gap: var(--tmp-block-gap);
+  gap: var(--block-gap);
   align-items: center;
 }
 @media (min-width: 960px) {
@@ -286,6 +293,28 @@ html.dark [data-icon='moon'] { display: none; }
 .hero__copy { display: flex; flex-direction: column; gap: var(--spacing-24); align-items: flex-start; }
 .hero__copy .lead { max-width: 54ch; }
 
+/* The hero bloom. --marketing-accent-glow was coined to go with blur-lg/blur-xl, and this
+   is the pair in use: a decorative cyan that is explicitly allowed on marketing surfaces
+   (Design, 2026-09-12 §6) while inside the product cyan stays reserved for selected and
+   focus. Pseudo-element and pointer-events:none — it is paint, never a target. */
+/* `overflow: clip` and not `hidden`: hidden would make the hero a scroll container, and the
+   blur bleeds ~96px past its box either way. Clipping it here — rather than leaning on the
+   body's overflow-x — is what keeps documentElement.scrollWidth equal to the viewport. */
+.hero { position: relative; isolation: isolate; overflow: clip; }
+.hero::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  inset-block-start: -6%;
+  inset-inline-end: 6%;
+  width: min(560px, 80vw);
+  aspect-ratio: 1;
+  border-radius: var(--radius-full);
+  background: var(--marketing-accent-glow);
+  filter: blur(var(--blur-xl));
+  opacity: 0.55;
+}
 /* ── §5. The flow — the hero's animated distribution of one month's gross ───────────── */
 .flow {
   background: var(--bg-surface-subtle);
@@ -317,7 +346,7 @@ html.dark [data-icon='moon'] { display: none; }
 }
 .flow__seg {
   width: 0;
-  transition: width var(--tmp-duration-reveal) var(--motion-easing-enter);
+  transition: width var(--motion-duration-reveal) var(--motion-easing-enter);
 }
 .flow__seg[data-kind='tax'] { background: var(--bg-tax); }
 .flow__seg[data-kind='provision'] { background: var(--fg-provision); }
@@ -411,10 +440,10 @@ html.dark [data-icon='moon'] { display: none; }
 .card__icon[data-tone='income'] { background: var(--bg-income-subtle); color: var(--fg-income); }
 .card__icon[data-tone='provision'] { background: var(--bg-provision-subtle); color: var(--fg-provision); }
 
-.section-head { display: flex; flex-direction: column; gap: var(--spacing-12); margin-bottom: var(--tmp-block-gap); }
+.section-head { display: flex; flex-direction: column; gap: var(--spacing-12); margin-bottom: var(--block-gap); }
 .section-head .lead { max-width: 60ch; }
 
-.features { display: grid; gap: var(--tmp-block-gap); }
+.features { display: grid; gap: var(--block-gap); }
 .feature {
   display: grid;
   gap: var(--spacing-24);
@@ -448,15 +477,28 @@ html.dark [data-icon='moon'] { display: none; }
 }
 
 /* ── §8. Privacy block ────────────────────────────────────────────────────────────────
-   NOT --bg-surface-inverse. That token's job is "the opposite of the page", so in dark mode
-   it is white — correct for the thin announcement bar, a light bomb for a full-bleed section,
-   and worst of all in the one section arguing that Neto is calm and private. What this wants
-   is a marketing panel that stays dark in both themes, and the system has no token for that
-   yet (asked in the Design Q, §5). Until it does: the page's own tinted band, with the brand
-   carrying the accent. */
-.privacy { background: var(--bg-surface-default); }
-.privacy .card { background: var(--bg-surface-subtle); }
-.privacy .card__icon { background: var(--bg-brand-alpha-10); color: var(--fg-brand); }
+   The marketing panel, coined for exactly this. NOT --bg-surface-inverse: that token means
+   "the opposite of the page", so in dark mode it is white — right for the thin announcement
+   bar, a light bomb across a full section, and worst of all in the one arguing that Neto is
+   calm. The panel family holds the SAME value in both themes on purpose; that is its
+   definition, not an oversight. Its background is what bg/surface/inverse already equals in
+   light, so this section is unchanged there — dark is where it stops flashing.
+   Contrast measured by Design on the panel: foreground 17.06, subtle 6.96, accent 9.88. */
+.privacy {
+  background: var(--marketing-panel-background);
+  color: var(--marketing-panel-foreground);
+}
+.privacy .lead, .privacy .muted { color: var(--marketing-panel-foreground-subtle); }
+.privacy h2, .privacy h3 { color: var(--marketing-panel-foreground); }
+.privacy .card {
+  background: transparent;
+  border-color: var(--marketing-accent-line);
+}
+.privacy .card__icon {
+  background: var(--marketing-accent-glow);
+  color: var(--marketing-accent-on-panel);
+}
+.privacy .card p { color: var(--marketing-panel-foreground-subtle); }
 
 /* ── §9. Calculator cross-link ──────────────────────────────────────────────────────── */
 .crosslink {
@@ -474,7 +516,7 @@ html.dark [data-icon='moon'] { display: none; }
 /* ── §10. Founders / Pro ────────────────────────────────────────────────────────────── */
 .pro {
   display: grid;
-  gap: var(--tmp-block-gap);
+  gap: var(--block-gap);
   align-items: start;
 }
 @media (min-width: 900px) { .pro { grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr); } }
@@ -502,7 +544,7 @@ html.dark [data-icon='moon'] { display: none; }
 }
 
 /* ── §11. FAQ ───────────────────────────────────────────────────────────────────────── */
-.faq { display: grid; gap: var(--spacing-2); max-width: var(--tmp-container-narrow); }
+.faq { display: grid; gap: var(--spacing-2); max-width: var(--container-narrow); }
 .faq details {
   border-bottom: var(--border-width-default) solid var(--border-default);
 }
@@ -554,8 +596,8 @@ html.dark [data-icon='moon'] { display: none; }
   opacity: 0;
   transform: translateY(16px);
   transition:
-    opacity var(--tmp-duration-reveal) var(--motion-easing-enter),
-    transform var(--tmp-duration-reveal) var(--motion-easing-enter);
+    opacity var(--motion-duration-reveal) var(--motion-easing-enter),
+    transform var(--motion-duration-reveal) var(--motion-easing-enter);
   transition-delay: var(--reveal-delay, 0ms);
 }
 [data-reveal][data-shown='true'] { opacity: 1; transform: none; }

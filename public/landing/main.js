@@ -100,7 +100,7 @@
           var el = entry.target
           var siblings = el.parentElement ? el.parentElement.querySelectorAll(':scope > [data-reveal]') : []
           var index = Array.prototype.indexOf.call(siblings, el)
-          el.style.setProperty('--reveal-delay', Math.max(index, 0) * 70 + 'ms')
+          el.style.setProperty('--reveal-delay', 'calc(var(--motion-stagger-base) * ' + Math.max(index, 0) + ')')
           el.setAttribute('data-shown', 'true')
           observer.unobserve(el)
         })
