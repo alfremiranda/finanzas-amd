@@ -163,11 +163,6 @@ MAP = [
         ("--btn-danger-fg", "--button-danger-foreground"),
         ("--btn-danger-border", "--button-danger-border"),
     ]),
-    ("Charts", [
-        ("--chart-1", "--chart-categorical-1"), ("--chart-2", "--chart-categorical-2"),
-        ("--chart-3", "--chart-categorical-3"), ("--chart-4", "--chart-categorical-4"),
-        ("--chart-5", "--chart-categorical-5"),
-    ]),
 ]
 CATS = [("home", "home"), ("food", "food"), ("bank", "bank"), ("health", "health"), ("transit", "transit"),
         ("tech", "connectivity"), ("recreation", "recreation"), ("work", "work"), ("family", "family"),
@@ -274,6 +269,22 @@ def sw(on=False, dis=False):
             f'width:36px;height:20px;padding:2px;border-radius:999px;'
             f'background:var({"--switch-track-on" if on else "--switch-track-off"});{"opacity:.5;" if dis else ""}">'
             f'<span style="width:16px;height:16px;border-radius:999px;background:var(--switch-thumb)"></span></span>')
+
+# La vista de Toast/SystemMessage afirma que el glifo es el segundo portador del
+# significado (1.4.1). Dibujarlo con el cuadro placeholder de sq() hacía que la página
+# se contradijera a sí misma: tres formas distintas en el texto, tres cuadros iguales
+# en la imagen. Estos tres trazos son los de la librería (Lucide) que usa el producto.
+TRAZOS = {
+    "check": '<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
+    "alert": '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/>'
+             '<path d="M12 9v4"/><path d="M12 17h.01"/>',
+    "info": '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
+}
+
+def glifo(nombre, px=16, tok="--foreground-default"):
+    return (f'<svg width="{px}" height="{px}" viewBox="0 0 24 24" fill="none" '
+            f'stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" '
+            f'style="color:var({tok});flex:none">{TRAZOS[nombre]}</svg>')
 
 def sq(px=14, tok="--foreground-default"):
     return f'<span style="display:inline-block;width:{px}px;height:{px}px;border:1.5px solid var({tok});border-radius:3px"></span>'
@@ -411,7 +422,7 @@ def mock(n, c):
                   ("ago", [1.3, 1.0, 2.7, 3.5]), ("sep", [1.4, 1.1, 2.8, 3.6])])
         toks = (["--category-home-accent", "--category-food-accent", "--category-bank-accent", "--category-transit-accent"]
                 if cat else
-                ["--chart-categorical-1", "--chart-categorical-2", "--chart-categorical-3", "--chart-categorical-4"])
+                ["--bg-tax", "--bg-provision", "--bg-expense", "--bg-net"])
         etiquetas = ["Obligaciones", "Provisiones", "Gastos", "Neto libre"]
         ymax, alto = (8, 172) if cat else (12, 180)
         actual = len(datos) - 4 if cat else len(datos) - 1
@@ -448,8 +459,8 @@ def mock(n, c):
                 f'{rejilla}{cols}{promedio}</div>'
                 f'<div style="display:flex;margin-top:8px">{ejeX}</div>{leyenda}</div>')
     if n == "AnnualDonut":
-        segs = [("--chart-categorical-1", 14), ("--chart-categorical-2", 11),
-                ("--chart-categorical-3", 33), ("--chart-categorical-4", 42)]
+        segs = [("--bg-tax", 14), ("--bg-provision", 11),
+                ("--bg-expense", 33), ("--bg-net", 42)]
         paradas, acc = [], 0
         for t, p_ in segs:
             paradas.append(f'var({t}) {acc}% {acc + p_}%')
@@ -500,23 +511,33 @@ def mock(n, c):
         return (f'<div style="width:380px"><div style="display:flex;gap:1px;height:16px;border-radius:999px;overflow:hidden">{bar}</div>'
                 f'<div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:10px">{leg}</div></div>')
     if n in ("Toast", "SystemMessage"):
+        # El 12-sep Alfredo rediseñó ambos: pastilla completa, tinte por tono y el icono
+        # como segundo portador del significado (glifo distinto por tono, no sólo color).
+        # Esta vista se re-derivó midiendo el componente en Figma, no de memoria:
+        # Toast pad 8/16/8/12 gap 10 · SystemMessage pad 8/8/8/16 con Button LG.
         sombra = ("0 var(--elevation-floating-key-offset-y) var(--elevation-floating-key-blur) "
                   "var(--elevation-floating-key-spread) var(--shadow-key),"
                   "0 var(--elevation-floating-ambient-offset-y) var(--elevation-floating-ambient-blur) "
                   "var(--elevation-floating-ambient-spread) var(--shadow-ambient)")
-        def pastilla(tinte, tono, glifo, texto, accion=False):
-            der = "8px" if accion else "16px"
-            btn = ('<span style="display:inline-flex;align-items:center;padding:4px 12px;border-radius:999px;'
-                   'background:var(--button-primary-filled-background);color:var(--button-primary-filled-foreground);'
-                   + ts("Control/SM") + '">Actualizar</span>') if accion else ""
-            return (f'<span style="display:inline-flex;align-items:center;gap:{"10px" if accion else "8px"};'
-                    f'padding:8px {der} 8px 16px;border-radius:999px;background:var({tinte});box-shadow:{sombra}">'
-                    f'{sq(16, tono)}'
+        def pastilla(tinte, tono, glifo_nombre, texto, accion=False):
+            pad = ("var(--spacing-8) var(--spacing-8) var(--spacing-8) var(--spacing-16)" if accion
+                   else "var(--spacing-8) var(--spacing-16) var(--spacing-8) var(--spacing-12)")
+            btn = ('<span style="display:inline-flex;align-items:center;'
+                   'height:var(--button-size-lg-height);'
+                   'padding:0 var(--button-size-lg-padding-x);'
+                   'border-radius:var(--radius-full);'
+                   'background:var(--button-filled-background-default);'
+                   'color:var(--button-filled-foreground);'
+                   + ts("Control/LG") + '">Actualizar</span>') if accion else ""
+            return (f'<span style="display:inline-flex;align-items:center;gap:var(--spacing-10);'
+                    f'padding:{pad};border-radius:var(--radius-full);background:var({tinte});'
+                    f'box-shadow:{sombra}">'
+                    f'{glifo(glifo_nombre, 16, tono)}'
                     f'<span style="{ts("Body/Small")}color:var(--foreground-default)">{texto}</span>{btn}</span>')
         if n == "SystemMessage":
             return ('<div class="row">' + pastilla("--bg-info-subtle", "--fg-info", "info",
                                                    "Hay una versión nueva", True) + '</div>')
-        return ('<div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start">'
+        return ('<div style="display:flex;flex-direction:column;gap:var(--spacing-12);align-items:flex-start">'
                 + pastilla("--bg-success-subtle", "--fg-success", "check", "Ingreso registrado")
                 + pastilla("--bg-warning-subtle", "--fg-warning-strong", "alert", "Ingresa descripción y monto")
                 + pastilla("--bg-info-subtle", "--fg-info", "info", "Sincronizado") + '</div>')

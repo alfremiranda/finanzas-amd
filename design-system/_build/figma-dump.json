@@ -217,56 +217,6 @@
           "#06b6d4"
         ],
         [
-          "chart/sequential/1",
-          "#6ee7b7",
-          "#6ee7b7"
-        ],
-        [
-          "chart/sequential/2",
-          "#34d399",
-          "#34d399"
-        ],
-        [
-          "chart/sequential/3",
-          "#10b981",
-          "#10b981"
-        ],
-        [
-          "chart/sequential/4",
-          "#059669",
-          "#059669"
-        ],
-        [
-          "chart/sequential/5",
-          "#047857",
-          "#047857"
-        ],
-        [
-          "chart/categorical/1",
-          "#fbbf24",
-          "#fcd34d"
-        ],
-        [
-          "chart/categorical/2",
-          "#059669",
-          "#34d399"
-        ],
-        [
-          "chart/categorical/3",
-          "#ef4444",
-          "#f87171"
-        ],
-        [
-          "chart/categorical/4",
-          "#0e7490",
-          "#06b6d4"
-        ],
-        [
-          "chart/categorical/5",
-          "#1d4ed8",
-          "#93c5fd"
-        ],
-        [
           "category/home/accent",
           "#0d9488",
           "#5eead4"
@@ -1190,6 +1140,16 @@
           "fg/warning-strong",
           "#b45309",
           "#fcd34d"
+        ],
+        [
+          "chart/dim/label",
+          0.75,
+          0.75
+        ],
+        [
+          "chart/dim/swatch",
+          0.3,
+          0.3
         ]
       ]
     },
@@ -2601,136 +2561,6 @@
       "aliases": {
         "Light": "bg/brand",
         "Dark": "bg/brand"
-      }
-    },
-    {
-      "collection": "Semantic",
-      "name": "chart/sequential/1",
-      "type": "COLOR",
-      "values": {
-        "Light": "#6ee7b7",
-        "Dark": "#6ee7b7"
-      },
-      "aliases": {
-        "Light": "color/emerald/300",
-        "Dark": "color/emerald/300"
-      }
-    },
-    {
-      "collection": "Semantic",
-      "name": "chart/sequential/2",
-      "type": "COLOR",
-      "values": {
-        "Light": "#34d399",
-        "Dark": "#34d399"
-      },
-      "aliases": {
-        "Light": "color/emerald/400",
-        "Dark": "color/emerald/400"
-      }
-    },
-    {
-      "collection": "Semantic",
-      "name": "chart/sequential/3",
-      "type": "COLOR",
-      "values": {
-        "Light": "#10b981",
-        "Dark": "#10b981"
-      },
-      "aliases": {
-        "Light": "color/emerald/500",
-        "Dark": "color/emerald/500"
-      }
-    },
-    {
-      "collection": "Semantic",
-      "name": "chart/sequential/4",
-      "type": "COLOR",
-      "values": {
-        "Light": "#059669",
-        "Dark": "#059669"
-      },
-      "aliases": {
-        "Light": "color/emerald/600",
-        "Dark": "color/emerald/600"
-      }
-    },
-    {
-      "collection": "Semantic",
-      "name": "chart/sequential/5",
-      "type": "COLOR",
-      "values": {
-        "Light": "#047857",
-        "Dark": "#047857"
-      },
-      "aliases": {
-        "Light": "color/emerald/700",
-        "Dark": "color/emerald/700"
-      }
-    },
-    {
-      "collection": "Semantic",
-      "name": "chart/categorical/1",
-      "type": "COLOR",
-      "values": {
-        "Light": "#fbbf24",
-        "Dark": "#fcd34d"
-      },
-      "aliases": {
-        "Light": "bg/tax",
-        "Dark": "bg/tax"
-      }
-    },
-    {
-      "collection": "Semantic",
-      "name": "chart/categorical/2",
-      "type": "COLOR",
-      "values": {
-        "Light": "#059669",
-        "Dark": "#34d399"
-      },
-      "aliases": {
-        "Light": "fg/provision",
-        "Dark": "fg/provision"
-      }
-    },
-    {
-      "collection": "Semantic",
-      "name": "chart/categorical/3",
-      "type": "COLOR",
-      "values": {
-        "Light": "#ef4444",
-        "Dark": "#f87171"
-      },
-      "aliases": {
-        "Light": "fg/expense",
-        "Dark": "fg/expense"
-      }
-    },
-    {
-      "collection": "Semantic",
-      "name": "chart/categorical/4",
-      "type": "COLOR",
-      "values": {
-        "Light": "#0e7490",
-        "Dark": "#06b6d4"
-      },
-      "aliases": {
-        "Light": "bg/net",
-        "Dark": "bg/net"
-      }
-    },
-    {
-      "collection": "Semantic",
-      "name": "chart/categorical/5",
-      "type": "COLOR",
-      "values": {
-        "Light": "#1d4ed8",
-        "Dark": "#93c5fd"
-      },
-      "aliases": {
-        "Light": "fg/income",
-        "Dark": "fg/income"
       }
     },
     {
@@ -5136,6 +4966,24 @@
       "aliases": {
         "Light": "color/amber/700",
         "Dark": "color/amber/300"
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "chart/dim/label",
+      "type": "FLOAT",
+      "values": {
+        "Light": 0.75,
+        "Dark": 0.75
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "chart/dim/swatch",
+      "type": "FLOAT",
+      "values": {
+        "Light": 0.3,
+        "Dark": 0.3
       }
     },
     {

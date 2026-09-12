@@ -34,16 +34,6 @@ bg/tax-subtle	COLOR	#fffbeb	#451a03	color/amber/50	color/amber/950
 bg/net	COLOR	#0e7490	#06b6d4	bg/brand	bg/brand
 bg/net-subtle	COLOR	rgba(6,182,212,0.1)	rgba(6,182,212,0.2)	bg/brand-alpha-10	bg/brand-alpha-10
 fg/net	COLOR	#0e7490	#06b6d4	bg/brand	bg/brand
-chart/sequential/1	COLOR	#6ee7b7	#6ee7b7	color/emerald/300	color/emerald/300
-chart/sequential/2	COLOR	#34d399	#34d399	color/emerald/400	color/emerald/400
-chart/sequential/3	COLOR	#10b981	#10b981	color/emerald/500	color/emerald/500
-chart/sequential/4	COLOR	#059669	#059669	color/emerald/600	color/emerald/600
-chart/sequential/5	COLOR	#047857	#047857	color/emerald/700	color/emerald/700
-chart/categorical/1	COLOR	#fbbf24	#fcd34d	bg/tax	bg/tax
-chart/categorical/2	COLOR	#059669	#34d399	fg/provision	fg/provision
-chart/categorical/3	COLOR	#ef4444	#f87171	fg/expense	fg/expense
-chart/categorical/4	COLOR	#0e7490	#06b6d4	bg/net	bg/net
-chart/categorical/5	COLOR	#1d4ed8	#93c5fd	fg/income	fg/income
 category/home/accent	COLOR	#0d9488	#5eead4	color/teal/600	color/teal/300
 category/home/surface	COLOR	#f0fdfa	#042f2e	color/teal/50	color/teal/950
 category/food/accent	COLOR	#ea580c	#fdba74	color/orange/600	color/orange/300

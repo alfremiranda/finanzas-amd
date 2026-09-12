@@ -39,16 +39,6 @@
   --bg-net: #0e7490;
   --bg-net-subtle: rgba(6,182,212,0.1);
   --fg-net: #0e7490;
-  --chart-sequential-1: #6ee7b7;
-  --chart-sequential-2: #34d399;
-  --chart-sequential-3: #10b981;
-  --chart-sequential-4: #059669;
-  --chart-sequential-5: #047857;
-  --chart-categorical-1: #fbbf24;
-  --chart-categorical-2: #059669;
-  --chart-categorical-3: #ef4444;
-  --chart-categorical-4: #0e7490;
-  --chart-categorical-5: #1d4ed8;
   --category-home-accent: #0d9488;
   --category-home-surface: #f0fdfa;
   --category-food-accent: #ea580c;
@@ -344,6 +334,8 @@
   --size-40: 40px;
   --size-48: 48px;
   --size-64: 64px;
+  --chart-dim-label: 0.75px;
+  --chart-dim-swatch: 0.3px;
   --badge-size: 20px;
   --button-size-sm-padding-x: 8px;
   --button-size-sm-padding-y: 4px;
@@ -455,16 +447,6 @@
   --category-transit-default: var(--category-transit-accent);
   --category-travel-default: var(--category-travel-accent);
   --category-work-default: var(--category-work-accent);
-  --data-categorical-1: var(--chart-categorical-1);
-  --data-categorical-2: var(--chart-categorical-2);
-  --data-categorical-3: var(--chart-categorical-3);
-  --data-categorical-4: var(--chart-categorical-4);
-  --data-categorical-5: var(--chart-categorical-5);
-  --data-sequential-1: var(--chart-sequential-1);
-  --data-sequential-2: var(--chart-sequential-2);
-  --data-sequential-3: var(--chart-sequential-3);
-  --data-sequential-4: var(--chart-sequential-4);
-  --data-sequential-5: var(--chart-sequential-5);
   --foreground-default: var(--fg-default);
   --foreground-on-card: var(--fg-default);
   --foreground-on-inverse: var(--fg-on-inverse);
@@ -565,7 +547,7 @@
   --bg-surface: var(--bg-surface-default);
 
   /* QUARANTINE — no Figma source. See token-ledger.json `pending`. Should only shrink. */
-  --account-summary-card-icon-foreground: #a855f7;
+
 }
 
 /* Two dark selectors on purpose: [data-theme] is what the generated previews in this
@@ -612,16 +594,6 @@
   --bg-net: #06b6d4;
   --bg-net-subtle: rgba(6,182,212,0.2);
   --fg-net: #06b6d4;
-  --chart-sequential-1: #6ee7b7;
-  --chart-sequential-2: #34d399;
-  --chart-sequential-3: #10b981;
-  --chart-sequential-4: #059669;
-  --chart-sequential-5: #047857;
-  --chart-categorical-1: #fcd34d;
-  --chart-categorical-2: #34d399;
-  --chart-categorical-3: #f87171;
-  --chart-categorical-4: #06b6d4;
-  --chart-categorical-5: #93c5fd;
   --category-home-accent: #5eead4;
   --category-home-surface: #042f2e;
   --category-food-accent: #fdba74;
@@ -845,7 +817,7 @@
   --readout-swatch-debt: #e11d48;
   --progress-track: #334155;
   --account-summary-card-meta-chip-border: #475569;
-  --account-summary-card-icon-foreground: #c084fc;
+
 
   /* Los mismos alias, re-declarados aquí: ver la nota del bloque claro. */
   --badge-primary-background: var(--action-chip-selected-background);
@@ -871,16 +843,6 @@
   --category-transit-default: var(--category-transit-accent);
   --category-travel-default: var(--category-travel-accent);
   --category-work-default: var(--category-work-accent);
-  --data-categorical-1: var(--chart-categorical-1);
-  --data-categorical-2: var(--chart-categorical-2);
-  --data-categorical-3: var(--chart-categorical-3);
-  --data-categorical-4: var(--chart-categorical-4);
-  --data-categorical-5: var(--chart-categorical-5);
-  --data-sequential-1: var(--chart-sequential-1);
-  --data-sequential-2: var(--chart-sequential-2);
-  --data-sequential-3: var(--chart-sequential-3);
-  --data-sequential-4: var(--chart-sequential-4);
-  --data-sequential-5: var(--chart-sequential-5);
   --foreground-default: var(--fg-default);
   --foreground-on-card: var(--fg-default);
   --foreground-on-inverse: var(--fg-on-inverse);

@@ -181,66 +181,6 @@
    "via": "provenance",
    "why": "--color-category-work-default -> --category-work-accent in token-migration"
   },
-  "--data-categorical-1": {
-   "uses": 0,
-   "to": "--chart-categorical-1",
-   "via": "provenance",
-   "why": "--color-categorical-1 -> --chart-categorical-1 in token-migration"
-  },
-  "--data-categorical-2": {
-   "uses": 0,
-   "to": "--chart-categorical-2",
-   "via": "provenance",
-   "why": "--color-categorical-2 -> --chart-categorical-2 in token-migration"
-  },
-  "--data-categorical-3": {
-   "uses": 0,
-   "to": "--chart-categorical-3",
-   "via": "provenance",
-   "why": "--color-categorical-3 -> --chart-categorical-3 in token-migration"
-  },
-  "--data-categorical-4": {
-   "uses": 0,
-   "to": "--chart-categorical-4",
-   "via": "provenance",
-   "why": "--color-categorical-4 -> --chart-categorical-4 in token-migration"
-  },
-  "--data-categorical-5": {
-   "uses": 0,
-   "to": "--chart-categorical-5",
-   "via": "provenance",
-   "why": "--color-categorical-5 -> --chart-categorical-5 in token-migration"
-  },
-  "--data-sequential-1": {
-   "uses": 0,
-   "to": "--chart-sequential-1",
-   "via": "provenance",
-   "why": "--color-sequential-1 -> --chart-sequential-1 in token-migration"
-  },
-  "--data-sequential-2": {
-   "uses": 0,
-   "to": "--chart-sequential-2",
-   "via": "provenance",
-   "why": "--color-sequential-2 -> --chart-sequential-2 in token-migration"
-  },
-  "--data-sequential-3": {
-   "uses": 0,
-   "to": "--chart-sequential-3",
-   "via": "provenance",
-   "why": "--color-sequential-3 -> --chart-sequential-3 in token-migration"
-  },
-  "--data-sequential-4": {
-   "uses": 0,
-   "to": "--chart-sequential-4",
-   "via": "provenance",
-   "why": "--color-sequential-4 -> --chart-sequential-4 in token-migration"
-  },
-  "--data-sequential-5": {
-   "uses": 0,
-   "to": "--chart-sequential-5",
-   "via": "provenance",
-   "why": "--color-sequential-5 -> --chart-sequential-5 in token-migration"
-  },
   "--foreground-default": {
    "uses": 12,
    "to": "--fg-default",
@@ -920,16 +860,112 @@
     "light": "#f1f5f9",
     "dark": "#334155"
    }
+  },
+  "--chart-categorical-1": {
+   "uses": 0,
+   "via": "logged",
+   "why": "Reservada en agosto para la fase 4. La fase 4 se construyó y no la necesitó: las cuatro series son las mismas de las cards de KPI, y apuntarlas a una segunda familia es justo lo que les permitiría divergir —lo midió Dev, 2026-09-12—. Cero consumidores. Las series usan bg/tax · bg/provision · bg/expense · bg/net."
+  },
+  "--chart-categorical-2": {
+   "uses": 0,
+   "via": "logged",
+   "why": "Reservada en agosto para la fase 4. La fase 4 se construyó y no la necesitó: las cuatro series son las mismas de las cards de KPI, y apuntarlas a una segunda familia es justo lo que les permitiría divergir —lo midió Dev, 2026-09-12—. Cero consumidores. Las series usan bg/tax · bg/provision · bg/expense · bg/net."
+  },
+  "--chart-categorical-3": {
+   "uses": 0,
+   "via": "logged",
+   "why": "Reservada en agosto para la fase 4. La fase 4 se construyó y no la necesitó: las cuatro series son las mismas de las cards de KPI, y apuntarlas a una segunda familia es justo lo que les permitiría divergir —lo midió Dev, 2026-09-12—. Cero consumidores. Las series usan bg/tax · bg/provision · bg/expense · bg/net."
+  },
+  "--chart-categorical-4": {
+   "uses": 0,
+   "via": "logged",
+   "why": "Reservada en agosto para la fase 4. La fase 4 se construyó y no la necesitó: las cuatro series son las mismas de las cards de KPI, y apuntarlas a una segunda familia es justo lo que les permitiría divergir —lo midió Dev, 2026-09-12—. Cero consumidores. Las series usan bg/tax · bg/provision · bg/expense · bg/net."
+  },
+  "--chart-categorical-5": {
+   "uses": 0,
+   "via": "logged",
+   "why": "Reservada en agosto para la fase 4. La fase 4 se construyó y no la necesitó: las cuatro series son las mismas de las cards de KPI, y apuntarlas a una segunda familia es justo lo que les permitiría divergir —lo midió Dev, 2026-09-12—. Cero consumidores. Las series usan bg/tax · bg/provision · bg/expense · bg/net."
+  },
+  "--chart-sequential-1": {
+   "uses": 0,
+   "via": "logged",
+   "why": "Reservada en agosto para la fase 4 y nunca usada: ninguna de las cuatro gráficas necesitó una rampa secuencial. Cero consumidores. Si alguna vez hace falta un mapa de calor, cinco alias se acuñan en un minuto; lo que no se puede es dejar una rampa en el sistema diciendo que alguien la usa."
+  },
+  "--chart-sequential-2": {
+   "uses": 0,
+   "via": "logged",
+   "why": "Reservada en agosto para la fase 4 y nunca usada: ninguna de las cuatro gráficas necesitó una rampa secuencial. Cero consumidores. Si alguna vez hace falta un mapa de calor, cinco alias se acuñan en un minuto; lo que no se puede es dejar una rampa en el sistema diciendo que alguien la usa."
+  },
+  "--chart-sequential-3": {
+   "uses": 0,
+   "via": "logged",
+   "why": "Reservada en agosto para la fase 4 y nunca usada: ninguna de las cuatro gráficas necesitó una rampa secuencial. Cero consumidores. Si alguna vez hace falta un mapa de calor, cinco alias se acuñan en un minuto; lo que no se puede es dejar una rampa en el sistema diciendo que alguien la usa."
+  },
+  "--chart-sequential-4": {
+   "uses": 0,
+   "via": "logged",
+   "why": "Reservada en agosto para la fase 4 y nunca usada: ninguna de las cuatro gráficas necesitó una rampa secuencial. Cero consumidores. Si alguna vez hace falta un mapa de calor, cinco alias se acuñan en un minuto; lo que no se puede es dejar una rampa en el sistema diciendo que alguien la usa."
+  },
+  "--chart-sequential-5": {
+   "uses": 0,
+   "via": "logged",
+   "why": "Reservada en agosto para la fase 4 y nunca usada: ninguna de las cuatro gráficas necesitó una rampa secuencial. Cero consumidores. Si alguna vez hace falta un mapa de calor, cinco alias se acuñan en un minuto; lo que no se puede es dejar una rampa en el sistema diciendo que alguien la usa."
+  },
+  "--account-summary-card-icon-foreground": {
+   "uses": 0,
+   "via": "logged",
+   "why": "Era un purple/500 fijo para una marca de identidad que debe llevar el matiz de la cuenta. Retirado de Figma el 12-sep y congelado mientras AccountSummaryCard.tsx lo leía; Dev migró AccountGlyph al matiz de la cuenta el mismo día (A-2026-09-11), así que se queda sin consumidores y sale de cuarentena."
+  },
+  "--data-categorical-1": {
+   "uses": 0,
+   "via": "logged",
+   "why": "Alias del nombre viejo hacia --chart-categorical-1, que se retiró el 12-sep sin consumidores. Un alias cuyo destino ya no existe no es un puente, es una referencia rota."
+  },
+  "--data-categorical-2": {
+   "uses": 0,
+   "via": "logged",
+   "why": "Alias del nombre viejo hacia --chart-categorical-2, que se retiró el 12-sep sin consumidores. Un alias cuyo destino ya no existe no es un puente, es una referencia rota."
+  },
+  "--data-categorical-3": {
+   "uses": 0,
+   "via": "logged",
+   "why": "Alias del nombre viejo hacia --chart-categorical-3, que se retiró el 12-sep sin consumidores. Un alias cuyo destino ya no existe no es un puente, es una referencia rota."
+  },
+  "--data-categorical-4": {
+   "uses": 0,
+   "via": "logged",
+   "why": "Alias del nombre viejo hacia --chart-categorical-4, que se retiró el 12-sep sin consumidores. Un alias cuyo destino ya no existe no es un puente, es una referencia rota."
+  },
+  "--data-categorical-5": {
+   "uses": 0,
+   "via": "logged",
+   "why": "Alias del nombre viejo hacia --chart-categorical-5, que se retiró el 12-sep sin consumidores. Un alias cuyo destino ya no existe no es un puente, es una referencia rota."
+  },
+  "--data-sequential-1": {
+   "uses": 0,
+   "via": "logged",
+   "why": "Alias del nombre viejo hacia --chart-sequential-1, que se retiró el 12-sep sin consumidores. Un alias cuyo destino ya no existe no es un puente, es una referencia rota."
+  },
+  "--data-sequential-2": {
+   "uses": 0,
+   "via": "logged",
+   "why": "Alias del nombre viejo hacia --chart-sequential-2, que se retiró el 12-sep sin consumidores. Un alias cuyo destino ya no existe no es un puente, es una referencia rota."
+  },
+  "--data-sequential-3": {
+   "uses": 0,
+   "via": "logged",
+   "why": "Alias del nombre viejo hacia --chart-sequential-3, que se retiró el 12-sep sin consumidores. Un alias cuyo destino ya no existe no es un puente, es una referencia rota."
+  },
+  "--data-sequential-4": {
+   "uses": 0,
+   "via": "logged",
+   "why": "Alias del nombre viejo hacia --chart-sequential-4, que se retiró el 12-sep sin consumidores. Un alias cuyo destino ya no existe no es un puente, es una referencia rota."
+  },
+  "--data-sequential-5": {
+   "uses": 0,
+   "via": "logged",
+   "why": "Alias del nombre viejo hacia --chart-sequential-5, que se retiró el 12-sep sin consumidores. Un alias cuyo destino ya no existe no es un puente, es una referencia rota."
   }
  },
- "pending": {
-  "--account-summary-card-icon-foreground": {
-   "uses": 1,
-   "frozen": {
-    "light": "#a855f7",
-    "dark": "#c084fc"
-   },
-   "why": "Retirado de Figma 2026-09-12: era purple/500 fijo para una marca de identidad que debe llevar el matiz de la cuenta. El glifo en Figma ya pinta con account/<hue>/accent. Queda congelado porque AccountSummaryCard.tsx:111 todavia lo consume; muere cuando Dev tinte AccountGlyph con el matiz de la cuenta (A-2026-09-12 §2)."
-  }
- }
+ "pending": {}
 }

@@ -6,7 +6,7 @@
  * Plugin API and CANNOT run in CI. These three can, and only these three. Claiming CI
  * runs the Figma audit would be governance theatre — so this file does not pretend to.
  *
- *   R1  no raw hex in component code (the repo mirror of Figma's C1)
+ *   R1  no raw colour in component code — hex or oklch()/rgb()/hsl() (Figma's C1)
  *   R2  design-system/tokens/ is reproducible from _build/tokens.json
  *   R3  every var(--x) in tokens.map.css resolves to a token that exists
  *   R5  no literal duration or easing curve in component code
@@ -44,6 +44,22 @@ const fail = (check, msg) => failures.push(`${check}  ${msg}`)
 // The rule is structural, not an allowlist of files: a hex is exempt when it is a
 // `fill=`/`stroke=` attribute inside an SVG. Anything in a className is ours.
 const HEX = /#[0-9a-fA-F]{3,8}\b/
+// El 12-sep R1 sólo miraba hex. Un color literal escrito `oklch(0.7 0.15 250)` pasaba
+// la regla entera — la regla decía «sin colores crudos» y medía una sola notación de
+// cuatro. Dev confirmó que los seis literales sueltos ya no existen, así que extenderla
+// no abre en rojo. Exenta lo que no es un literal: `rgb(from var(--x) …)` y
+// `hsl(var(--x))` son referencias a token con otra sintaxis, no decisiones de color.
+const FUNC = /\b(oklch|oklab|lab|lch|color|rgba?|hsla?|hwb)\(([^()]*(?:\([^()]*\)[^()]*)*)\)/g
+function scanFunc(code) {
+  const hits = []
+  for (const m of code.matchAll(FUNC)) {
+    const args = m[2]
+    if (/var\(|\bfrom\b/.test(args)) continue        // referencia a token, no literal
+    if (!/\d/.test(args)) continue                     // `color(display-p3)` sin valores: no es un color
+    hits.push(m[0].slice(0, 40))
+  }
+  return hits
+}
 function scanHex(file, src) {
   const hits = []
   let inBlockComment = false
@@ -55,12 +71,18 @@ function scanHex(file, src) {
     const codeOnly = stripComments(line, inBlockComment)
     inBlockComment = codeOnly.stillOpen
     const code = codeOnly.text
-    if (!HEX.test(code)) return
-    // Brand marks: a hex is exempt when it is a fill=/stroke= attribute inside SVG.
+    // Brand marks: a colour is exempt when it is a fill=/stroke= attribute inside SVG.
     // Structural, not an allowlist — 16-marks.md asked for the exemption to live here.
-    if (/(fill|stroke)=["']#[0-9a-fA-F]{3,8}["']/.test(code)) return
-    for (const m of code.matchAll(/#[0-9a-fA-F]{3,8}\b/g)) {
-      hits.push({ line: i + 1, hex: m[0], text: line.trim().slice(0, 90) })
+    const marca = /(fill|stroke)=["'](#[0-9a-fA-F]{3,8}|[a-z]+\([^"']*\))["']/.test(code)
+    if (!marca) {
+      if (HEX.test(code)) {
+        for (const m of code.matchAll(/#[0-9a-fA-F]{3,8}\b/g)) {
+          hits.push({ line: i + 1, hex: m[0], text: line.trim().slice(0, 90) })
+        }
+      }
+      for (const f of scanFunc(code)) {
+        hits.push({ line: i + 1, hex: f, text: line.trim().slice(0, 90) })
+      }
     }
   })
   return hits.map(h => `${relative(ROOT, file)}:${h.line}  ${h.hex}  ${h.text}`)
@@ -94,7 +116,7 @@ function stripComments(line, startsInBlock) {
 const componentFiles = walk(join(ROOT, 'src')).filter(f => /\.(tsx|ts)$/.test(f))
 const r1 = componentFiles.flatMap(f => scanHex(f, readFileSync(f, 'utf8')))
 r1.forEach(v => fail('R1', v))
-notes.push(`R1  ${componentFiles.length} archivos de componente · ${r1.length} hex crudos`)
+notes.push(`R1  ${componentFiles.length} archivos de componente · ${r1.length} colores crudos (hex · oklch/rgb/hsl)`)
 
 // ── R2 · design-system/ reproducible from tokens.json ────────────────────────
 // The system declares design-system/ a generated artefact. If a hand edit can survive
