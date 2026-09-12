@@ -8,6 +8,7 @@ import { MetricCard } from '@/components/ui/MetricCard'
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/components/ui/empty'
 import { deductionGroupFlags } from '@/hooks/useDeductionGroups'
 import { cn } from '@/lib/utils'
+import { toTextToken } from '@/lib/toneToken'
 
 interface AnnualTableProps {
   year: number
@@ -122,6 +123,9 @@ export function AnnualTable({ year }: AnnualTableProps) {
   // Colors
   const obligColor = '--color-tax-txt'
   const provColor  = deductions.find(d => d.group === 'provision' && d.id !== 'retencion' && d.enabled)?.color ?? '--color-provision'
+  // The FIGURE takes the text rung; the donut ARC below keeps the fill one. A user-configured
+  // deduction colour arrives as a variable, which is why this cannot be a class at the call site.
+  const provTxtColor = toTextToken(provColor)
 
   // Donut segments — the gross composition, mirroring the KPI cards
   const donutSegments: DonutSeg[] = []
@@ -135,8 +139,8 @@ export function AnnualTable({ year }: AnnualTableProps) {
   // Secondary KPIs — the gross ("Bruto") is shown separately as the principal.
   const restKpis: { key: string; label: string; value: ReactNode; sub: string }[] = []
   if (showOblig) restKpis.push({ key: 'oblig', label: 'Obligaciones tributarias', value: <span className="ts-amount-base" style={{ color: `var(${obligColor})` }}>{COP(totOblig)}</span>, sub: `${pct(totOblig, totBruto)} del bruto` })
-  if (showProv)  restKpis.push({ key: 'prov',  label: 'Provisiones',              value: <span className="ts-amount-base" style={{ color: `var(${provColor})` }}>{COP(totProv)}</span>,  sub: `${pct(totProv, totBruto)} del bruto` })
-  restKpis.push({ key: 'gast', label: 'Gastos',            value: <span className="ts-amount-base text-[var(--color-expense)]">{COP(totGast)}</span>, sub: `${pct(totGast, totBruto)} del bruto` })
+  if (showProv)  restKpis.push({ key: 'prov',  label: 'Provisiones',              value: <span className="ts-amount-base" style={{ color: `var(${provTxtColor})` }}>{COP(totProv)}</span>,  sub: `${pct(totProv, totBruto)} del bruto` })
+  restKpis.push({ key: 'gast', label: 'Gastos',            value: <span className="ts-amount-base text-[var(--color-expense-txt)]">{COP(totGast)}</span>, sub: `${pct(totGast, totBruto)} del bruto` })
   // Now that months are no longer clamped this can come out negative, so it takes the
   // expense colour — the same rule as the monthly KPI. Here the real figure is shown
   // rather than zero: a yearly total is a balance, not "what is left of this month".

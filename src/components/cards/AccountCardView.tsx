@@ -141,7 +141,7 @@ export function AccountCardView({ account, size = 'lg', selected = false, onClic
 
         {/* Primary sub-lines (large only) */}
         {!sm && hasConfig && account.type === 'account' && account.rate > 0 && (
-          <div className="text-[11px] tabular-nums text-[var(--color-provision)]">
+          <div className="text-[11px] tabular-nums text-[var(--color-provision-txt)]">
             ≈ {fmt(monthlyYield)}/mes · {account.rate}% a.a.
           </div>
         )}
@@ -156,7 +156,7 @@ export function AccountCardView({ account, size = 'lg', selected = false, onClic
           </>
         )}
         {!sm && hasConfig && isSavings && account.rate > 0 && (
-          <div className="text-[11px] tabular-nums text-[var(--color-provision)]">
+          <div className="text-[11px] tabular-nums text-[var(--color-provision-txt)]">
             ≈ {fmt(monthlyYield)}/mes · {account.rate}% E.A.
           </div>
         )}

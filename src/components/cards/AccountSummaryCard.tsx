@@ -178,7 +178,7 @@ export function AccountSummaryCard({ account, chart }: { account: Account; chart
               <div className={cn(
                 'ts-amount-base',
                 secondary.tone === 'debt'  && 'text-[var(--color-expense-txt)]',
-                secondary.tone === 'yield' && 'text-[var(--color-provision)]',
+                secondary.tone === 'yield' && 'text-[var(--color-provision-txt)]',
               )}>
                 {secondary.value}
               </div>

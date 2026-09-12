@@ -400,17 +400,17 @@ function PaymentRow({ payment, period, suggestedIbc, suggestedSS }: {
       className="w-full text-left flex items-center gap-2 py-2 border-t border-[var(--border)] rounded-lg px-1 hover:bg-muted/50 transition-colors"
     >
       <div className="w-8 h-8 rounded-full bg-[var(--color-provision-bg)] flex items-center justify-center shrink-0">
-        <Check size={16} className="text-[var(--color-provision)]" />
+        <Check size={16} className="text-[var(--color-provision-txt)]" />
       </div>
       <div className="flex-1 min-w-0">
-        <div className="ts-body-base-emphasis text-[var(--color-provision)]">SS pagada</div>
+        <div className="ts-body-base-emphasis text-[var(--color-provision-txt)]">SS pagada</div>
         <div className="ts-body-small text-muted-foreground truncate">
           {fmtDate(payment.date)}
           {payment.account && ` · ${payment.account}`}
           {payment.ibc != null && ` · IBC ${COP(payment.ibc)}`}
         </div>
       </div>
-      <span className="ts-amount-base shrink-0 text-[var(--color-provision)]">{COP(payment.amount)}</span>
+      <span className="ts-amount-base shrink-0 text-[var(--color-provision-txt)]">{COP(payment.amount)}</span>
     </button>
   )
 }

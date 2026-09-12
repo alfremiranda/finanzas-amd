@@ -68,7 +68,7 @@ export function EgresosBreakdown({ year }: EgresosBreakdownProps) {
       icon={LayoutList}
       title="Gastos por categoría"
       action={
-        <span className="ts-amount-base text-[var(--color-expense)]">
+        <span className="ts-amount-base text-[var(--color-expense-txt)]">
           {COP(grandTotal)}
         </span>
       }

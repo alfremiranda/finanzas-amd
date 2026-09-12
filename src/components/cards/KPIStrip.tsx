@@ -6,6 +6,7 @@ import { useDeductionGroups } from '@/hooks/useDeductionGroups'
 import { calcTotales, calcIBC, calcGastos, calcAllDeductions, calcProvisionBase, settledEgresos } from '@/lib/calc'
 import { COP, COPShort, USD, localToday } from '@/lib/format'
 import { cn } from '@/lib/utils'
+import { toTextToken } from '@/lib/toneToken'
 import { Card } from '@/components/ui/card'
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
 import { TooltipReadout, type ReadoutRowData } from '@/components/ui/TooltipReadout'
@@ -121,15 +122,7 @@ export function KPIStrip({ onNavigate }: { onNavigate?: (tab: string) => void } 
                        + res.volItems.reduce((a, i) => a + i.amount, 0)
   const obligTotal     = res.ssTotal + retencionTotal
 
-  const TO_TXT: Record<string, string> = {
-    '--color-provision': '--color-provision-txt',
-    '--color-expense':   '--color-expense-txt',
-    '--color-tax':       '--color-tax-txt',
-    '--color-net':       '--color-net-txt',
-    '--color-income':    '--color-income-txt',
-    '--color-danger':    '--color-danger-txt',
-  }
-  const toTxt = (t: string) => TO_TXT[t] ?? t
+  const toTxt = toTextToken
 
   const provToken = toTxt(provItems.find(i => i.applies)?.color ?? '--color-provision')
 

@@ -179,7 +179,7 @@ export function TributariasView() {
                         used to be the small grey number under a large "$0". */}
                     <div className="text-right shrink-0">
                       <div className={cn('ts-amount-base',
-                        r.state === 'settled' ? 'text-[var(--color-provision)]'
+                        r.state === 'settled' ? 'text-[var(--color-provision-txt)]'
                         : r.state === 'upcoming' ? 'text-muted-foreground'
                         : 'text-[var(--color-tax-txt)]')}>
                         {r.state === 'settled' ? COP(r.paid)

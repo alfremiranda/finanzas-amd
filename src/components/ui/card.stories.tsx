@@ -42,7 +42,7 @@ export const MetricCard_: Story = {
   render: () => (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12, maxWidth: 480 }}>
       <MetricCard label="Bruto total año" value="$41.120.125" sub="USD 10.250,00" />
-      <MetricCard label="Gastos" value={<span className="text-[var(--color-expense)]">$4.742.240</span>} sub="12% del bruto" />
+      <MetricCard label="Gastos" value={<span className="text-[var(--color-expense-txt)]">$4.742.240</span>} sub="12% del bruto" />
     </div>
   ),
 }

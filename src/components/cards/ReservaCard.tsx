@@ -49,7 +49,7 @@ export function ReservaCard({ year }: { year: number }) {
                 the figure for something else would make the headline mean two different
                 quantities depending on the state. */}
             <span className="ts-body-base-emphasis">Faltante</span>
-            <span className={`ts-amount-large ${covered ? 'text-[var(--color-provision)]' : 'text-[var(--color-tax-txt)]'}`}>
+            <span className={`ts-amount-large ${covered ? 'text-[var(--color-provision-txt)]' : 'text-[var(--color-tax-txt)]'}`}>
               {COP(r.gap)}
             </span>
           </div>

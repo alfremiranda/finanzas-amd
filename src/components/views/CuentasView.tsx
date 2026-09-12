@@ -129,7 +129,7 @@ function LedgerRow({ entry, account, accounts, opening }: { entry: LedgerEntry; 
             pay, since "-USD 12.534,00" measures 116 at Amount/Base and wrapped to two
             lines inside 104, giving a USD account a different row height from a COP one. */}
         <div className="order-1 sm:order-2 flex items-baseline gap-2 sm:block sm:text-right shrink-0">
-          <span className={cn('block ts-amount-base', !opening && isCredit ? 'text-[var(--color-provision)]' : 'text-foreground')}>
+          <span className={cn('block ts-amount-base', !opening && isCredit ? 'text-[var(--color-provision-txt)]' : 'text-foreground')}>
             {!opening && isCredit ? '+' : ''}{fmt(entry.convertedAmount)}
           </span>
           {!opening && <span className="block ts-amount-micro text-muted-foreground">{fmt(runningBalance)}</span>}
