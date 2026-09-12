@@ -237,10 +237,11 @@ adjúntala como referencia para las otras dos («mismo encuadre, luz y color que
 el pie del bloque sí va sobre el velo oscuro. Si alguna sale muy clara en el lado izquierdo (ventana
 quemada, pared blanca), puede tumbar ese contraste.
 
-**Medido al agregarlas (2026-09-12).** Con persona, el pie de foto fallaba en pantallas angostas:
-2.14:1 a 768px y 1.02:1 a 375px. Ahí el pie ocupa todo el ancho y pasa por donde el velo lateral se
-adelgaza, justo sobre la camisa clara de la persona. Se agregó un velo inferior en
-`.router__media::before` y quedó en 5.74 como mínimo (375px, independiente) y 6.77 como máximo. Las
-píldoras tienen su propio fondo y se mantuvieron sobre 15.6:1 en los tres anchos. El recorte de las
-fotos por perfil se ancla en la persona (`background-position: 72% 22%`): centrado cortaba frentes en
-escritorio y partía a la persona por la mitad en el teléfono.
+**Medido al agregarlas (2026-09-12).** Con persona, el pie de foto fallaba en pantallas angostas
+(2.14:1 a 768px, 1.02:1 a 375px) y un velo inferior lo arregló, pero entre ese velo y el lateral la
+foto casi no se veía. Ahora el contraste no depende de la foto: el pie de foto es un chip de vidrio
+con el mismo fondo que las píldoras y texto en el foreground completo del panel. El velo quedó ligero
+y sólo a la izquierda. Medido en los tres perfiles a 1280, 768 y 375: píldoras ≥11.5:1, pie ≥10.2:1.
+Por eso **una foto nueva ya no puede tumbar el contraste**, sólo verse más o menos.
+El recorte de las fotos por perfil se ancla en la persona (`background-position: 72% 22%`): centrado
+cortaba frentes en escritorio y partía a la persona por la mitad en el teléfono.

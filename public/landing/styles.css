@@ -553,24 +553,17 @@ html.dark [data-icon='moon'] { display: none; }
   content: '';
   position: absolute;
   inset: 0;
+  border-radius: inherit;
   pointer-events: none;
-  /* Two veils. The sideways one carries the pills. The bottom one carries the caption: on a
-     narrow box the caption runs the full width, out past where the sideways veil thins, and with
-     a person in the photo that is where a light shirt sits — the caption measured 1.02:1 at 375px
-     before this layer. */
-  background:
-    linear-gradient(
-      to top,
-      color-mix(in oklch, var(--marketing-panel-background) 92%, transparent) 0%,
-      color-mix(in oklch, var(--marketing-panel-background) 85%, transparent) 30%,
-      transparent 60%
-    ),
-    linear-gradient(
-      100deg,
-      var(--marketing-panel-background) 0%,
-      color-mix(in oklch, var(--marketing-panel-background) 82%, transparent) 42%,
-      color-mix(in oklch, var(--marketing-panel-background) 25%, transparent) 100%
-    );
+  /* A light veil, only on the left where the pills sit. The pills and the caption carry their own
+     glass ground, so nothing on this photo depends on the veil for contrast any more — it was a
+     full-width darkening plus a bottom scrim, and the photos behind them barely showed. */
+  background: linear-gradient(
+    100deg,
+    color-mix(in oklch, var(--marketing-panel-background) 72%, transparent) 0%,
+    color-mix(in oklch, var(--marketing-panel-background) 40%, transparent) 35%,
+    transparent 65%
+  );
 }
 .router__media > * { position: relative; }
 
@@ -655,9 +648,20 @@ html.dark [data-icon='moon'] { display: none; }
 }
 .pill[data-on='false'] { opacity: 0.4; }
 
+/* The caption is a glass chip, same ground as the pills, so it reads on any photo instead of
+   asking the photo to be dark. On that ground the subtle foreground fell short on a light
+   background, so the text is the full panel foreground. */
 .router__caption {
-  color: var(--marketing-panel-foreground-subtle);
+  align-self: flex-start;
   max-width: 52ch;
+  padding: var(--spacing-8) var(--spacing-12);
+  border-radius: var(--radius-lg);
+  border: var(--border-width-default) solid color-mix(in oklch, var(--marketing-panel-foreground) 14%, transparent);
+  background: color-mix(in oklch, var(--marketing-panel-background) 78%, transparent);
+  color: var(--marketing-panel-foreground);
+}
+@supports (backdrop-filter: blur(1px)) {
+  .router__caption { backdrop-filter: blur(var(--blur-sm)); }
 }
 .router__caption strong { color: var(--marketing-panel-foreground); font-weight: 600; }
 
