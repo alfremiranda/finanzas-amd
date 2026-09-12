@@ -145,8 +145,9 @@ export function TrendChart() {
 
     const colorVars = series.map(s => `var(${s.token})`)
     const tickColor = cssVar('--muted-foreground')
-    const gridColor = dark ? 'oklch(1 0 0 / 8%)' : 'oklch(0 0 0 / 5%)'
-    const hlColor   = dark ? 'oklch(1 0 0 / 5%)' : 'oklch(0 0 0 / 3%)'
+    // See EgresosCategoryChart: the token carries both modes, `dark` stays to force the redraw.
+    const gridColor = cssVar('--chart-grid')
+    const hlColor   = cssVar('--chart-highlight')
 
     const svg = select(svgRef.current)
     svg.attr('width', W).attr('height', H)

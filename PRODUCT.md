@@ -43,9 +43,9 @@ Cinco superficies (la navegación expone cuatro; Configuración y Perfil viven e
 | Vista | Propósito |
 |---|---|
 | **Resumen** (dashboard) | Saludo, cuentas favoritas, resumen anual (dona + KPIs), tendencia 8 meses, gastos por categoría, export CSV. |
-| **Mes** | Operación diaria. Resumen fijo arriba (KPIs + barra de distribución) y **tabs**: Ingresos · Gastos · Movimientos · Tributarias\* · Provisiones\*. |
-| **Cuentas** | Cuadrícula de cuentas + libro de movimientos (ledger) de la seleccionada. |
-| **Ahorros** | Total ahorrado y aportes por cuenta de ahorro/CDT/inversión. |
+| **Mes** | Operación diaria. Resumen fijo arriba (KPIs + barra de distribución) y **tabs**: Ingresos · Gastos · Movimientos · Tributarias\* · Provisiones\*. La tab Tributarias es lo causado **ese mes**; la vista Obligaciones es la relación del año. |
+| **Obligaciones** | Relación anual de lo causado y lo pagado, mes a mes: SS con su estado (al día / pendiente / parcial / por vencer) y la reserva de retención. |
+| **Cuentas** | Cuadrícula de cuentas. Cada cuenta abre su **propia página**: identidad, sus cifras, gráfica de saldo con franja de rango, y el ledger cronológico cross-mes. |
 | **Configuración / Perfil** | Editor de deducciones, sync, nombre, monedas, sesión. |
 
 \* Tabs condicionales: solo aparecen si el usuario tiene ese grupo de deducciones habilitado.
@@ -91,21 +91,18 @@ Cuatro tipos, cada uno con su semántica:
 | **Cuenta** bancaria | número, tasa anual | Muestra rendimiento estimado `≈ $X/mes · N% a.a.` |
 | **Efectivo** (bolsillo) | — | Sin número ni tasa. La cuenta “Efectivo” por defecto es de sistema: no se puede eliminar ni renombrar. |
 | **Crédito** (tarjeta) | cupo, día de corte, día de pago | El saldo se guarda como **deuda negativa**; la UI muestra cupo, deuda, % usado y fechas. Las compras son gastos a la tarjeta (suben deuda); los pagos son movimientos desde otra cuenta (la bajan). |
-| **Ahorro** | subtipo (Cuenta/CDT/Inversión), vencimiento (CDT), rendimiento E.A. | Únicas visibles en la vista Ahorros. Los CDT muestran cuenta regresiva de vencimiento. |
+| **Ahorro** | subtipo (Cuenta/CDT/Inversión), vencimiento (CDT), rendimiento E.A. | Los aportes hacia ellas son movimientos, no gastos: no reducen el neto libre. Los CDT muestran cuenta regresiva de vencimiento. |
 
 - **Favoritos**: se fijan como tarjetas compactas en Resumen y aparecen primero en todos los selectores.
 - **El tipo se bloquea después de crear** la cuenta (para reclasificar hay que recrearla).
 - **Ledger por cuenta**: histórico cronológico cross-mes con saldo corriente, entradas/salidas, saldo (o deuda) actual, y estados “Programado”. Los programados no mueven el saldo ni los totales.
 
-### 4.5 Ahorros e inversiones
-- **Total ahorrado** convertido a tu moneda principal.
-- Aportes = movimientos hacia cuentas de ahorro (no son gastos: no reducen el neto libre).
-
-### 4.6 Obligaciones tributarias
+### 4.5 Obligaciones tributarias
 - Salud, Pensión, ARL sobre el IBC + Retención en la fuente sobre el bruto.
 - Muestra el IBC y si viene del 40% de servicios o del piso SMMLV.
 - **FSS (Fondo de Solidaridad)** se inyecta automáticamente cuando el IBC ≥ 4 SMMLV, con su tabla de rangos y referencia legal (Ley 100 de 1993, art. 25).
 - **Calendario de pago de SS**: tabla de los 15 rangos de últimos dígitos de cédula/NIT con las **fechas hábiles calculadas** del mes de pago.
+- **Página propia** (`Obligaciones`, en la navegación): selector de año, una franja con las dos cifras abiertas —SS por pagar y retención por reservar, que **no se suman**: una se le debe a un operador y la otra debería estar reservada— y los doce meses, cada uno con una sola cifra cuyo color es su estado.
 
 **Actualizaciones.** Una versión nueva no se aplica sola: se instala en segundo plano y la app
 ofrece **"Hay una versión nueva · Actualizar"**. La recarga ocurre solo cuando el usuario acepta,
@@ -152,10 +149,10 @@ la pagada es el hecho — casi nunca coinciden, porque la PILA redondea y el IBC
 marcadas, no del saldo de la cuenta: si hay ahorro personal en la misma cuenta, el saldo diría
 que estás cubierto cuando no lo estás.
 
-### 4.7 Provisiones
+### 4.6 Provisiones
 Primas (8.33%), Cesantías (8.33%) y Vacaciones (4.17%) sobre el ingreso bruto con provisiones activadas. Son configurables y se pueden agregar provisiones propias.
 
-### 4.8 Analítica
+### 4.7 Analítica
 - **KPIs del mes**: Ingreso bruto · O. Tributarias\* · Provisiones\* · Gastos · Neto libre. Cada uno con desglose en tooltip y **click para saltar a su tab**.
 - **Barra de distribución** del bruto (obligaciones / provisiones / gastos / neto).
 - **Resumen anual**: dona interactiva de composición del bruto (al tocar un segmento el centro muestra ese monto) + KPIs anuales.
@@ -163,10 +160,10 @@ Primas (8.33%), Cesantías (8.33%) y Vacaciones (4.17%) sobre el ingreso bruto c
 - **Gastos mensuales por categoría** con línea de promedio, y **ranking de gastos por categoría** del año.
 - **Export CSV** anual (compatible con Excel).
 
-### 4.9 Notificaciones
+### 4.8 Notificaciones
 Derivadas de gastos **con fecha y sin confirmar** (típicamente recurrentes recién sembrados). Se agrupan en **Vencidos / Vence hoy / Próximos (7 días)**. El badge solo cuenta vencidos + hoy. Tocar un ítem lleva a su mes y abre el gasto para confirmarlo. Son in-app; no hay notificaciones push.
 
-### 4.10 Onboarding
+### 4.9 Onboarding
 Asistente de 5 pasos: bienvenida → **moneda principal y secundaria** → **cuentas** (Efectivo incluido siempre; se pueden agregar bancarias y tarjetas con cupo/deuda/fechas) → **perfil de trabajo** → listo.
 
 **Omitir un paso significa "decido después", no "descarta lo que elegí".** Por eso ningún
@@ -200,7 +197,7 @@ comparte superficie con una cifra, y el nombre de la cuenta siempre va al lado. 
 adivinaba por el nombre ("si dice arq, píntala de cian"), lo que tenía tus cuentas escritas dentro
 del sistema de diseño. Las de moneda (USD/COP) conservan color propio, porque ahí significa algo.
 
-### 4.10bis Color de cuenta
+### 4.10 Color de cuenta
 Cada cuenta tiene un color de identidad que pinta **su avatar y nada más** (el círculo con el
 ícono del tipo de cuenta). Doce colores. Se elige al crear o editar la cuenta.
 

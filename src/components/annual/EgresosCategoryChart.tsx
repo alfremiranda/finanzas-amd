@@ -95,10 +95,13 @@ export function EgresosCategoryChart({ year }: EgresosCategoryChartProps) {
     const h  = H - mg.top - mg.bottom
 
     const tickColor  = cssVar('--muted-foreground')
-    const gridColor  = dark ? 'oklch(1 0 0 / 8%)' : 'oklch(0 0 0 / 5%)'
-    const hlColor    = dark ? 'oklch(1 0 0 / 5%)' : 'oklch(0 0 0 / 3%)'
-    const emptyColor = dark ? 'oklch(1 0 0 / 6%)' : 'oklch(0 0 0 / 4%)'
-    const avgColor   = dark ? 'oklch(1 0 0 / 30%)' : 'oklch(0 0 0 / 25%)'
+    // Chart chrome comes from tokens, which already carry the light/dark pair — so there is
+    // no ternary here any more. `dark` stays in the dependency list below: cssVar reads the
+    // computed value at draw time, so the redraw is what picks the other mode up.
+    const gridColor  = cssVar('--chart-grid')
+    const hlColor    = cssVar('--chart-highlight')
+    const emptyColor = cssVar('--chart-empty')
+    const avgColor   = cssVar('--chart-average')
 
     const svg = select(svgRef.current)
     svg.attr('width', W).attr('height', H)
