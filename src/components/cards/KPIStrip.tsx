@@ -4,7 +4,7 @@ import { useMonthData } from '@/hooks/useMonthData'
 import { useSettingsStore } from '@/store/settingsStore'
 import { useDeductionGroups } from '@/hooks/useDeductionGroups'
 import { calcTotales, calcIBC, calcGastos, calcAllDeductions, calcProvisionBase, settledEgresos } from '@/lib/calc'
-import { COP, USD, localToday } from '@/lib/format'
+import { COP, COPShort, USD, localToday } from '@/lib/format'
 import { cn } from '@/lib/utils'
 import { Card } from '@/components/ui/card'
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
@@ -80,6 +80,18 @@ function egresoCategory(category: string) {
   return EGRESO_CATEGORIAS.find(c => c.id === category)?.label ?? 'Otros'
 }
 
+/**
+ * The column count is bounded by the WIDEST FIGURE, not by how many cards there are.
+ *
+ * `Amount/Hero` is 28px tabular, so an eleven-digit COP amount — which a yearly gross reaches
+ * routinely — needs about 162px of text plus the card's 34px of padding: ~196px. Two columns
+ * on a 390px phone give each card 139px of content, and the amount was being clipped by 23px
+ * on Mes and by 97px on Resumen, where it ran off the screen entirely. Five columns at 1280
+ * clipped it too, by 10px. Measured, not estimated.
+ *
+ * So each breakpoint offers only as many columns as can hold that figure whole: one on a
+ * phone, and five only from `xl`.
+ */
 const GRID_BY_COUNT: Record<number, string> = {
   3: 'grid-cols-1 sm:grid-cols-3 lg:grid-cols-3',
   4: 'grid-cols-2 sm:grid-cols-2 lg:grid-cols-4',
@@ -194,7 +206,7 @@ export function KPIStrip({ onNavigate }: { onNavigate?: (tab: string) => void } 
     <KPICard
       key="bruto"
       label="Ingreso bruto"
-      value={COP(bruto)}
+      value={COPShort(bruto)}
       sub={bruto > 0 ? USD(totUSD) : 'Sin ingresos este mes'}
       detail={ingresoDetail.length > 0 ? ingresoDetail : undefined}
       onClick={onNavigate ? () => onNavigate('ingresos') : undefined}
@@ -203,7 +215,7 @@ export function KPIStrip({ onNavigate }: { onNavigate?: (tab: string) => void } 
       <KPICard
         key="oblig"
         label="O. Tributarias"
-        value={COP(obligTotal)}
+        value={COPShort(obligTotal)}
         sub={pct(obligTotal)}
         accentToken="--color-tax-txt"
         detail={obligDetail.length > 0 ? obligDetail : undefined}
@@ -214,7 +226,7 @@ export function KPIStrip({ onNavigate }: { onNavigate?: (tab: string) => void } 
       <KPICard
         key="prov"
         label="Provisiones"
-        value={COP(provTotal)}
+        value={COPShort(provTotal)}
         sub={pct(provTotal)}
         accentToken={provToken}
         detail={provDetail.length > 0 ? provDetail : undefined}
@@ -224,7 +236,7 @@ export function KPIStrip({ onNavigate }: { onNavigate?: (tab: string) => void } 
     <KPICard
       key="egresos"
       label="Gastos"
-      value={COP(gast)}
+      value={COPShort(gast)}
       sub={pct(gast)}
       accent="text-[var(--color-expense-txt)]"
       detail={egresoDetail.length > 0 ? egresoDetail : undefined}
@@ -233,7 +245,7 @@ export function KPIStrip({ onNavigate }: { onNavigate?: (tab: string) => void } 
     <KPICard
       key="neto"
       label="Neto libre"
-      value={COP(Math.max(res.netoLibre, 0))}
+      value={COPShort(Math.max(res.netoLibre, 0))}
       // No minus sign: "de tu saldo" already carries the direction, and the figure is
       // already red. A sign would mark the same fact a third time — a bank statement says
       // "Retiro $500.000", not "Retiro −$500.000". The annual total does take a sign,
