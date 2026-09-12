@@ -903,16 +903,57 @@ html.dark [data-icon='moon'] { display: none; }
 .calc__dot { width: 10px; height: 10px; border-radius: var(--radius-full); }
 .calc__rate { color: var(--fg-subtle); }
 
-/* ── §10. Pro ───────────────────────────────────────────────────────────────────────────
-   One short column now. The second column was the "Qué llevará Pro" list, which came out with
-   the promise it sat beside (see the section's HTML comment). */
+/* ── §10. Pro — a brand mesh in the page's bounding-box panel ─────────────────────────────
+   Same near-full-bleed rounded geometry as the other panels (see .panel), dark in both themes,
+   centred. The ground is a mesh: four radial gradients anchored at the corners over the
+   marketing panel ground, every colour a brand token — the brand cyan, the on-panel accent,
+   and two deep teals mixed from them. No hue picked by eye.
+
+   The colour lives at the EDGES and the middle stays near the panel ground, on purpose. Under
+   data-theme="dark" the filled button is #22d3ee — the very value of --marketing-accent-on-panel,
+   the brightest blob. A bright blob behind the button would make the button vanish into it, so
+   the mesh frames the centre instead of filling it.
+
+   The four blobs mix `in oklab`, not oklch: see .calc for the hue arc that turned a warm panel
+   teal. Here every stop is already cyan, but a teal mixed toward slate in oklch would still swing
+   its hue on the way. */
+.pro-panel {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  margin: var(--spacing-12);
+  border-radius: var(--radius-2xl);
+  color: var(--marketing-panel-foreground);
+  background-color: var(--marketing-panel-background);
+  background-image:
+    radial-gradient(at 0% 0%, color-mix(in oklab, var(--bg-brand) 62%, transparent) 0, transparent 46%),
+    radial-gradient(at 100% 0%, color-mix(in oklab, var(--bg-brand), var(--marketing-panel-background) 58%) 0, transparent 52%),
+    radial-gradient(at 100% 100%, color-mix(in oklab, var(--marketing-accent-on-panel) 48%, transparent) 0, transparent 44%),
+    radial-gradient(at 0% 100%, color-mix(in oklab, var(--bg-brand), var(--marketing-panel-background) 42%) 0, transparent 50%);
+}
+/* The texture: grain from an inline SVG turbulence filter, desaturated so it adds light and
+   shadow and no hue of its own. A data URI, so the page still makes no third-party request.
+   It sits under the content (z-index -1 inside the isolated panel) and never takes a click. */
+.pro-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.22;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
+}
 .pro {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  text-align: center;
   gap: var(--spacing-16);
 }
-.pro .cta-row { margin-top: var(--spacing-8); }
+.pro h2 { color: var(--marketing-panel-foreground); }
+.pro .lead { max-width: 44ch; }
+.pro .cta-row { justify-content: center; margin-top: var(--spacing-8); }
 .badge {
   display: inline-flex;
   align-items: center;
