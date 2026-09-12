@@ -776,12 +776,17 @@ html.dark [data-icon='moon'] { display: none; }
 
 /* ── §11bis. Final CTA — photograph under an overlay ───────────────────────────────────
    The overlay is the contract, not the decoration: it is what lets display-sized text sit on
-   a photograph nobody has measured. Two stops rather than a flat wash, so the top stays dark
-   enough for the heading while the bottom lets more of the image through.
-   Contrast is measured against the real photo (see docs/landing-images.md), not assumed. */
-/* The same near-full-bleed rounded panel as the profile block and the footer (see .panel for
-   the measured geometry). `overflow: clip` was already here for the overlay; it is also what
-   rounds the photograph and the scrim together, so neither pokes square out of the corners. */
+   a photograph nobody has measured. Contrast is measured against the real photo on its worst
+   pixel (see docs/landing-images.md), in both themes, not assumed.
+
+   Same near-full-bleed rounded geometry as the profile block and the footer (see .panel).
+   `overflow: clip` rounds the photograph and the scrim together.
+
+   It is the one panel that follows the page theme, on purpose. Stacked on the footer — dark in
+   both themes — a dark closing block ran the two together into one mass. So in light mode it
+   is light, which is what most visitors see; in dark mode it follows the page rather than
+   becoming a light bomb, and the photograph against the footer's flat ground carries the
+   separation there. The surface tokens flip on their own, so there is no second rule for dark. */
 .cta-final {
   position: relative;
   isolation: isolate;
@@ -789,18 +794,16 @@ html.dark [data-icon='moon'] { display: none; }
   margin: var(--spacing-12);
   border-radius: var(--radius-2xl);
   text-align: center;
-  color: var(--marketing-panel-foreground);
-  background-color: var(--marketing-panel-background);
+  color: var(--fg-default);
+  background-color: var(--bg-surface-default);
   background-image: url('/landing/images/cta-final.webp');
   background-size: cover;
   background-position: center 40%;
 }
-/* Strongest through the middle, where the text is — not weakest, which is what the first
-   version did. It ran 90% at the top down to 74% at the bottom, so it thinned out exactly
-   where the lead and the note sit, and over this photograph's blown-out window they measured
-   3.87 and 3.47 against the 4.5 they need. The heading was never at risk (10.42 against the
-   3 large text needs); it is the small copy that a photograph eats.
-   Measured again after this change — see docs/landing-images.md. */
+/* Strongest through the middle, where the text is. The first dark version thinned out exactly
+   where the lead and the note sit and measured 3.87 / 3.47 against 4.5. Light turns the risk
+   around: the danger is no longer the blown-out window but the DARK parts of the frame — her
+   hair, the shadowed room — under dark text. Same four-stop shape, re-measured for it. */
 .cta-final::before {
   content: '';
   position: absolute;
@@ -809,10 +812,10 @@ html.dark [data-icon='moon'] { display: none; }
   pointer-events: none;
   background: linear-gradient(
     to bottom,
-    color-mix(in oklch, var(--marketing-panel-background) 82%, transparent) 0%,
-    color-mix(in oklch, var(--marketing-panel-background) 94%, transparent) 45%,
-    color-mix(in oklch, var(--marketing-panel-background) 94%, transparent) 78%,
-    color-mix(in oklch, var(--marketing-panel-background) 80%, transparent) 100%
+    color-mix(in oklch, var(--bg-surface-default) 80%, transparent) 0%,
+    color-mix(in oklch, var(--bg-surface-default) 92%, transparent) 45%,
+    color-mix(in oklch, var(--bg-surface-default) 92%, transparent) 78%,
+    color-mix(in oklch, var(--bg-surface-default) 78%, transparent) 100%
   );
 }
 .cta-final__inner {
@@ -821,9 +824,9 @@ html.dark [data-icon='moon'] { display: none; }
   align-items: center;
   gap: var(--spacing-16);
 }
-.cta-final .lead { color: var(--marketing-panel-foreground-subtle); max-width: 46ch; }
+.cta-final .lead { color: var(--fg-subtle); max-width: 46ch; }
 .cta-final .cta-row { justify-content: center; margin-top: var(--spacing-8); }
-.cta-final__note { color: var(--marketing-panel-foreground-subtle); }
+.cta-final__note { color: var(--fg-subtle); }
 
 /* ── §12. Footer ────────────────────────────────────────────────────────────────────────
    A marketing panel, so it carries data-theme="dark" like the others: dark whatever the page

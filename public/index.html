@@ -613,13 +613,15 @@
       </section>
 
       <!-- ── 12. Final CTA ─────────────────────────────────────────────────────────────
-           A photograph with an overlay, and data-theme="dark" for the same reason the
-           profile panel carries it: this block is dark whatever the page is doing, so its
-           subtree has to resolve against the dark scale. The image is a background layer —
+           A photograph under an overlay that FOLLOWS the page theme — light in light, dark in
+           dark. It used to carry data-theme="dark" like the other panels, and stacked on the
+           footer (dark in both themes) the two read as one mass. Forcing it light instead would
+           be a light bomb in dark mode, the same one removed from the privacy section. Following
+           the theme gives the contrast where most visitors are, and costs nothing in dark. The image is a background layer —
            the section reads complete before the file exists and stays complete if it 404s,
            because the panel colour is the base and the overlay sits on top of it either
            way. -->
-      <section class="section cta-final" data-theme="dark">
+      <section class="section cta-final">
         <div class="wrap wrap--narrow cta-final__inner" data-reveal>
           <h2 class="display-lg">Sabe cuánto es tuyo antes de gastarlo.</h2>
           <p class="lead">Gratis, sin tarjeta, y funciona desde el primer mes que registres.</p>
