@@ -30,32 +30,41 @@ type Story = StoryObj<typeof meta>
  * - **No actions and no close button.** It leaves on its own after 2200ms. A message that
  *   waits for an answer is `SystemMessage`.
  */
-export const Tones: Story = {
-  render: () => {
-    const showToast = useUIStore(s => s.showToast)
-    const samples: [string, FeedbackTone][] = [
-      ['Ingreso registrado', 'success'],
-      ['Ingresa descripción y monto', 'warning'],
-      ['Sincronizado', 'info'],
-    ]
-    // The store holds one at a time and clears it after ~2.2s, so the story cycles through
-    // the three rather than showing them stacked — which is also how they really arrive.
-    useEffect(() => {
-      let i = 0
-      const fire = () => { const [msg, tone] = samples[i++ % samples.length]; showToast(msg, tone) }
-      fire()
-      const t = setInterval(fire, 1800)
-      return () => clearInterval(t)
-    }, [showToast])
-    return (
-      <div style={{ height: 160 }}>
-        <p className="ts-body-small text-muted-foreground">
-          Anclado al borde inferior de la ventana, no de este bloque. Los tres tonos se turnan.
-        </p>
-        <Toast />
-      </div>
-    )
-  },
+/**
+ * One story per tone, and deliberately NOT one that cycles. A story whose content changes
+ * over time produces a screenshot that depends on when the shutter opened, and the visual
+ * baseline it seeds would then report a false diff on the next run.
+ */
+function ToneStory({ msg, tone }: { msg: string; tone: FeedbackTone }) {
+  const showToast = useUIStore(s => s.showToast)
+  // The store clears it after ~2.2s, so re-arm the SAME message to keep it on screen.
+  useEffect(() => {
+    showToast(msg, tone)
+    const t = setInterval(() => showToast(msg, tone), 1800)
+    return () => clearInterval(t)
+  }, [showToast, msg, tone])
+  return (
+    <div style={{ height: 160 }}>
+      <p className="ts-body-small text-muted-foreground">
+        Anclado al borde inferior de la ventana, no de este bloque.
+      </p>
+      <Toast />
+    </div>
+  )
+}
+
+export const Success: Story = {
+  render: () => <ToneStory msg="Ingreso registrado" tone="success" />,
+}
+
+/** A validation that BLOCKS the save — the case that was indistinguishable from a success. */
+export const Warning: Story = {
+  render: () => <ToneStory msg="Ingresa descripción y monto" tone="warning" />,
+}
+
+/** The system reporting on itself, with nothing for the user to have done. */
+export const Info: Story = {
+  render: () => <ToneStory msg="Sincronizado" tone="info" />,
 }
 
 /** Fired by hand, which is how it really appears: after an action, or instead of one. */
