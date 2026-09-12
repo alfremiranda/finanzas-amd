@@ -38,6 +38,25 @@ const TYPE_GLYPH = {
   account: Landmark,
 } as const
 
+/**
+ * The account-type glyph on its own — Figma's `Icon Account`, which is a component in its
+ * own right and not a part of the avatar.
+ *
+ * The avatar is the glyph plus a tinted disc, and the disc is what carries the identity
+ * colour. That pairing earns its keep in the grid, where the colour is what tells one tile
+ * from another at a glance. Inside an account page it does not: you already know which
+ * account you are in, and the disc then competes with the title for the same corner of the
+ * eye. So the page header takes the glyph bare.
+ */
+export function AccountGlyph({ type, size = 16, className }: {
+  type?: Account['type']
+  size?: number
+  className?: string
+}) {
+  const Glyph = TYPE_GLYPH[type ?? 'account']
+  return <Glyph aria-hidden="true" size={size} strokeWidth={2} className={className} />
+}
+
 type AccountAvatarProps = Omit<React.ComponentProps<'span'>, 'color'> &
   VariantProps<typeof avatarVariants> & {
     account: Pick<Account, 'id' | 'type' | 'color'>

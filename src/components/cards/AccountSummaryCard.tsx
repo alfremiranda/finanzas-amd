@@ -4,7 +4,7 @@ import { useFinanceStore } from '@/store/financeStore'
 import { useUIStore } from '@/store/uiStore'
 import { computeAccountBalance, creditCardStats } from '@/lib/calc'
 import { COP, USD, fmtDate, localToday } from '@/lib/format'
-import { AccountAvatar } from '@/components/ui/AccountAvatar'
+import { AccountGlyph } from '@/components/ui/AccountAvatar'
 import { CurrencyBadge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -100,19 +100,26 @@ export function AccountSummaryCard({ account, chart }: { account: Account; chart
       <div className="flex flex-col sm:flex-row sm:items-start gap-3">
 
         <div className="flex-1 min-w-0 flex flex-col gap-2">
-          {/* title-row · identity */}
+          {/* title-row · identity. The account name is the TITLE OF THE PAGE here, not one
+              more line of a card — hence Heading/Subsection. At Body/Base-Emphasis it sat at
+              the same rank as a ledger row's description, which is what made the screen read
+              flat. The glyph comes bare (`Icon Account`, 16) rather than as an avatar: see
+              AccountGlyph. */}
           <div className="flex items-center gap-2 min-w-0">
-            <AccountAvatar account={account} size="sm" />
-            <span className="ts-body-base-emphasis truncate">{account.label}</span>
+            <AccountGlyph
+              type={account.type}
+              className="shrink-0 text-[var(--account-summary-card-icon-foreground)]"
+            />
+            <span className="ts-heading-subsection truncate">{account.label}</span>
             <button
               type="button"
               onClick={() => toggleAccountFavorite(account.id)}
               aria-label={account.favorite ? 'Quitar de favoritos' : 'Marcar como favorito'}
               aria-pressed={!!account.favorite}
-              className="shrink-0 -m-1 p-1 rounded-full hover:bg-muted transition-colors"
+              className="shrink-0 size-6 inline-flex items-center justify-center rounded-full hover:bg-muted transition-colors"
             >
               <Star
-                size={14}
+                size={24}
                 className={cn(account.favorite ? 'text-[var(--color-fav-selected-txt)]' : 'text-muted-foreground/60')}
                 fill={account.favorite ? 'currentColor' : 'none'}
               />
@@ -128,7 +135,7 @@ export function AccountSummaryCard({ account, chart }: { account: Account; chart
             {facts.map((f, i) => (
               <Fragment key={i}>
                 {i > 0 && <Separator orientation="vertical" className="h-3.5" />}
-                <span className="ts-detail-large text-muted-foreground">{f}</span>
+                <span className="ts-detail-large-strong text-muted-foreground">{f}</span>
               </Fragment>
             ))}
             {schedule.length > 0 && (
@@ -142,7 +149,7 @@ export function AccountSummaryCard({ account, chart }: { account: Account; chart
                   {schedule.map((sch, i) => (
                     <Fragment key={sch}>
                       {i > 0 && <Separator orientation="vertical" className="h-3" />}
-                      <span className="ts-detail-large text-[var(--fg-subtle)]">{sch}</span>
+                      <span className="ts-detail-large-strong text-[var(--fg-subtle)]">{sch}</span>
                     </Fragment>
                   ))}
                 </span>
@@ -165,7 +172,7 @@ export function AccountSummaryCard({ account, chart }: { account: Account; chart
         <div className="flex items-end justify-between sm:justify-end gap-6 shrink-0">
           {secondary && (
             <div className="text-right">
-              <div className="ts-detail-base text-muted-foreground">{secondary.label}</div>
+              <div className="ts-label-base text-muted-foreground">{secondary.label}</div>
               <div className={cn(
                 'ts-amount-base',
                 secondary.tone === 'debt'  && 'text-[var(--color-expense-txt)]',
@@ -176,7 +183,7 @@ export function AccountSummaryCard({ account, chart }: { account: Account; chart
             </div>
           )}
           <div className="text-right">
-            <div className="ts-detail-base text-muted-foreground">{primary.label}</div>
+            <div className="ts-label-base text-muted-foreground">{primary.label}</div>
             <div className="ts-amount-large">{primary.value}</div>
           </div>
         </div>
