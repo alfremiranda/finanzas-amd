@@ -544,17 +544,33 @@ html.dark [data-icon='moon'] { display: none; }
 .router__media[data-profile='ambos'] {
   background-image: url('/landing/images/como-trabajas-ambos.webp'), url('/landing/images/como-trabajas.webp');
 }
+/* The profile photos carry a person in the right half, face in the upper third. `cover` on a wide,
+   short box crops top and bottom, and centred it cut foreheads; on a phone the box is taller than
+   wide and crops the sides, and centred it cut the person in half. So the crop is anchored where
+   the person is. The default photo, a desk with no one at it, keeps its centre. */
+.router__media[data-profile] { background-position: 72% 22%, center; }
 .router__media::before {
   content: '';
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(
-    100deg,
-    var(--marketing-panel-background) 0%,
-    color-mix(in oklch, var(--marketing-panel-background) 82%, transparent) 42%,
-    color-mix(in oklch, var(--marketing-panel-background) 25%, transparent) 100%
-  );
+  /* Two veils. The sideways one carries the pills. The bottom one carries the caption: on a
+     narrow box the caption runs the full width, out past where the sideways veil thins, and with
+     a person in the photo that is where a light shirt sits — the caption measured 1.02:1 at 375px
+     before this layer. */
+  background:
+    linear-gradient(
+      to top,
+      color-mix(in oklch, var(--marketing-panel-background) 92%, transparent) 0%,
+      color-mix(in oklch, var(--marketing-panel-background) 85%, transparent) 30%,
+      transparent 60%
+    ),
+    linear-gradient(
+      100deg,
+      var(--marketing-panel-background) 0%,
+      color-mix(in oklch, var(--marketing-panel-background) 82%, transparent) 42%,
+      color-mix(in oklch, var(--marketing-panel-background) 25%, transparent) 100%
+    );
 }
 .router__media > * { position: relative; }
 

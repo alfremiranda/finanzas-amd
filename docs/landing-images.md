@@ -50,9 +50,9 @@ bloque se ve completo sin la foto. La imagen añade atmósfera, nunca informaci�
 | `como-trabajas.webp` | Fondo del bloque «¿Cómo trabajas?» (panel oscuro, píldoras encima) | ✅ 2026-09-12 · 1254×1254 · 111 kB |
 
 | `cta-final.webp` | Fondo del cierre «Sabe cuánto es tuyo antes de gastarlo» (foto + overlay) | ✅ 2026-09-12 · 1536×1024 · 71 kB |
-| `como-trabajas-independiente.webp` | Fondo de «¿Cómo trabajas?» con **Independiente** elegido | **pendiente** |
-| `como-trabajas-empleado.webp` | Fondo de «¿Cómo trabajas?» con **Empleado** elegido | **pendiente** |
-| `como-trabajas-ambos.webp` | Fondo de «¿Cómo trabajas?» con **Ambos** elegido | **pendiente** |
+| `como-trabajas-independiente.webp` | Fondo de «¿Cómo trabajas?» con **Independiente** elegido | ✅ 2026-09-12 · 1600×900 · 64 kB |
+| `como-trabajas-empleado.webp` | Fondo de «¿Cómo trabajas?» con **Empleado** elegido | ✅ 2026-09-12 · 1600×900 · 69 kB |
+| `como-trabajas-ambos.webp` | Fondo de «¿Cómo trabajas?» con **Ambos** elegido | ✅ 2026-09-12 · 1600×900 · 81 kB |
 
 **Nota sobre la que ya está:** llegó cuadrada, no 16:9. No se recortó — `background-size: cover`
 la encuadra y el CSS la centra, y la composición aguanta porque el tercio tranquilo recorre toda la
@@ -236,3 +236,11 @@ adjúntala como referencia para las otras dos («mismo encuadre, luz y color que
 **Al agregarlas se vuelve a medir.** Las píldoras tienen su propio fondo y no dependen de la foto, pero
 el pie del bloque sí va sobre el velo oscuro. Si alguna sale muy clara en el lado izquierdo (ventana
 quemada, pared blanca), puede tumbar ese contraste.
+
+**Medido al agregarlas (2026-09-12).** Con persona, el pie de foto fallaba en pantallas angostas:
+2.14:1 a 768px y 1.02:1 a 375px. Ahí el pie ocupa todo el ancho y pasa por donde el velo lateral se
+adelgaza, justo sobre la camisa clara de la persona. Se agregó un velo inferior en
+`.router__media::before` y quedó en 5.74 como mínimo (375px, independiente) y 6.77 como máximo. Las
+píldoras tienen su propio fondo y se mantuvieron sobre 15.6:1 en los tres anchos. El recorte de las
+fotos por perfil se ancla en la persona (`background-position: 72% 22%`): centrado cortaba frentes en
+escritorio y partía a la persona por la mitad en el teléfono.
