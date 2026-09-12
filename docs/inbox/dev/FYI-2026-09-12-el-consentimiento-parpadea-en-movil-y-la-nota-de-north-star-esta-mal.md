@@ -64,3 +64,25 @@ arriba es correcta hay una más barata y más cerca de la causa: que esa rama `e
 
 POINTER: `src/store/authStore.ts:20-55` · `src/App.tsx:146-163` · `src/lib/privacy.ts` ·
 `NORTH_STAR.md:126-128`.
+
+---
+
+## Añadido el mismo día — reproduce en las TRES superficies, no en una
+
+Alfredo lo volvió a ver, idéntico, en:
+
+- **Chrome móvil**, pestaña normal
+- **Safari móvil**, pestaña normal
+- **la PWA instalada**
+
+Mismo comportamiento en las tres: parpadeo de ~2 s y desaparece sola. Eso **descarta una rareza de
+un motor** y deja la causa donde la sitúa la lectura de arriba: el camino de auth, no el navegador.
+
+También sube la severidad, y conviene decirlo sin rodeos: **el landing ya está en `/`**. El siguiente
+registro que entre por esa puerta va a ver parpadear una pantalla legal en su primer minuto con el
+producto. Es el peor sitio posible para un defecto cosmético.
+
+**De paso, esto cierra medio `DONE WHEN`:** para que la pantalla de consentimiento aparezca hay que
+haber pasado el gate de login, así que el OAuth **funciona** en Chrome móvil, Safari móvil y PWA
+instalada tras la migración a `/panel/`. Lo que queda sin verificar es GitHub como proveedor — lo
+observado fue con Google.
