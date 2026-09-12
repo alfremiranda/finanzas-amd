@@ -285,9 +285,9 @@
   },
   "--interactive-accent": {
    "uses": 1,
-   "to": "--bg-subtle",
+   "to": "--bg-surface-subtle",
    "via": "provenance",
-   "why": "--color-interactive-accent -> --bg-subtle in token-migration"
+   "why": "--color-interactive-accent -> --bg-subtle in token-migration · Repuntado 2026-09-12: su destino se agrupó bajo bg/surface/*, y un alias que apunta a otro alias no se emite."
   },
   "--interactive-accent-foreground": {
    "uses": 1,
@@ -309,9 +309,9 @@
   },
   "--interactive-secondary": {
    "uses": 1,
-   "to": "--bg-subtle",
+   "to": "--bg-surface-subtle",
    "via": "provenance",
-   "why": "--color-interactive-secondary -> --bg-subtle in token-migration"
+   "why": "--color-interactive-secondary -> --bg-subtle in token-migration · Repuntado 2026-09-12: su destino se agrupó bajo bg/surface/*, y un alias que apunta a otro alias no se emite."
   },
   "--interactive-secondary-foreground": {
    "uses": 1,
@@ -687,9 +687,9 @@
   },
   "--surface-inverse": {
    "uses": 2,
-   "to": "--bg-inverse",
+   "to": "--bg-surface-inverse",
    "via": "provenance",
-   "why": "--color-surface-inverse -> --bg-inverse in token-migration"
+   "why": "--color-surface-inverse -> --bg-inverse in token-migration · Repuntado 2026-09-12: su destino se agrupó bajo bg/surface/*, y un alias que apunta a otro alias no se emite."
   },
   "--surface-popover": {
    "uses": 3,
@@ -735,33 +735,33 @@
   },
   "--surface-sunken": {
    "uses": 0,
-   "to": "--bg-sunken",
+   "to": "--bg-surface-sunken",
    "via": "provenance",
-   "why": "--color-surface-sunken -> --bg-sunken in token-migration"
+   "why": "--color-surface-sunken -> --bg-sunken in token-migration · Repuntado 2026-09-12: su destino se agrupó bajo bg/surface/*, y un alias que apunta a otro alias no se emite."
   },
   "--surface-wrap-card": {
    "uses": 10,
-   "to": "--bg-surface",
+   "to": "--bg-surface-default",
    "via": "provenance",
-   "why": "--color-wrap-card -> --bg-surface in token-migration"
+   "why": "--color-wrap-card -> --bg-surface in token-migration · Repuntado 2026-09-12: su destino se agrupó bajo bg/surface/*, y un alias que apunta a otro alias no se emite."
   },
   "--surface-wrap-container": {
    "uses": 0,
-   "to": "--bg-chrome",
+   "to": "--bg-surface-chrome",
    "via": "provenance",
-   "why": "--color-wrap-container -> --bg-chrome in token-migration + coherence-log second hop"
+   "why": "--color-wrap-container -> --bg-chrome in token-migration + coherence-log second hop · Repuntado 2026-09-12: su destino se agrupó bajo bg/surface/*, y un alias que apunta a otro alias no se emite."
   },
   "--surface-wrap-default": {
    "uses": 3,
-   "to": "--bg-canvas",
+   "to": "--bg-surface-canvas",
    "via": "provenance",
-   "why": "--color-wrap-default -> --bg-canvas in token-migration"
+   "why": "--color-wrap-default -> --bg-canvas in token-migration · Repuntado 2026-09-12: su destino se agrupó bajo bg/surface/*, y un alias que apunta a otro alias no se emite."
   },
   "--surface-wrap-subtle": {
    "uses": 6,
-   "to": "--bg-subtle",
+   "to": "--bg-surface-subtle",
    "via": "provenance",
-   "why": "--color-wrap-subtle -> --bg-subtle in token-migration"
+   "why": "--color-wrap-subtle -> --bg-subtle in token-migration · Repuntado 2026-09-12: su destino se agrupó bajo bg/surface/*, y un alias que apunta a otro alias no se emite."
   },
   "--spinner-track-on-dark": {
    "uses": 1,
@@ -790,6 +790,42 @@
   "--border-subtle": {
    "to": "--border-emphasis",
    "reason": "Renamed 2026-09-02. The name said the opposite of the value: measured against a card, --border-default is 1.13:1 and this one 1.36:1, so what was called subtle was the MORE prominent of the two. The ladder is now default -> emphasis -> strong (1.13 / 1.36 / 4.34). There is no rung quieter than default on purpose: a border quieter than slate/200 on a slate/100 card is not subtle, it is absent."
+  },
+  "--bg-canvas": {
+   "uses": 0,
+   "to": "--bg-surface-canvas",
+   "via": "named",
+   "why": "Figma agrupó las superficies bajo bg/surface/* y el volcado seguía con los nombres planos: 2026-09-12 se sincronizó. Mismo valor, nombre nuevo."
+  },
+  "--bg-chrome": {
+   "uses": 2,
+   "to": "--bg-surface-chrome",
+   "via": "named",
+   "why": "Figma agrupó las superficies bajo bg/surface/* y el volcado seguía con los nombres planos: 2026-09-12 se sincronizó. Mismo valor, nombre nuevo."
+  },
+  "--bg-inverse": {
+   "uses": 0,
+   "to": "--bg-surface-inverse",
+   "via": "named",
+   "why": "Figma agrupó las superficies bajo bg/surface/* y el volcado seguía con los nombres planos: 2026-09-12 se sincronizó. Mismo valor, nombre nuevo."
+  },
+  "--bg-subtle": {
+   "uses": 0,
+   "to": "--bg-surface-subtle",
+   "via": "named",
+   "why": "Figma agrupó las superficies bajo bg/surface/* y el volcado seguía con los nombres planos: 2026-09-12 se sincronizó. Mismo valor, nombre nuevo."
+  },
+  "--bg-sunken": {
+   "uses": 0,
+   "to": "--bg-surface-sunken",
+   "via": "named",
+   "why": "Figma agrupó las superficies bajo bg/surface/* y el volcado seguía con los nombres planos: 2026-09-12 se sincronizó. Mismo valor, nombre nuevo."
+  },
+  "--bg-surface": {
+   "uses": 3,
+   "to": "--bg-surface-default",
+   "via": "named",
+   "why": "Figma agrupó las superficies bajo bg/surface/* y el volcado seguía con los nombres planos: 2026-09-12 se sincronizó. Mismo valor, nombre nuevo."
   }
  },
  "tombstones": {

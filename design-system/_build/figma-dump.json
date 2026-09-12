@@ -42,32 +42,32 @@
           "#f8fafc"
         ],
         [
-          "bg/sunken",
+          "bg/surface/sunken",
           "#cbd5e1",
           "#020617"
         ],
         [
-          "bg/inverse",
+          "bg/surface/inverse",
           "#0f172a",
           "#ffffff"
         ],
         [
-          "bg/subtle",
+          "bg/surface/subtle",
           "#fdfefe",
           "#1e293b"
         ],
         [
-          "bg/surface",
+          "bg/surface/default",
           "#f1f5f9",
           "#162032"
         ],
         [
-          "bg/chrome",
+          "bg/surface/chrome",
           "#e2e8f0",
           "#0f172a"
         ],
         [
-          "bg/canvas",
+          "bg/surface/canvas",
           "#f8fafc",
           "#020617"
         ],
@@ -1090,6 +1090,101 @@
           "fg/brand",
           "#0e7490",
           "#06b6d4"
+        ],
+        [
+          "chart/average",
+          "rgba(0,0,0,0.3)",
+          "rgba(255,255,255,0.3)"
+        ],
+        [
+          "chart/empty",
+          "rgba(0,0,0,0.05)",
+          "rgba(255,255,255,0.05)"
+        ],
+        [
+          "chart/grid",
+          "rgba(0,0,0,0.05)",
+          "rgba(255,255,255,0.08)"
+        ],
+        [
+          "chart/highlight",
+          "rgba(0,0,0,0.05)",
+          "rgba(255,255,255,0.05)"
+        ],
+        [
+          "size/0",
+          0,
+          0
+        ],
+        [
+          "size/2",
+          2,
+          2
+        ],
+        [
+          "size/4",
+          4,
+          4
+        ],
+        [
+          "size/6",
+          6,
+          6
+        ],
+        [
+          "size/8",
+          8,
+          8
+        ],
+        [
+          "size/10",
+          10,
+          10
+        ],
+        [
+          "size/12",
+          12,
+          12
+        ],
+        [
+          "size/16",
+          16,
+          16
+        ],
+        [
+          "size/20",
+          20,
+          20
+        ],
+        [
+          "size/24",
+          24,
+          24
+        ],
+        [
+          "size/28",
+          28,
+          28
+        ],
+        [
+          "size/32",
+          32,
+          32
+        ],
+        [
+          "size/40",
+          40,
+          40
+        ],
+        [
+          "size/48",
+          48,
+          48
+        ],
+        [
+          "size/64",
+          64,
+          64
         ]
       ]
     },
@@ -2050,7 +2145,7 @@
     },
     {
       "collection": "Semantic",
-      "name": "bg/sunken",
+      "name": "bg/surface/sunken",
       "type": "COLOR",
       "values": {
         "Light": "#cbd5e1",
@@ -2063,7 +2158,7 @@
     },
     {
       "collection": "Semantic",
-      "name": "bg/inverse",
+      "name": "bg/surface/inverse",
       "type": "COLOR",
       "values": {
         "Light": "#0f172a",
@@ -2076,7 +2171,7 @@
     },
     {
       "collection": "Semantic",
-      "name": "bg/subtle",
+      "name": "bg/surface/subtle",
       "type": "COLOR",
       "values": {
         "Light": "#fdfefe",
@@ -2089,7 +2184,7 @@
     },
     {
       "collection": "Semantic",
-      "name": "bg/surface",
+      "name": "bg/surface/default",
       "type": "COLOR",
       "values": {
         "Light": "#f1f5f9",
@@ -2102,7 +2197,7 @@
     },
     {
       "collection": "Semantic",
-      "name": "bg/chrome",
+      "name": "bg/surface/chrome",
       "type": "COLOR",
       "values": {
         "Light": "#e2e8f0",
@@ -2115,7 +2210,7 @@
     },
     {
       "collection": "Semantic",
-      "name": "bg/canvas",
+      "name": "bg/surface/canvas",
       "type": "COLOR",
       "values": {
         "Light": "#f8fafc",
@@ -3084,8 +3179,8 @@
         "Dark": "#020617"
       },
       "aliases": {
-        "Light": "bg/subtle",
-        "Dark": "bg/canvas"
+        "Light": "bg/surface/subtle",
+        "Dark": "bg/surface/canvas"
       }
     },
     {
@@ -4776,6 +4871,253 @@
       "aliases": {
         "Light": "bg/brand",
         "Dark": "bg/brand"
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "chart/average",
+      "type": "COLOR",
+      "values": {
+        "Light": "rgba(0,0,0,0.3)",
+        "Dark": "rgba(255,255,255,0.3)"
+      },
+      "aliases": {
+        "Light": "color/black/30",
+        "Dark": "color/white/30"
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "chart/empty",
+      "type": "COLOR",
+      "values": {
+        "Light": "rgba(0,0,0,0.05)",
+        "Dark": "rgba(255,255,255,0.05)"
+      },
+      "aliases": {
+        "Light": "color/black/5",
+        "Dark": "color/white/5"
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "chart/grid",
+      "type": "COLOR",
+      "values": {
+        "Light": "rgba(0,0,0,0.05)",
+        "Dark": "rgba(255,255,255,0.08)"
+      },
+      "aliases": {
+        "Light": "color/black/5",
+        "Dark": "color/white/8"
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "chart/highlight",
+      "type": "COLOR",
+      "values": {
+        "Light": "rgba(0,0,0,0.05)",
+        "Dark": "rgba(255,255,255,0.05)"
+      },
+      "aliases": {
+        "Light": "color/black/5",
+        "Dark": "color/white/5"
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "size/0",
+      "type": "FLOAT",
+      "values": {
+        "Light": 0,
+        "Dark": 0
+      },
+      "aliases": {
+        "Light": "scale/0",
+        "Dark": "scale/0"
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "size/2",
+      "type": "FLOAT",
+      "values": {
+        "Light": 2,
+        "Dark": 2
+      },
+      "aliases": {
+        "Light": "scale/2",
+        "Dark": "scale/2"
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "size/4",
+      "type": "FLOAT",
+      "values": {
+        "Light": 4,
+        "Dark": 4
+      },
+      "aliases": {
+        "Light": "scale/4",
+        "Dark": "scale/4"
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "size/6",
+      "type": "FLOAT",
+      "values": {
+        "Light": 6,
+        "Dark": 6
+      },
+      "aliases": {
+        "Light": "scale/6",
+        "Dark": "scale/6"
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "size/8",
+      "type": "FLOAT",
+      "values": {
+        "Light": 8,
+        "Dark": 8
+      },
+      "aliases": {
+        "Light": "scale/8",
+        "Dark": "scale/8"
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "size/10",
+      "type": "FLOAT",
+      "values": {
+        "Light": 10,
+        "Dark": 10
+      },
+      "aliases": {
+        "Light": "scale/10",
+        "Dark": "scale/10"
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "size/12",
+      "type": "FLOAT",
+      "values": {
+        "Light": 12,
+        "Dark": 12
+      },
+      "aliases": {
+        "Light": "scale/12",
+        "Dark": "scale/12"
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "size/16",
+      "type": "FLOAT",
+      "values": {
+        "Light": 16,
+        "Dark": 16
+      },
+      "aliases": {
+        "Light": "scale/16",
+        "Dark": "scale/16"
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "size/20",
+      "type": "FLOAT",
+      "values": {
+        "Light": 20,
+        "Dark": 20
+      },
+      "aliases": {
+        "Light": "scale/20",
+        "Dark": "scale/20"
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "size/24",
+      "type": "FLOAT",
+      "values": {
+        "Light": 24,
+        "Dark": 24
+      },
+      "aliases": {
+        "Light": "scale/24",
+        "Dark": "scale/24"
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "size/28",
+      "type": "FLOAT",
+      "values": {
+        "Light": 28,
+        "Dark": 28
+      },
+      "aliases": {
+        "Light": "scale/28",
+        "Dark": "scale/28"
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "size/32",
+      "type": "FLOAT",
+      "values": {
+        "Light": 32,
+        "Dark": 32
+      },
+      "aliases": {
+        "Light": "scale/32",
+        "Dark": "scale/32"
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "size/40",
+      "type": "FLOAT",
+      "values": {
+        "Light": 40,
+        "Dark": 40
+      },
+      "aliases": {
+        "Light": "scale/40",
+        "Dark": "scale/40"
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "size/48",
+      "type": "FLOAT",
+      "values": {
+        "Light": 48,
+        "Dark": 48
+      },
+      "aliases": {
+        "Light": "scale/48",
+        "Dark": "scale/48"
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "size/64",
+      "type": "FLOAT",
+      "values": {
+        "Light": 64,
+        "Dark": 64
+      },
+      "aliases": {
+        "Light": "scale/64",
+        "Dark": "scale/64"
       }
     },
     {
@@ -10375,6 +10717,30 @@
       "type": "FLOAT",
       "values": {
         "Default": -12
+      }
+    },
+    {
+      "collection": "Primitives",
+      "name": "color/black/5",
+      "type": "COLOR",
+      "values": {
+        "Default": "rgba(0,0,0,0.05)"
+      }
+    },
+    {
+      "collection": "Primitives",
+      "name": "color/white/5",
+      "type": "COLOR",
+      "values": {
+        "Default": "rgba(255,255,255,0.05)"
+      }
+    },
+    {
+      "collection": "Primitives",
+      "name": "color/white/8",
+      "type": "COLOR",
+      "values": {
+        "Default": "rgba(255,255,255,0.08)"
       }
     }
   ],

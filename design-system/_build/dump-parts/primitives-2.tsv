@@ -173,3 +173,6 @@ scale/-1	FLOAT	-1
 scale/-2	FLOAT	-2
 scale/-4	FLOAT	-4
 scale/-12	FLOAT	-12
+color/black/5	COLOR	rgba(0,0,0,0.05)
+color/white/5	COLOR	rgba(255,255,255,0.05)
+color/white/8	COLOR	rgba(255,255,255,0.08)

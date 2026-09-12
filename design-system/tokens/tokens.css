@@ -4,12 +4,12 @@
 
 :root, [data-theme="light"] {
   --fg-default: #0f172a;
-  --bg-sunken: #cbd5e1;
-  --bg-inverse: #0f172a;
-  --bg-subtle: #fdfefe;
-  --bg-surface: #f1f5f9;
-  --bg-chrome: #e2e8f0;
-  --bg-canvas: #f8fafc;
+  --bg-surface-sunken: #cbd5e1;
+  --bg-surface-inverse: #0f172a;
+  --bg-surface-subtle: #fdfefe;
+  --bg-surface-default: #f1f5f9;
+  --bg-surface-chrome: #e2e8f0;
+  --bg-surface-canvas: #f8fafc;
   --bg-hover: #e2e8f0;
   --bg-active: #cbd5e1;
   --bg-selected: rgba(6,182,212,0.1);
@@ -148,6 +148,10 @@
   --fg-on-inverse-subtle: rgba(255,255,255,0.7);
   --border-on-inverse: rgba(255,255,255,0.2);
   --fg-brand: #0e7490;
+  --chart-average: rgba(0,0,0,0.3);
+  --chart-empty: rgba(0,0,0,0.05);
+  --chart-grid: rgba(0,0,0,0.05);
+  --chart-highlight: rgba(0,0,0,0.05);
   --action-chip-selected-background: rgba(6,182,212,0.1);
   --action-chip-selected-foreground: #0e7490;
   --action-chip-selected-border: #06b6d4;
@@ -324,6 +328,21 @@
   --elevation-overlay-key-blur: 12px;
   --elevation-overlay-key-spread: -4px;
   --elevation-overlay-key-offset-y: 8px;
+  --size-0: 0px;
+  --size-2: 2px;
+  --size-4: 4px;
+  --size-6: 6px;
+  --size-8: 8px;
+  --size-10: 10px;
+  --size-12: 12px;
+  --size-16: 16px;
+  --size-20: 20px;
+  --size-24: 24px;
+  --size-28: 28px;
+  --size-32: 32px;
+  --size-40: 40px;
+  --size-48: 48px;
+  --size-64: 64px;
   --badge-size: 20px;
   --button-size-sm-padding-x: 8px;
   --button-size-sm-padding-y: 4px;
@@ -445,11 +464,11 @@
   --foreground-placeholder: var(--fg-placeholder);
   --foreground-subtle: var(--fg-subtle);
   --input-color-border-focus: var(--input-color-ring);
-  --interactive-accent: var(--bg-subtle);
+  --interactive-accent: var(--bg-surface-subtle);
   --interactive-accent-foreground: var(--fg-on-subtle);
   --interactive-primary: var(--bg-brand);
   --interactive-primary-foreground: var(--fg-on-brand);
-  --interactive-secondary: var(--bg-subtle);
+  --interactive-secondary: var(--bg-surface-subtle);
   --interactive-secondary-foreground: var(--fg-on-subtle);
   --kpi-expense-default: var(--fg-expense);
   --kpi-expense-foreground: var(--fg-expense-strong);
@@ -512,7 +531,7 @@
   --surface-feedback-success-emphasis: var(--fg-success);
   --surface-feedback-warning: var(--bg-warning-subtle);
   --surface-feedback-warning-emphasis: var(--fg-warning);
-  --surface-inverse: var(--bg-inverse);
+  --surface-inverse: var(--bg-surface-inverse);
   --surface-popover: var(--bg-anchored);
   --surface-raised: var(--bg-floating);
   --surface-scrim: var(--bg-scrim);
@@ -520,16 +539,22 @@
   --surface-status-disabled: var(--bg-disabled);
   --surface-status-hover: var(--bg-hover);
   --surface-status-selected: var(--bg-selected);
-  --surface-sunken: var(--bg-sunken);
-  --surface-wrap-card: var(--bg-surface);
-  --surface-wrap-container: var(--bg-chrome);
-  --surface-wrap-default: var(--bg-canvas);
-  --surface-wrap-subtle: var(--bg-subtle);
+  --surface-sunken: var(--bg-surface-sunken);
+  --surface-wrap-card: var(--bg-surface-default);
+  --surface-wrap-container: var(--bg-surface-chrome);
+  --surface-wrap-default: var(--bg-surface-canvas);
+  --surface-wrap-subtle: var(--bg-surface-subtle);
   --spinner-track-on-dark: var(--spinner-track-on-solid);
   --spinner-head-on-dark: var(--spinner-head-on-solid);
   --spinner-track-on-light: var(--spinner-track-default);
   --spinner-head-on-light: var(--spinner-head-default);
   --border-subtle: var(--border-emphasis);
+  --bg-canvas: var(--bg-surface-canvas);
+  --bg-chrome: var(--bg-surface-chrome);
+  --bg-inverse: var(--bg-surface-inverse);
+  --bg-subtle: var(--bg-surface-subtle);
+  --bg-sunken: var(--bg-surface-sunken);
+  --bg-surface: var(--bg-surface-default);
 
   /* QUARANTINE — no Figma source. See token-ledger.json `pending`. Should only shrink. */
   --account-summary-card-icon-foreground: #a855f7;
@@ -544,12 +569,12 @@
    the app would get dark tokens under light classes. The toggle is the only authority. */
 [data-theme="dark"], .dark {
   --fg-default: #f8fafc;
-  --bg-sunken: #020617;
-  --bg-inverse: #ffffff;
-  --bg-subtle: #1e293b;
-  --bg-surface: #162032;
-  --bg-chrome: #0f172a;
-  --bg-canvas: #020617;
+  --bg-surface-sunken: #020617;
+  --bg-surface-inverse: #ffffff;
+  --bg-surface-subtle: #1e293b;
+  --bg-surface-default: #162032;
+  --bg-surface-chrome: #0f172a;
+  --bg-surface-canvas: #020617;
   --bg-hover: #334155;
   --bg-active: #475569;
   --bg-selected: rgba(6,182,212,0.2);
@@ -688,6 +713,10 @@
   --fg-on-inverse-subtle: #64748b;
   --border-on-inverse: rgba(0,0,0,0.2);
   --fg-brand: #06b6d4;
+  --chart-average: rgba(255,255,255,0.3);
+  --chart-empty: rgba(255,255,255,0.05);
+  --chart-grid: rgba(255,255,255,0.08);
+  --chart-highlight: rgba(255,255,255,0.05);
   --action-chip-selected-background: rgba(6,182,212,0.2);
   --action-chip-selected-foreground: #22d3ee;
   --action-chip-selected-border: #164e63;
