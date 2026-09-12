@@ -5,6 +5,7 @@ import { useUIStore } from '@/store/uiStore'
 import { computeAccountBalance, creditCardStats } from '@/lib/calc'
 import { COP, USD, fmtDate, localToday } from '@/lib/format'
 import { AccountGlyph } from '@/components/ui/AccountAvatar'
+import { accountColor, accountColorVars } from '@/lib/accountColor'
 import { CurrencyBadge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -108,7 +109,8 @@ export function AccountSummaryCard({ account, chart }: { account: Account; chart
           <div className="flex items-center gap-2 min-w-0">
             <AccountGlyph
               type={account.type}
-              className="shrink-0 text-[var(--account-summary-card-icon-foreground)]"
+              style={accountColorVars(accountColor(account))}
+              className="shrink-0 text-[var(--account-accent)]"
             />
             <span className="ts-heading-subsection truncate">{account.label}</span>
             <button

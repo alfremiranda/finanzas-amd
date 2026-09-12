@@ -102,7 +102,7 @@ export function AccountCardView({ account, size = 'lg', selected = false, onClic
           className="shrink-0 -m-1 p-1 rounded-full hover:bg-muted transition-colors"
         >
           <Star
-            size={14}
+            size={20}
             className={cn(account.favorite ? 'text-[var(--color-fav-selected-txt)]' : 'text-muted-foreground/60')}
             fill={account.favorite ? 'currentColor' : 'none'}
           />
