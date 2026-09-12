@@ -70,11 +70,13 @@ Each phase is independently shippable and leaves the product functional. Do not 
       returns 5/5 (B cannot see, read, update, or spoof-insert A's rows). Canonical `supabase/schema.sql`
       corrected from the old open PoC. *Deferred debt (minor, non-security): `months.data` is nullable on
       prod vs `not null default '{}'` in schema.sql — backfill needs care under forced RLS.*
-- [ ] **Fix `_settings` sync.** Today `_settings` (which includes accounts) is whole-object LWW —
-      concurrent account edits across devices can silently drop one side. Upgrade to per-entry /
-      per-field merge, consistent with the existing `mergeMonth`/`mergeList` model. Scope also covers
-      **deductions**, which today live in a separate `neto-settings` store that **never syncs at all**
-      (a worse bug than the LWW one) — they get consolidated into the synced `_settings`.
+- [x] **Fix `_settings` sync.** ✅ 2026-07-23 (PR #3, squash `9a4fadb7`). `_settings` (which includes
+      accounts) had been whole-object LWW, so concurrent account edits across devices could silently
+      drop one side. It became per-entry / per-field merge, consistent with the existing
+      `mergeMonth`/`mergeList` model (`mergeSettings` in `src/store/merge.ts`, covered in
+      `merge.test.ts`). Scope also covered **deductions**, which lived in a separate `neto-settings`
+      store that **never synced at all** (a worse bug than the LWW one) — consolidated into the
+      synced `_settings`.
       Three merge groups: accounts (per-entry), deductions (per-entry), scalars (per-field LWW, except
       `onboardingDone` which is monotonic OR — must never regress to false).
       *Note: the onboarding profile (empleado/independiente/ambos) is NOT persisted — it is a transient
