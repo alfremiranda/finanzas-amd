@@ -28,13 +28,16 @@ export default defineConfig({
         // The public SEO pages under /calculadoras/ are standalone static pages with
         // their own fonts — they must not enter the app's precache (they'd add weight
         // to every install and the SW has no business owning them).
-        globIgnores: ['calculadoras/**', 'storybook/**'],
+        // 'landing/**' joins them: the marketing page is a standalone static page with its
+        // own fonts and token mirror. Precaching it would add ~110 kB to every install for a
+        // page an installed user never opens.
+        globIgnores: ['calculadoras/**', 'storybook/**', 'landing/**'],
         // Network-first for navigation (SPA shell)
         navigateFallback: '/index.html',
         // Keep the static pages out of the SPA navigation fallback — a direct
         // navigation to /privacidad.html or /calculadoras/... must serve that page,
         // not the app shell. (They must also load pre-login and without the SW.)
-        navigateFallbackDenylist: [/^\/api/, /privacidad\.html$/, /^\/calculadoras\//, /^\/storybook\//],
+        navigateFallbackDenylist: [/^\/api/, /privacidad\.html$/, /^\/calculadoras\//, /^\/storybook\//, /^\/landing\//],
         // Network-only for external APIs
         runtimeCaching: [
           {

@@ -1,0 +1,579 @@
+/* Neto — landing page styles.
+   Every colour, radius and duration below resolves to a token from tokens.css, which is a
+   generated mirror of the Figma source. The only exceptions are quarantined in §0 and are
+   pending Design (docs/inbox/design/Q-2026-09-12-la-escala-de-marketing-no-existe.md). */
+
+/* ── Fonts ──────────────────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Rethink Sans Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 800;
+  src: url('/landing/fonts/rethink-sans-latin-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,
+    U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Rethink Sans Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 800;
+  src: url('/landing/fonts/rethink-sans-latin-ext-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,
+    U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+/* ── §0. QUARANTINE — values the design system does not have yet ────────────────────────
+   tokens.css tops out at .ts-heading-display (28/36), --spacing-64 and
+   --motion-duration-slow (300ms). A landing needs a display scale, a section rhythm and a
+   reveal duration above all three. Design owns them; they are born in Figma, not here.
+   Asked in docs/inbox/design/Q-2026-09-12-la-escala-de-marketing-no-existe.md.
+   WHEN THAT LANDS: delete this block and swap the names. Nothing else changes. */
+:root {
+  --tmp-display-xl: clamp(38px, 7.2vw, 68px);
+  --tmp-display-xl-lh: 1.04;
+  --tmp-display-lg: clamp(30px, 4.6vw, 44px);
+  --tmp-display-lg-lh: 1.12;
+  --tmp-display-md: clamp(24px, 3vw, 32px);
+  --tmp-display-md-lh: 1.2;
+  --tmp-lead: clamp(17px, 1.5vw, 20px);
+
+  --tmp-section-y: clamp(64px, 9vw, 128px);
+  --tmp-block-gap: clamp(32px, 5vw, 64px);
+  --tmp-gutter: clamp(20px, 4vw, 32px);
+  --tmp-container: 1120px;
+  --tmp-container-narrow: 760px;
+
+  --tmp-duration-reveal: 520ms;
+  --tmp-stagger: 70ms;
+}
+
+/* ── §1. Reset & base ───────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  --font-sans: 'Rethink Sans Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--bg-surface-canvas);
+  color: var(--fg-default);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+h1, h2, h3, p, figure, ul, ol { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+img, svg { display: block; max-width: 100%; }
+/* `svg { display: block }` above outranks the UA stylesheet's [hidden] rule — author
+   styles beat UA styles — so anything marked hidden needs saying again, louder. */
+[hidden] { display: none !important; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; }
+
+:where(a, button, input, summary):focus-visible {
+  outline: var(--border-width-focus-default) solid var(--shadow-focus-inner);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.skip {
+  position: absolute;
+  left: var(--spacing-8);
+  top: calc(var(--spacing-8) * -8);
+  z-index: 100;
+  padding: var(--spacing-8) var(--spacing-16);
+  border-radius: var(--radius-full);
+  background: var(--bg-brand);
+  color: var(--fg-on-brand);
+  transition: top var(--motion-duration-fast) var(--motion-easing-enter);
+}
+.skip:focus { top: var(--spacing-8); }
+
+.wrap {
+  width: 100%;
+  max-width: var(--tmp-container);
+  margin-inline: auto;
+  padding-inline: var(--tmp-gutter);
+}
+.wrap--narrow { max-width: var(--tmp-container-narrow); }
+.section { padding-block: var(--tmp-section-y); }
+.section--tint { background: var(--bg-surface-default); }
+
+/* Type. The .ts-* classes from tokens.css cover everything at and below 28px; §0 covers
+   what sits above it. Never write a raw font-size outside those two. */
+.display-xl {
+  font-weight: 800;
+  font-size: var(--tmp-display-xl);
+  line-height: var(--tmp-display-xl-lh);
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.display-lg {
+  font-weight: 700;
+  font-size: var(--tmp-display-lg);
+  line-height: var(--tmp-display-lg-lh);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+.display-md {
+  font-weight: 700;
+  font-size: var(--tmp-display-md);
+  line-height: var(--tmp-display-md-lh);
+  letter-spacing: -0.01em;
+}
+.lead {
+  font-size: var(--tmp-lead);
+  line-height: 1.55;
+  color: var(--fg-subtle);
+  text-wrap: pretty;
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-6);
+  color: var(--fg-brand);
+  text-transform: uppercase;
+}
+.muted { color: var(--fg-subtle); }
+
+/* ── §2. Buttons — the pill shape and sizes come from the Button component spec ─────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-8);
+  border-radius: var(--radius-full);
+  border: var(--border-width-default) solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-easing-move),
+    border-color var(--motion-duration-fast) var(--motion-easing-move),
+    color var(--motion-duration-fast) var(--motion-easing-move),
+    transform var(--motion-duration-instant) var(--motion-easing-move);
+}
+.btn:active { transform: scale(0.97); }
+.btn--md {
+  height: var(--button-size-lg-height);
+  padding-inline: var(--button-size-lg-padding-x);
+  font-weight: 500;
+  font-size: var(--button-text-lg-size);
+  letter-spacing: 0.5px;
+}
+.btn--lg {
+  height: var(--button-size-xl-height);
+  padding-inline: var(--button-size-xl-padding-x);
+  font-weight: 600;
+  font-size: var(--button-text-xl-size);
+  letter-spacing: 0.5px;
+}
+.btn--filled {
+  background: var(--button-filled-background-default);
+  color: var(--button-filled-foreground);
+}
+.btn--filled:hover { background: var(--button-filled-background-hover); }
+.btn--outline {
+  border-color: var(--button-outline-border);
+  color: var(--button-outline-foreground);
+}
+/* Hover is neutral on purpose: cyan is reserved for selected state and the focus ring
+   (design.md §Principles #4). Two cyan states side by side read as two selections. */
+.btn--outline:hover { background: var(--button-outline-background-hover); }
+.btn--ghost { color: var(--button-ghost-foreground); }
+.btn--ghost:hover { background: var(--button-ghost-background-hover); }
+
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-12);
+  align-items: center;
+}
+.cta-note {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-8) var(--spacing-16);
+  color: var(--fg-subtle);
+}
+.cta-note li { display: flex; align-items: center; gap: var(--spacing-6); }
+.cta-note svg { color: var(--fg-provision); flex: none; }
+
+/* ── §3. Announcement bar + nav ─────────────────────────────────────────────────────── */
+.announce {
+  background: var(--bg-surface-inverse);
+  color: var(--fg-on-inverse);
+  text-align: center;
+  padding: var(--spacing-10) var(--tmp-gutter);
+}
+.announce a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--fg-on-inverse-subtle);
+}
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in oklch, var(--bg-surface-canvas) 82%, transparent);
+  border-bottom: var(--border-width-default) solid transparent;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-easing-move),
+    border-color var(--motion-duration-fast) var(--motion-easing-move);
+}
+@supports (backdrop-filter: blur(1px)) {
+  .nav { backdrop-filter: saturate(180%) blur(14px); }
+}
+.nav[data-stuck='true'] {
+  background: color-mix(in oklch, var(--bg-surface-canvas) 92%, transparent);
+  border-bottom-color: var(--border-default);
+}
+.nav__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-24);
+  height: 64px;
+  transition: height var(--motion-duration-moderate) var(--motion-easing-move);
+}
+.nav[data-stuck='true'] .nav__inner { height: 56px; }
+.brand { display: flex; align-items: center; gap: var(--spacing-10); font-weight: 700; }
+.brand img { width: 28px; height: 28px; border-radius: var(--radius-lg); }
+.nav__links { display: none; gap: var(--spacing-20); margin-inline-start: auto; }
+.nav__links a { color: var(--fg-subtle); transition: color var(--motion-duration-fast) var(--motion-easing-move); }
+.nav__links a:hover { color: var(--fg-default); }
+.nav__actions { display: flex; align-items: center; gap: var(--spacing-8); margin-inline-start: auto; }
+.nav__links + .nav__actions { margin-inline-start: var(--spacing-24); }
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  cursor: pointer;
+  color: var(--fg-subtle);
+  transition: background-color var(--motion-duration-fast) var(--motion-easing-move);
+}
+.icon-btn:hover { background: var(--bg-hover); }
+/* The theme icon is swapped in CSS, not in JS. `hidden` is an HTMLElement property:
+   assigning svg.hidden = true sets a JS expando and never reaches the attribute, so the
+   JS version silently showed the wrong glyph. The class on <html> is already the truth. */
+html:not(.dark) [data-icon='sun'] { display: none; }
+html.dark [data-icon='moon'] { display: none; }
+.nav .btn--ghost { display: none; }
+@media (min-width: 860px) {
+  .nav__links { display: flex; }
+  .nav .btn--ghost { display: inline-flex; }
+}
+
+/* ── §4. Hero ───────────────────────────────────────────────────────────────────────── */
+.hero { padding-block: clamp(48px, 7vw, 96px) var(--tmp-section-y); }
+.hero__grid {
+  display: grid;
+  gap: var(--tmp-block-gap);
+  align-items: center;
+}
+@media (min-width: 960px) {
+  .hero__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr); gap: clamp(40px, 5vw, 72px); }
+}
+.hero__copy { display: flex; flex-direction: column; gap: var(--spacing-24); align-items: flex-start; }
+.hero__copy .lead { max-width: 54ch; }
+
+/* ── §5. The flow — the hero's animated distribution of one month's gross ───────────── */
+.flow {
+  background: var(--bg-surface-subtle);
+  border: var(--border-width-default) solid var(--border-default);
+  border-radius: var(--radius-2xl);
+  padding: var(--spacing-20);
+  box-shadow:
+    0 var(--elevation-floating-key-offset-y) var(--elevation-floating-key-blur)
+      var(--elevation-floating-key-spread) var(--shadow-key),
+    0 var(--elevation-floating-ambient-offset-y) var(--elevation-floating-ambient-blur)
+      var(--elevation-floating-ambient-spread) var(--shadow-ambient);
+}
+.flow__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-12);
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-16);
+}
+.flow__gross { font-variant-numeric: tabular-nums; }
+.flow__bar {
+  display: flex;
+  height: var(--spacing-12);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  background: var(--bg-surface-default);
+  gap: 2px;
+}
+.flow__seg {
+  width: 0;
+  transition: width var(--tmp-duration-reveal) var(--motion-easing-enter);
+}
+.flow__seg[data-kind='tax'] { background: var(--bg-tax); }
+.flow__seg[data-kind='provision'] { background: var(--fg-provision); }
+.flow__seg[data-kind='expense'] { background: var(--fg-expense); }
+.flow__seg[data-kind='net'] { background: var(--bg-net); }
+.flow__rows { margin-top: var(--spacing-20); display: grid; gap: var(--spacing-2); }
+.flow__row {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--spacing-10);
+  padding: var(--spacing-8) var(--spacing-6);
+  border-radius: var(--radius-md);
+}
+.flow__row[data-kind='net'] { background: var(--bg-net-subtle); }
+.flow__dot { width: 10px; height: 10px; border-radius: var(--radius-full); }
+.flow__row[data-kind='tax'] .flow__dot { background: var(--bg-tax); }
+.flow__row[data-kind='provision'] .flow__dot { background: var(--fg-provision); }
+.flow__row[data-kind='expense'] .flow__dot { background: var(--fg-expense); }
+.flow__row[data-kind='net'] .flow__dot { background: var(--bg-net); }
+.flow__amount { font-variant-numeric: tabular-nums; }
+.flow__row[data-kind='net'] .flow__label,
+.flow__row[data-kind='net'] .flow__amount { color: var(--fg-net); font-weight: 700; }
+.flow__foot {
+  margin-top: var(--spacing-16);
+  padding-top: var(--spacing-12);
+  border-top: var(--border-width-default) solid var(--border-default);
+  color: var(--fg-subtle);
+}
+
+/* ── §6. Intent router ──────────────────────────────────────────────────────────────── */
+.router__options {
+  display: grid;
+  gap: var(--spacing-12);
+  margin-block: var(--spacing-24);
+}
+@media (min-width: 700px) { .router__options { grid-template-columns: repeat(3, 1fr); } }
+.router__opt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  align-items: flex-start;
+  text-align: start;
+  padding: var(--spacing-16);
+  border: var(--border-width-default) solid var(--border-default);
+  border-radius: var(--radius-xl);
+  background: var(--bg-surface-subtle);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-easing-move),
+    border-color var(--motion-duration-fast) var(--motion-easing-move);
+}
+.router__opt:hover { background: var(--bg-hover); }
+/* Selected is the one place cyan belongs. */
+.router__opt[aria-pressed='true'] {
+  background: var(--bg-selected);
+  border-color: var(--border-brand-strong);
+}
+.router__opt strong { font-weight: 600; }
+.router__answer {
+  border-inline-start: var(--border-width-strong) solid var(--border-brand-strong);
+  padding-inline-start: var(--spacing-16);
+  color: var(--fg-subtle);
+  min-height: var(--spacing-48);
+}
+
+/* ── §7. Cards & feature blocks ─────────────────────────────────────────────────────── */
+.grid-3 { display: grid; gap: var(--spacing-16); }
+@media (min-width: 760px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
+.card {
+  background: var(--bg-surface-subtle);
+  border: var(--border-width-default) solid var(--border-default);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-20);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-10);
+}
+.card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--spacing-40);
+  height: var(--spacing-40);
+  border-radius: var(--radius-lg);
+  background: var(--bg-neutral-subtle);
+  color: var(--fg-neutral);
+  flex: none;
+}
+.card__icon[data-tone='tax'] { background: var(--bg-tax-subtle); color: var(--fg-tax); }
+.card__icon[data-tone='income'] { background: var(--bg-income-subtle); color: var(--fg-income); }
+.card__icon[data-tone='provision'] { background: var(--bg-provision-subtle); color: var(--fg-provision); }
+
+.section-head { display: flex; flex-direction: column; gap: var(--spacing-12); margin-bottom: var(--tmp-block-gap); }
+.section-head .lead { max-width: 60ch; }
+
+.features { display: grid; gap: var(--tmp-block-gap); }
+.feature {
+  display: grid;
+  gap: var(--spacing-24);
+  align-items: center;
+}
+@media (min-width: 900px) {
+  .feature { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(32px, 5vw, 72px); }
+  .feature:nth-child(even) .feature__copy { order: 2; }
+}
+.feature__copy { display: flex; flex-direction: column; gap: var(--spacing-12); align-items: flex-start; }
+.feature__list { display: grid; gap: var(--spacing-8); color: var(--fg-subtle); }
+.feature__list li { display: flex; gap: var(--spacing-8); }
+.feature__list svg { color: var(--fg-net); flex: none; margin-top: 3px; }
+.feature__media {
+  border: var(--border-width-default) solid var(--border-default);
+  border-radius: var(--radius-2xl);
+  background: var(--bg-surface-subtle);
+  padding: var(--spacing-8);
+  overflow: hidden;
+}
+.feature__media img { border-radius: var(--radius-xl); width: 100%; }
+/* Scaffolding until the real captures land. --fg-placeholder on --bg-surface-default
+   measures 4.34:1 in light — under AA, and there is no reason for temporary copy to be the
+   one thing on the page that fails. */
+.feature__media--empty {
+  display: grid;
+  place-items: center;
+  min-height: 260px;
+  color: var(--fg-subtle);
+  background: var(--bg-surface-default);
+}
+
+/* ── §8. Privacy block ────────────────────────────────────────────────────────────────
+   NOT --bg-surface-inverse. That token's job is "the opposite of the page", so in dark mode
+   it is white — correct for the thin announcement bar, a light bomb for a full-bleed section,
+   and worst of all in the one section arguing that Neto is calm and private. What this wants
+   is a marketing panel that stays dark in both themes, and the system has no token for that
+   yet (asked in the Design Q, §5). Until it does: the page's own tinted band, with the brand
+   carrying the accent. */
+.privacy { background: var(--bg-surface-default); }
+.privacy .card { background: var(--bg-surface-subtle); }
+.privacy .card__icon { background: var(--bg-brand-alpha-10); color: var(--fg-brand); }
+
+/* ── §9. Calculator cross-link ──────────────────────────────────────────────────────── */
+.crosslink {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-20);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-24);
+  border: var(--border-width-default) solid var(--border-default);
+  border-radius: var(--radius-2xl);
+  background: var(--bg-surface-subtle);
+}
+
+/* ── §10. Founders / Pro ────────────────────────────────────────────────────────────── */
+.pro {
+  display: grid;
+  gap: var(--tmp-block-gap);
+  align-items: start;
+}
+@media (min-width: 900px) { .pro { grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr); } }
+.price {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-8);
+  font-variant-numeric: tabular-nums;
+}
+.plan {
+  border: var(--border-width-default) solid var(--border-default);
+  border-radius: var(--radius-2xl);
+  background: var(--bg-surface-subtle);
+  padding: var(--spacing-24);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+}
+.plan__list { display: grid; gap: var(--spacing-8); color: var(--fg-subtle); }
+.plan__list li { display: flex; gap: var(--spacing-8); }
+.plan__list svg { color: var(--fg-provision); flex: none; margin-top: 3px; }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  height: var(--badge-size);
+  padding-inline: var(--spacing-8);
+  border-radius: var(--radius-full);
+  background: var(--badge-accent-background);
+  color: var(--badge-accent-foreground);
+  font-weight: 500;
+}
+
+/* ── §11. FAQ ───────────────────────────────────────────────────────────────────────── */
+.faq { display: grid; gap: var(--spacing-2); max-width: var(--tmp-container-narrow); }
+.faq details {
+  border-bottom: var(--border-width-default) solid var(--border-default);
+}
+.faq summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-16);
+  padding: var(--spacing-20) 0;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 600;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary svg {
+  flex: none;
+  color: var(--fg-subtle);
+  transition: transform var(--motion-duration-fast) var(--motion-easing-move);
+}
+.faq details[open] summary svg { transform: rotate(45deg); }
+.faq p { padding-bottom: var(--spacing-20); color: var(--fg-subtle); max-width: 68ch; }
+
+/* ── §12. Footer ────────────────────────────────────────────────────────────────────── */
+.footer {
+  border-top: var(--border-width-default) solid var(--border-default);
+  padding-block: var(--spacing-48);
+  color: var(--fg-subtle);
+}
+.footer__grid { display: grid; gap: var(--spacing-32); }
+@media (min-width: 760px) { .footer__grid { grid-template-columns: 1.4fr 1fr 1fr; } }
+.footer h3 { color: var(--fg-default); margin-bottom: var(--spacing-12); }
+.footer li + li { margin-top: var(--spacing-8); }
+.footer a:hover { color: var(--fg-default); }
+.footer__legal {
+  margin-top: var(--spacing-32);
+  padding-top: var(--spacing-20);
+  border-top: var(--border-width-default) solid var(--border-default);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-12) var(--spacing-24);
+  justify-content: space-between;
+}
+
+/* ── §13. Reveal ────────────────────────────────────────────────────────────────────────
+   Opacity + 16px of travel, staggered between siblings. What leaves goes one step faster
+   than what arrived (design-system/docs/15-motion.md §1) — nothing here leaves, so only
+   the enter curve is used. */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity var(--tmp-duration-reveal) var(--motion-easing-enter),
+    transform var(--tmp-duration-reveal) var(--motion-easing-enter);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+[data-reveal][data-shown='true'] { opacity: 1; transform: none; }
+
+/* Less movement never means less information (PRODUCT.md §4.9): everything is visible, the
+   travel is what goes. */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] { opacity: 1; transform: none; transition: none; }
+  .flow__seg { transition: none; }
+  .btn:active { transform: none; }
+  .nav__inner, .nav { transition: none; }
+}
+
+/* Anything that never reaches the observer (no JS, print, crawlers) must still be readable. */
+.no-js [data-reveal] { opacity: 1; transform: none; }

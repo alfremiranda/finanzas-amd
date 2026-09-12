@@ -12,9 +12,9 @@ name: Design system
 on:
   push:
     branches: [main]
-    paths: ['src/**', 'design-system/**', '.storybook/**', 'scripts/visual-regression.mjs', 'scripts/motion-rules.mjs', 'test/visual-baseline/**', '.github/workflows/design-system.yml']
+    paths: ['src/**', 'design-system/**', '.storybook/**', 'public/landing/**', 'scripts/visual-regression.mjs', 'scripts/motion-rules.mjs', 'scripts/landing-assets.mjs', 'test/visual-baseline/**', '.github/workflows/design-system.yml']
   pull_request:
-    paths: ['src/**', 'design-system/**', '.storybook/**', 'scripts/visual-regression.mjs', 'scripts/motion-rules.mjs', 'test/visual-baseline/**', '.github/workflows/design-system.yml']
+    paths: ['src/**', 'design-system/**', '.storybook/**', 'public/landing/**', 'scripts/visual-regression.mjs', 'scripts/motion-rules.mjs', 'scripts/landing-assets.mjs', 'test/visual-baseline/**', '.github/workflows/design-system.yml']
   workflow_dispatch:
 
 permissions:
@@ -44,6 +44,14 @@ jobs:
 
       - name: Validate
         run: node design-system/_build/validate-repo.mjs
+
+      # The landing page lives in public/, outside the bundle, so it cannot @import
+      # tokens.css the way src/index.css does — it carries a generated mirror instead.
+      # A mirror nobody checks is what public/calculadoras/ has: a hand-copied :root block
+      # still declaring Inter Variable and --color-tax, both retired in August. This is the
+      # check that stops the same thing happening twice.
+      - name: Landing assets in sync with the token package
+        run: node scripts/landing-assets.mjs --check
 
   # Separate job: the repo validator needs no npm install, and a visual diff that has to
   # wait for one would discourage running it.
