@@ -12,7 +12,8 @@
 > step, verify against every member of the set, never the first — proposed by Design, adopted after a
 > Design session died mid-queue and only its handoff saved the continuity. **v3.7 (2026-09-12): the
 > orchestrator commits what it writes, same run; an audit belongs to the leg that can observe what
-> it audits.**
+> it audits. v3.8 (2026-09-12): a fifth role, Web, with its own
+> territory and mailbox.**
 
 ## The system
 
@@ -25,6 +26,7 @@ Neto is built by one human (Alfredo) directing **five** Claude agents, each in i
 | Design | **Cowork running on Alfredo's computer**, with direct repo access; also drives Figma + Claude Design | Figma file (visual truth) + `design.md` + `design-system/` | Yes — its territory only (see below) |
 | Business | Cowork (cloud) | Project doc `neto-business-model.md` | No |
 | Legal | Cowork (cloud) | Project doc `neto-legal.md` | No |
+| **Web** | Cowork on Alfredo's computer | The landing brief + `DIRECTION.md §1` | Yes — its territory only (v3.8) |
 
 There is no "Producto" or "Dominio" agent — those are project doc names (`neto-context.md`
 is the product export of this repo; `neto-domain.md` is the netofinanzas.app domain decision).
@@ -86,7 +88,11 @@ Two agents share this working tree. The boundary that keeps that sane:
 
 - **Design owns:** `design-system/**` and `design.md`. Generated artifacts (tokens.css,
   previews) are regenerated, not hand-edited, by either agent.
-- **Dev owns:** everything else — `src/**`, `public/**`, configs, docs. This includes
+- **Web owns (v3.8):** `public/index.html`, `public/landing/**`, and the mailbox
+  `docs/inbox/web/`. Nothing else — **the route migration (app moves to `/app`) is Dev's**,
+  because it touches auth, the service worker and the manifest, and the service worker has
+  already produced one silent production bug this month.
+- **Dev owns:** everything else — `src/**`, the rest of `public/**`, configs, docs. This includes
   `src/index.css`: when Design's token work requires changes there, Design reports the
   finding and **Dev applies it** (the favourite-star / radius findings flow was the model).
 - **Orchestrator writes:** `docs/DIRECTION.md`, `docs/ORCHESTRATION.md` and
