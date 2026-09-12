@@ -2,6 +2,11 @@
 
 > **Authoritative reference for all design and UI decisions.**
 > This document overrides personal preferences and library defaults.
+>
+> **Re-verified against Figma and the repo on 2026-09-12** after 42 days without a pass. What was
+> stale is listed in the changelog (v6) — eleven claims, and every one of them measured rather
+> than remembered. Two sections described a state that had already changed: the token imports are
+> wired up, and `Badge` no longer has per-account variants.
 
 ---
 
@@ -15,16 +20,25 @@
 
 ### Key component nodes
 
-| Component | Node ID |
-|-----------|---------|
-| Desktop layout (expanded) | `2:34` |
-| Desktop layout (collapsed) | `129:9927` |
-| Sidebar (expanded, 255px) | `124:4969` |
-| Sidebar (collapsed, 65px) | `129:9931` |
-| TopNav | `121:4745` |
-| KPI cards strip | `128:5893` |
+These are the **library components** — the thing to inspect before implementing. The previous
+version of this table pointed at frames on `Screens & exploration` (`2:34` is *Neto - Desktop
+(Light)*, not a collapsed layout) and at instances inside them, so a spec read off it was a spec
+read off one screenshot.
 
-### Derived specs (verified against Figma, 2026-08-01)
+| Component | Node ID | Variants |
+|-----------|---------|----------|
+| `Sidebar` | `127:5113` | `isExpanded=True` · `isExpanded=false` |
+| `topnav` | `121:4674` | `Device=Mobile` · `Device=Desktop` |
+| `bottom-nav` | `1122:8` | `State=Expanded` · `State=Minimized` |
+| `KPI-Card` | `60:253` | — |
+| `SectionCard` | `324:1300` | `Action=False` · `Action=True` |
+| `AccountSummaryCard` | `379:12631` | `Type` × `Device`, 8 |
+
+The whole registry — 90 components with their node IDs, variant axes and descriptions — is
+generated into `design-system/_build/components.json` and rendered at
+`design-system/components/*.html`. Read that before hunting through the canvas.
+
+### Derived specs (measured against Figma, 2026-09-12)
 
 | Element | Spec |
 |---------|------|
@@ -32,15 +46,15 @@
 | Sidebar collapsed width | 65px |
 | TopNav height | 54px |
 | Sidebar item height | 40px (h-10) |
-| Sidebar item border-radius | 12px (rounded-[12px]) |
+| Sidebar item border-radius | **16px** (`rounded-2xl`) — decía 12 |
 | Sidebar item padding (expanded) | `px-3 py-2` |
 | Sidebar item padding (collapsed) | `p-[12px]` centered |
 | Sidebar list padding | `px-[12px]` |
 | Sidebar list gap | `gap-2` (8px) |
-| KPI card padding | `p-[17px]` |
+| KPI card padding | **16px** (`p-4`) — decía 17 |
 | KPI label | text style `Label/Micro` — 10px SemiBold, uppercase, tracking 0.5px |
-| KPI value | text style `Amount/Hero` — 20px SemiBold |
-| SectionCard title | text style `Heading/Group` — 14px SemiBold |
+| KPI value | text style `Amount/Hero` — **28px** SemiBold — decía 20 |
+| SectionCard title | text style `Heading/Group` — **16px** SemiBold — decía 14 |
 | IBC chip | `border border-[var(--border)] rounded-lg px-2 py-1` |
 
 Text styles are named in Figma and listed in `design-system/foundations/typography.html`.
@@ -59,11 +73,15 @@ and every hardcoded mention of it went stale at the same time.
 - Never replace a shadcn component with a custom implementation without documenting the reason.
 
 Custom components in `src/components/ui/` that extend shadcn:
-- `Badge` — account and currency variants
-- `SectionCard` — card with standardized header
+- `Badge` — `tone` × `variant` (see *Account badges* below; the per-account variants are gone)
+- `SectionCard` — card with a standardized header and a `Content` slot
 - `DatePicker` — Popover + Calendar wrapper
 - `MoneyInput` — input with automatic locale formatting
 - `Empty` — composed empty state
+
+> `DatePicker` and `MoneyInput` still ship in code but were **retired from the Figma library**, so
+> there is no drawn spec to check them against. Anything you change there is a code decision;
+> raise it with Design if it should come back into the library.
 
 ---
 
@@ -109,21 +127,29 @@ the reasoning behind it.
 
 ### How the app consumes them
 
-`src/index.css` currently declares its own values. The intent is for it to import the generated
-files instead:
+**This is wired up.** `src/index.css` imports both generated files at the top (lines 8–9):
 
 ```css
 @import "../design-system/tokens/tokens.css";
 @import "../design-system/tokens/tokens.map.css";
 ```
 
-**Not wired up yet** — it is a build change and needs its own review. Read the `NO EQUIVALENT`
-block at the end of `tokens.map.css` first: four variables have no counterpart and need a
-decision rather than a mapping.
+So the app reads Figma's values through the bridge, and `index.css` no longer declares colour of
+its own — `R4` in `validate-repo.mjs` fails the build if it starts again.
+
+Four variables still have **no counterpart** and are listed under `NO EQUIVALENT` at the end of
+`tokens.map.css`: `--font-sans`, `--font-mono`, `--font-heading` and `--radius`. Each needs a
+decision rather than a mapping — the fonts because the app still ships Inter Variable while Figma
+resolves to Rethink Sans, and `--radius` because the app derives every radius from one base with
+`calc()` while Figma has a named scale.
 
 ### Domain token shape
 
-The three-slot pattern still holds for financial and category tokens:
+The three-slot pattern still holds for financial and category tokens. **These `--color-*` names
+are not Figma's** — they are the app's older vocabulary, kept alive by `tokens.map.css`, which
+points each one at the generated token (`--color-income: var(--kpi-income-default)`). Use them in
+`src/**` as documented; do not look for them in `tokens.css`, and never add a new one to the
+bridge without a Figma token behind it.
 
 ```
 --color-{role}      saturated: icons, chart fills, dots
@@ -138,7 +164,9 @@ The three-slot pattern still holds for financial and category tokens:
 | `-txt` | Text on that background | ≥ 4.5:1 (WCAG AA) |
 
 Expense categories use `--cat-{id}` / `--cat-{id}-bg` and map 1:1 with `EGRESO_CATEGORIAS`.
-There are **15** of them. In dark mode every category surface is the `-950` tint and its text
+There are **14** of them — the document said 15. Figma carries a fifteenth ramp,
+`category/savings/*`, which is **not** an expense category: it belongs to the savings domain and
+has no entry in `EGRESO_CATEGORIAS`. Do not reach for it from a category lookup. In dark mode every category surface is the `-950` tint and its text
 the `-300`, with two documented exceptions: `connectivity` and `other` stay lighter, because
 their neutral `-950` is indistinguishable from the page background.
 
@@ -214,13 +242,13 @@ tables and KPI strips have more room, not less.
 
 ### Type scale
 
-26 text styles in 6 semantic groups, named by *what the text is* rather than how large it is:
+**27** text styles in 6 semantic groups, named by *what the text is* rather than how large it is:
 
 | Group | For |
 |---|---|
 | `Heading/` | Display · Section · Subsection · Card · Group |
 | `Body/` | running text, ±Emphasis at two sizes |
-| `Detail/` | metadata: Large 11 · Base 10 · Emphasis 10 · Nano 9 |
+| `Detail/` | metadata: Large 12 · Large-Strong 12 · Base 11 · Emphasis 11 · Nano 10 |
 | `Label/` | Base · Micro (the KPI label) · Badge |
 | `Amount/` | Hero · Large · Base · Small · Micro — monetary figures |
 | `Control/` | XS–XL, line height 100% for single-line control labels |
@@ -228,6 +256,9 @@ tables and KPI strips have more room, not less.
 Two rules that keep the scale from doubling in size:
 
 - **Emphasis in running text is Medium, never SemiBold.** SemiBold belongs to headers and figures.
+  One rung above Medium exists and is called **`-Strong`**, not `-Emphasis`: `Detail/Large-Strong`
+  (12/18 Bold) is the account meta row. The word *Emphasis* means Medium everywhere in this scale,
+  so a heavier rung needed a different word rather than a second meaning.
 - **There are no input text styles.** Text inside a field *is* body text.
 
 `Amount/` exists as its own group even where its metrics repeat `Body/` and `Heading/`, because
@@ -388,20 +419,34 @@ flex items-center gap-2 py-2 border-b border-[var(--border)] last:border-0
 
 ### Monetary amounts
 
+`font-heading` is **retired** — it aliased `--font-mono`, which no longer exists. Zero components
+still use it; the old rule in this document was the last place it survived. Use the generated
+`.ts-amount-*` class, which carries size, weight and `tabular-nums` together:
+
 ```tsx
-// Always: font-heading + tabular-nums
-<span className="font-heading tabular-nums text-sm font-semibold">
-  {COP(amount)}
-</span>
-// USD converted to COP as secondary
-<div className="text-[10px] text-muted-foreground tabular-nums">
-  {COP(amount * trm)}
-</div>
+// The figure
+<span className="ts-amount-base">{COP(amount)}</span>
+// USD converted to COP as the secondary line under it
+<div className="ts-amount-micro text-muted-foreground">{COP(amount * trm)}</div>
 ```
+
+`Amount/` runs Hero 28 · Large 22 · Base 16 · Small 14 · Micro 12. `tabular-nums` is already in
+every one of those classes — keep it there rather than at the call site.
 
 ### Account badges
 
-Use the `Badge` component with a `variant` prop: `arq`, `toptal`, `bancol`, `otro`. Background from `--color-account-{type}-bg`, text from `--color-account-{type}-txt`.
+**The per-account variants are gone.** `arq`, `toptal`, `bancol`, `ss` were a variant per real
+account, so adding an account meant editing the design system. `--color-account-{type}-bg` and
+`-txt` do not exist either.
+
+What replaces them:
+
+- `Badge` takes **`tone`** (what the thing is) × **`variant`** (`filled` | `outline`). Neither
+  names an account.
+- The account's own colour lives **on the account**, from the `account/{color}/*` ramps, and is
+  rendered by `AccountAvatar` — one of purple · sky · emerald · lime · amber · pink, chosen by the
+  user in the colour picker.
+- Currency is its own component, `CurrencyBadge`, not a tone.
 
 ### Sheet forms
 
@@ -439,7 +484,39 @@ shadcn Sidebar with `collapsible="icon"`. Critical constraints:
 1. **Tailwind v3 compatibility**: The installed `sidebar.tsx` uses v4 CSS variable shorthand. Always convert after install (see Rule 3).
 2. **Tooltip on collapse**: `SidebarMenuButton` receives `tooltip` only when `state === 'collapsed'`. Do not pass tooltip when expanded — the `hidden` prop on `TooltipContent` doesn't reliably suppress the Radix portal.
 3. **Fixed → Absolute**: The sidebar container is modified to `absolute inset-y-0` (instead of `fixed`) to respect the app layout with a header above. `SidebarProvider` needs a `relative h-full` ancestor.
-4. **Mobile**: Sidebar is `hidden md:block`. Mobile navigation uses the custom `Sidebar_MobileNav` (fixed bottom bar), not the shadcn mobile Sheet.
+4. **Mobile**: Sidebar is `hidden md:block`. Mobile navigation is `Sidebar_MobileNav`, not the
+   shadcn mobile Sheet. Its Figma spec is `bottom-nav` (`1122:8`) — see below; it is **not** a
+   fixed edge-to-edge bar.
+
+---
+
+## Mobile tab bar
+
+`bottom-nav` (`1122:8`), two states. It is a **floating capsule**, not the edge of the screen —
+the iOS 26 shape, per Apple's HIG for tab bars.
+
+| | `State=Expanded` | `State=Minimized` |
+|---|---|---|
+| size | 370 × 58 | 58 × 58 |
+| inset | 21 from left, right and bottom | the same 21 |
+| content | four tabs, 86.5 each | only the current tab, as a round button |
+
+Five rules that get implemented wrong when they are not written down:
+
+1. **Two to five tabs, and a tab is a destination, never an action.** There are four. The `+`
+   lives in the FAB above the bar, not in it.
+2. **Colour is the whole selected state** — `fg/brand` on icon and label, `fg/subtle` on the rest.
+   No pill, no underline, no background behind the active tab. In the minimized state colour is
+   the only thing left saying where you are.
+3. **The 21 band at the bottom belongs to the bar.** No other fixed element lives there; content
+   scrolls under the capsule rather than stopping against it.
+4. **It minimizes on scroll down** (`tabBarMinimizeBehavior(.onScrollDown)` on iOS; by hand in the
+   PWA) and expands on return to top or on tap. Long-press and swipe moves between tabs without
+   expanding.
+5. **Labels are `Control/XS` at 10.** Apple specifies 11; this is the one point where the bar
+   departs from the HIG on purpose.
+
+Elevation is `elevation/floating`, the system's own pair — never a hand-written shadow.
 
 ---
 
@@ -447,12 +524,20 @@ shadcn Sidebar with `collapsible="icon"`. Critical constraints:
 
 Transitions are functional, never decorative.
 
-| Property | Duration | Easing | Where |
-|----------|----------|--------|-------|
-| colors | 150ms | ease-in-out | Hover, active states |
-| width/height | 200ms | ease-linear | Sidebar collapse, row expand |
-| opacity | 150ms | ease-in-out | Tooltips, empty state fades |
-| transform | 100ms | ease | `active:scale-95` on buttons |
+**Durations and curves are tokens, and `R5` in `validate-repo.mjs` fails on a literal.** Never
+write `150ms` or `cubic-bezier(...)` in a component.
+
+| Property | Token | Value | Where |
+|----------|-------|-------|-------|
+| colors | `--motion-duration-fast` · `--motion-easing-move` | 150ms · `cubic-bezier(.4,0,.2,1)` | Hover, active states |
+| width/height | `--motion-duration-moderate` · `--motion-easing-move` | 200ms | Sidebar collapse, row expand |
+| enter (popover, tooltip, sheet) | `--motion-duration-fast` · `--motion-easing-enter` | 150ms · `cubic-bezier(.16,1,.3,1)` | Radix enter |
+| exit | `--motion-duration-fast` · `--motion-easing-exit` | 150ms · `cubic-bezier(.4,0,1,1)` | Radix exit |
+| transform | `--motion-duration-instant` | 100ms | `active:scale-95` on buttons |
+| spinner | `--motion-duration-spin` · `--motion-easing-spin` | 1000ms · linear | `Spinner` |
+
+`--motion-duration-slow` (300ms) exists and has no consumer; it is the rung above `moderate`, not
+a default.
 
 `tw-animate-css` provides `animate-in`/`animate-out` for Radix popover/tooltip enter/exit.
 
@@ -471,8 +556,8 @@ Transitions are functional, never decorative.
 <p className="text-muted-foreground">...</p>
 <div className="bg-card border border-border">...</div>
 
-// Tertiary text token
-<span className="text-[var(--n-txt3)]">...</span>
+// Placeholder / tertiary text
+<span className="text-[var(--fg-placeholder)]">...</span>
 ```
 
 ### ❌ Incorrect
@@ -516,7 +601,7 @@ Transitions are functional, never decorative.
 Before committing any new UI component:
 
 - [ ] Colours come from Semantic or Component tokens — never a Primitive, never a literal
-- [ ] Monetary values use `font-heading tabular-nums`
+- [ ] Monetary values use a `.ts-amount-*` class (which already carries `tabular-nums`)
 - [ ] Form elements at `h-9` (or `h-7` for compact), consistent within row
 - [ ] Destructive actions have two-tap confirm pattern
 - [ ] Row actions are always visible (no `opacity-0`)
@@ -550,3 +635,4 @@ Items in `deductions.ts` carry a `color: string` field referencing a domain toke
 | v3 | Tailwind+shadcn rules, form heights, component patterns, anti-patterns, checklist |
 | v4 | Translated to English |
 | v5 | Token architecture rewritten against the real Figma structure (Primitives → Semantic → Component). Values moved out of this document into `design-system/tokens/`, generated. Typography collapsed to one family, Rethink Sans. Type scale replaced by 26 named text styles. Fixed the `text-sm` arithmetic — it computes to 14px, not 12.25px. |
+| v6 | **Staleness pass, 2026-09-12** — 42 days since v5, against a `design-system/` that moved on 09-07. Eleven claims were wrong, each re-measured: the token imports **are** wired up (`index.css` 8–9), `Badge`'s per-account variants are gone, `font-heading` is retired and this document was its last consumer, `--n-txt3` and `--color-account-*` do not exist, the node table pointed at exploration frames instead of components, `Detail/` sizes were a rung low across all four, 27 text styles not 26, 14 expense categories not 15 (`category/savings/*` is not one), KPI padding 16 not 17, `Amount/Hero` 28 not 20, `Heading/Group` 16 not 14, sidebar item radius 16 not 12. Added: the mobile tab bar, motion as tokens, and `-Strong` as the rung above `-Emphasis`. Not re-verified in this pass and still carried from v5: the dark-mode category rule (`-950` surface / `-300` text with `connectivity` and `other` as exceptions) and the tabular-width measurements. |

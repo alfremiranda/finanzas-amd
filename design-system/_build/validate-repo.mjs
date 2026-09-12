@@ -9,6 +9,8 @@
  *   R1  no raw hex in component code (the repo mirror of Figma's C1)
  *   R2  design-system/tokens/ is reproducible from _build/tokens.json
  *   R3  every var(--x) in tokens.map.css resolves to a token that exists
+ *   R5  no literal duration or easing curve in component code
+ *   R6  the text scale in tokens.json matches the Figma dump
  *
  * Plus one ratchet, R4, which reports rather than forbids: the count of hard-coded
  * colours still defined in src/index.css. Those are the pre-token surface; the migration
@@ -190,6 +192,34 @@ for (const file of componentFiles) {
 }
 r5.forEach(v => fail('R5', v))
 notes.push(`R5  ${componentFiles.length} archivos · ${r5.length} duraciones/curvas literales`)
+
+// ── R6 · the text scale in tokens.json must match the Figma dump ──────────────
+// emit-tokens.mjs carries `text` over UNTOUCHED — it is the one array in tokens.json that
+// nothing regenerates, so it is the one that can drift without a single tool complaining.
+// It did: `Label/Base` sat at 12/16 in tokens.json against 14/16 in the dump, so
+// `.ts-label-base` shipped a point small to 16 call sites for as long as nobody measured.
+// Colour has the ledger; type had nothing. This is that.
+const dumpMeta = JSON.parse(readFileSync(join(HERE, 'dump-parts', 'meta.json'), 'utf8'))
+const tokensText = JSON.parse(readFileSync(join(HERE, 'tokens.json'), 'utf8')).text
+const scale = new Map(tokensText.map(row => {
+  const [name, weight, size, lh, ls] = row.split('|')
+  return [name, { weight, size: Number(size), lh: Number(lh), ls: Number(ls) }]
+}))
+const r6 = []
+for (const st of dumpMeta.textStyles) {
+  const got = scale.get(st.name)
+  if (!got) { r6.push(`${st.name} — está en el volcado y no en tokens.json`); continue }
+  const want = { weight: st.weight, size: Number(st.size), lh: Number(st.lineHeight), ls: Number(st.letterSpacing) }
+  for (const k of ['weight', 'size', 'lh', 'ls']) {
+    if (got[k] !== want[k]) r6.push(`${st.name}.${k} — volcado ${want[k]}, tokens.json ${got[k]}`)
+  }
+}
+const dumpNames = new Set(dumpMeta.textStyles.map(s => s.name))
+for (const name of scale.keys()) {
+  if (!dumpNames.has(name)) r6.push(`${name} — está en tokens.json y no en el volcado`)
+}
+r6.forEach(v => fail('R6', v))
+notes.push(`R6  ${dumpMeta.textStyles.length} estilos de texto · ${r6.length} desviaciones del volcado`)
 
 // ── report ───────────────────────────────────────────────────────────────────
 console.log('design-system · validador del lado del repo')

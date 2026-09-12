@@ -1,22 +1,44 @@
 # Handoff · Diseño
 
-Última actualización: **2026-09-01**. Trabajo en vuelo al cierre de sesión.
+Última actualización: **2026-09-12**. Trabajo en vuelo al cierre de sesión.
 
-**Diseño no puede pushear.** `credential-osxkeychain` es un binario de macOS que no existe en la
-VM de Linux donde corro; `git fetch` funciona (lectura anónima), `git push` no puede autenticar.
-Dev barre. Cada cierre lista sus hashes con `unpushed:`, y **esa lista caduca en cuanto Dev barre**
-— verifícala con `git log origin/main..HEAD` antes de salir a buscar nada. Los cinco del 01-sep ya
-viajaron (FYI del 05-sep).
+## Lo primero, antes de cualquier commit
 
-**FECHAS CORREGIDAS.** Feché como `2026-08-24` todo el trabajo de hoy, que es `2026-09-01`. Lo
-tomé de la sesión anterior y lo arrastré ocho días sin volver a mirar el reloj — la misma familia
-de §A6, una lectura vieja tratada como actual. Corregidas 14 descripciones en Figma, 1 token, 6
-docs y 6 notas de bandeja (contenido y nombre de archivo). Lo que SÍ es del 24 se quedó como
-estaba: §A6b, la entrada "Done, 2026-08-24" del roadmap y §5.1, que corresponden a commits
-`897afebe`–`57296e4a`. El corte está en `b7cc2b55`.
+**Firma explícita en cada commit.** La VM puente comparte el clon con Dev y `.git/config` trae
+`Dev <dev@neto.local>`. No lo cambies —es de Dev— y no confíes en heredarlo:
 
-**Bandeja vacía.** Contestadas y archivadas las dos de Dev: la fila del ledger (sus tres eran
-seis, y el pin de 104 que yo defendí no hacía falta) y las cinco de obligaciones.
+```
+git -c user.name=Design -c user.email=design@neto.local commit ...
+```
+
+Sin esos dos flags el commit sale firmado como Dev. Ya pasó en los dos sentidos: 62 commits de Dev
+firmados como el orquestador (06-sep) y dos míos firmados como Dev (07-sep, `18e0784e` y
+`76fcc73e`). El orquestador decidió que se corrige hacia adelante, no se reescribe hacia atrás.
+
+**Diseño no puede pushear.** `credential-osxkeychain` es un binario de macOS que no existe en la VM
+de Linux donde corro; `git fetch` funciona (lectura anónima), `git push` no puede autenticar. Dev
+barre. Cada cierre lista sus hashes con `unpushed:`, y **esa lista caduca en cuanto Dev barre** —
+verifícala con `git log origin/main..HEAD` antes de salir a buscar nada.
+
+## Lo que pasó esta semana (06 → 12 sep)
+
+- **La tab bar móvil.** Cuatro pasadas. Primero la rediseñé sin que nadie me lo pidiera, Alfredo la
+  revirtió, y después sí la rediseñó él con la HIG de Apple mandando: cápsula flotante de 370×58 con
+  21 de margen a los lados y abajo, icono de 24, la tab activa en `fg/brand`, y `State=Minimized`
+  (58×58, solo la tab actual) para el scroll. Componente `1122:8`.
+- **`fg/brand` y `Detail/Large-Strong`.** Dos huecos reales: el sistema tenía `bg/brand` y
+  `fg/on-brand` pero no la marca como color de texto, y los chips de meta de la cuenta llevaban
+  Bold sobre un estilo Regular sin nada que lo respaldara.
+- **El encabezado de la cuenta.** Seis diferencias medidas entre código y Figma, la peor el título a
+  16 Medium donde Figma dice 20 SemiBold. Ticket abierto en `dev/`, lado de diseño cerrado.
+- **`design.md` v6.** Once afirmaciones stale, cada una re-medida. Ver su changelog.
+- **`R6` en el validador.** `emit-tokens.mjs` regenera todo tokens.json menos el array `text`, que
+  se mantiene a mano — el único bloque del pipeline sin nada que lo comparara contra Figma. Había
+  divergido: `Label/Base` valía 12 contra los 14 del volcado, así que `.ts-label-base` salía un
+  punto corta a 16 sitios. Corregido, y `R6` compara los 27 estilos (peso, tamaño, interlínea,
+  tracking). Verificado que falla antes de darlo por bueno.
+- **El glifo de identidad lleva el matiz de la cuenta.** Era `purple/500` fijo, o sea dos cuentas
+  distintas con el mismo encabezado. Lo preguntó Dev, lo decidió Alfredo.
 
 ## Cómo le respondo a Alfredo (2026-08-21)
 
@@ -26,19 +48,14 @@ a los docs, a los mensajes de commit y a la bandeja de Dev, no a la conversació
 
 ## Dónde quedó el roadmap
 
-`design-system/docs/20-roadmap.md`, seis fases.
+`design-system/docs/20-roadmap.md`, seis fases. **Ahí está el estado, no aquí.** La tabla que este
+handoff copiaba se quedó atrás dos veces; dos copias del mismo párrafo divergen y ninguna se ve mal
+(`00-principles §A6e`).
 
-| fase | estado |
-|---|---|
-| 0 · instrumentar | ✅ `T8` a cero, `coherence-log.md`, `usage-census.js`, y la mitad de repo en CI (`validate-repo.mjs`, `R1`–`R4`) |
-| 1.1 · mapa como dry run | ✅ `naming-map.json` + `naming-proposal.md`, revisado por Alfredo |
-| 1.2 · aplicar en Figma | ✅ 138 → 121 tokens de color, renombrados, scopes derivados, `codeSyntax`, descripciones |
-| 1.3 · escalas numéricas | ✅ Semantic 58 → 33, Primitives 43 → 30, **cero colisiones de nombre** |
-| 1.4 · ocultar primitivas (`T2`) | ✅ `T2` 334 → 0, y las 203 vinculaciones directas que ocultaba bajaron a 57 (marcas y geometría de íconos, excepción estructural) |
-| 2 · pipeline / exporter | ✅ **cerrada 21-ago.** Etapas 1 y 2 corridas, paquete regenerado, `validate-repo` verde. El auditor da **ADDED 0 · CHANGED 0**: Figma y el paquete coinciden por primera vez |
-| 3 · movimiento e interacción | ⬜ API de Motion verificada. `23-onboarding-motion.md` ya escrito. `bg/neutral-alpha-{10,20}` reservados para state layers. La escala de blur/spread se acuña aquí |
-| 4 · componentes que faltan | 🟡 **`LedgerEntryIcon` y `ledger-itemrow` hechos el 24-ago**, con tres glifos nuevos. Quedan los tres gráficos anuales y la barra de distribución por categoría. Dos ítems de la lista original estaban mal: el asa de drawer **ya existía** dentro de `Sheet`, y la barra del código no es la `DistribucionCard` de Figma. `chart/*` reservado |
-| 5 · mantenerlo vivo | 🟡 `C5` `C6` `C7` `C8` en pie. `C5` llegó a **0 y perdió su trinquete**. `R2` pasó de comparar 2 archivos a comparar los 89 que genera `build.py` |
+Lo único que el roadmap no dice y hay que saber al abrir: su tabla *Where we actually are* trae las
+cifras del 12-sep, pero **la familia `T*` no se ha re-medido desde el 20-ago** y sus valores viejos
+se quitaron a propósito. Correr `audit-figma.js` es una sesión propia y es lo siguiente en la cola
+de instrumentación.
 
 ## Fase 2: resuelto el 21-ago. Cómo quedó
 
@@ -112,21 +129,57 @@ Diseño y está escrito:
 
 | qué | de quién | dónde |
 |---|---|---|
-| ~~espacio de nombres del CSS publicado~~ | **decidido por Alfredo 08-21: sigue a Figma** | `24-token-sync.md` |
-| ~~los 8 `--account-{1..4}-*`~~ | **decidido 08-21: mueren.** El color pasa a ser elección del usuario | `docs/25-account-color.md` · siguen en `pending` hasta que Dev repunte `build.py` 109-112 |
-| la fila `destructive` del mapa de migración: ¿la aplicó Dev? | Dev | `Q-2026-08-21-la-fila-destructive` |
-| `Frame 1` en `Components · Forms` (30 instancias de `Input` suyas) | Alfredo | pendiente desde el 20 |
-| migrar los 132 nombres viejos a su ritmo (75 ya sin consumidores) | Dev | `token-drift.mjs` → RETIRABLE |
-| repuntar `build.py` 109-112 y matar la cuarentena | Dev | `TASK-2026-08-21-color-de-cuenta` |
-| escala de blur/spread (dueño: Diseño, va a fase 3) | cola propia | `A-2026-08-20-fav-star §4` |
-| Storybook | sigue bloqueado, medido peor que en agosto | `6afa685e` |
+| tintar `AccountGlyph` con el matiz de la cuenta, y matar el token en cuarentena | Dev | `A-2026-09-12-label-base-el-glifo-y-la-estrella` §2 |
+| la estrella de la grilla a 20 | Dev | misma nota §3 |
+| **Fase 4: los tres gráficos anuales y la barra de distribución** | mío, ticket del 12-sep | `TASK-2026-09-12-fase-4-los-graficos` |
+| los dos flujos redibujados (Cuentas, Obligaciones) y los tokens que se movieron | Dev | `TASK-2026-09-03-lo-que-hay-que-traer-al-codigo` |
+| `Frame 1` en `Components · Forms` (30 instancias de `Input` suyas) | Alfredo | pendiente desde el 20-ago |
+| migrar los nombres viejos a su ritmo | Dev | `token-drift.mjs` → RETIRABLE |
+| Storybook | sigue bloqueado | `6afa685e` |
+
+**Decidido y cerrado desde el handoff anterior:** el espacio de nombres del CSS publicado (sigue a
+Figma), los ocho `--account-{1..4}-*` (mueren; el color es elección del usuario), la fila
+`destructive` del mapa, el peldaño de `bg/disabled` (sube la familia entera), «Total ahorrado» (se
+queda fuera: hay cuentas que son tarjeta de crédito y un cupo no es dinero que se tiene), y
+`Progress` (un solo consumidor; el segundo lo había inventado yo).
 
 ## Mi propia cola (no bloquea a Dev)
 
-Tres respuestas del orquestador siguen en mi bandeja **a propósito**: archivarlas habría sido falso.
+Medido y ofrecido, sin aplicar — cada uno espera una decisión que no es mía o una sesión propia:
+
+- **Los neutros colisionan en oscuro a 1.12:1.** Medido, ofrecido, no aplicado.
+- **`bg/subtle` = `bg/floating`**, `bg/expense-subtle` = `bg/danger-subtlest`, `bg/sunken` con el
+  valor de `border/emphasis`, y `fg/subtle` / `fg/neutral` colapsan en oscuro. Cuatro pares que
+  valen lo mismo a propósito o por descuido; no lo sé todavía.
+- **El registro diverge de Figma en 39 de 89 descripciones, en los dos sentidos.** `20-roadmap
+  §5.1b`: fusionar primero, generar después. Generar ahora borra trabajo bueno.
+- **`sheet.html` documenta `ui/sheet` y el panel real de la app es `SheetBase`.** Abierto para
+  Alfredo.
+- **La familia `T*` sin re-medir desde el 20-ago.** `audit-figma.js`, sesión propia.
+- **La estrella de la grilla es un botón en código y una marca estática en Figma.** La misma acción
+  dibujada de dos formas. Defecto mío; si la ficha pasa a llevar `Favorite`, se le avisa a Dev
+  antes.
+- **`--account-summary-card-icon-foreground` en cuarentena.** Retirado de Figma, congelado en
+  `pending` porque `AccountSummaryCard.tsx:111` lo consume. Muere con el cambio de Dev.
+- **`audit-figma.js` llegó a `C12`.** Los cuatro últimos salieron de esta semana: heading a ancho
+  fijo (`C9`), spec del doc contra su componente (`C10`), entidad HTML en una descripción (`C11`),
+  borde de un solo lado en una forma redonda (`C12`).
+
+Tres respuestas del orquestador de agosto siguen en la bandeja **a propósito**: archivarlas habría
+sido falso.
 
 - `A-2026-08-19-elevacion-ejecutada` — falta `C7` (el equivalente de `C1` para efectos) y el peldaño
   de elevación en Login / Bienvenida / Listo.
 - `A-2026-08-19-tone-action-chip-c5-c6` — `action-chip` acuñó 3 de sus 6 vinculaciones prestadas;
   `C5` y `C6` no están en `audit-figma.js`.
 - `A-2026-08-20-count-16-y-currency` — `currency/*` sigue en Component, aprobado su ascenso a Semantic.
+
+## La lección que más caro salió esta semana
+
+**Un componente que dibujó otro es suyo.** Dos veces reemplacé un dibujo de Alfredo por uno mío y
+lo reporté como hecho: el `AccountSummaryCard` y la tab bar. Los dos eran defendibles y los dos se
+revirtieron. Mantener el sistema honesto es mío —tokens que resuelven, rampas que suben, docs que
+coinciden con su componente, chequeos que cazan la clase y no el sitio—; **decidir qué dibuja la
+cosa es de él.** Cuando el pedido toca lo segundo, el entregable es una propuesta que pueda ver, no
+un componente ya cambiado. Escrito en `00-principles §A6g`, con sus dos corolarios: anotar una
+propiedad sin su valor no es anotarla, y una cita no es una orden.

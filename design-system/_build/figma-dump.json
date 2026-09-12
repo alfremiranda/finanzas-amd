@@ -1872,11 +1872,6 @@
           "rgba(255,255,255,0.7)"
         ],
         [
-          "account-summary-card/icon/foreground",
-          "#a855f7",
-          "#c084fc"
-        ],
-        [
           "calendar/day/foreground/default",
           "#0f172a",
           "#f8fafc"
@@ -7124,19 +7119,6 @@
       "aliases": {
         "Light": "color/slate/500",
         "Dark": "color/white/70"
-      }
-    },
-    {
-      "collection": "Component",
-      "name": "account-summary-card/icon/foreground",
-      "type": "COLOR",
-      "values": {
-        "Light": "#a855f7",
-        "Dark": "#c084fc"
-      },
-      "aliases": {
-        "Light": "color/purple/500",
-        "Dark": "color/purple/400"
       }
     },
     {

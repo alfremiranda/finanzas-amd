@@ -11,25 +11,24 @@ us whether it worked, and after a dry run that can be read before anything moves
 
 ## Where we actually are
 
-| | measured 2026-08-20 |
-|---|---|
-| Variables | 766 (Primitives 355 · Semantic 200 · Component 170 · Typography 41) |
-| `T1` open scopes | **292** — all `ALL_SCOPES`, none merely empty |
-| `T2` exposed primitives | **344** (every primitive) |
-| `T3` no `codeSyntax` | **701**, of which **346 are mandatory** (Semantic + Component) |
-| `T8` mode casing | **2** — `Light/Dark` vs `light/dark` |
-| `T5` broken alias · `T6` · `T7` | **0** ✅ |
-| Tokens carrying intent (a description) | Semantic 110/200 · Component 52/170 · Primitives 99/355 · Typography 7/41 |
-| Components | 77, with **73 described** ✅ |
-| Instances across the file | **5,686**, converged over 4 passes |
-| Components existing only in their own doc frame | **~10** (1–2 instances each) |
-| Components with zero instances | **1** (`obligation-itemrow`) |
-| Published package `design-system/tokens/` | frozen since **2026-08-02** — the exporter has never run |
-| What runs the validator | **nothing** (`deploy.yml` is the repo's only workflow) |
-| Figma Motion API | **enabled** on this account (6 first-party animation styles, timelines in seconds) |
+| | measured 2026-09-12 | was 2026-08-20 |
+|---|---|---|
+| Variables | **795** (Primitives 355 · Semantic 211 · Component 188 · Typography 41) | 766 |
+| Text styles | **27** | 26 |
+| Components in the registry | **90** (89 refreshed from Figma, 2 retired and dropped) | 77 |
+| Published package `design-system/tokens/` | **generated from the dump; `emit-tokens.mjs` refuses an unsigned value change** | frozen since 08-02, exporter never run |
+| What runs the validator | **`validate-repo.mjs` — R1–R5, green** | nothing |
+| Figma Motion API | **enabled** | enabled |
 
-The layer model is healthy — `T6` and `T7` at zero say so. What is missing is **naming
-discipline, enforcement, and a pipeline that closes**.
+**Not re-measured in this pass** — the `T*` audit rows (`T1` open scopes, `T2` exposed primitives,
+`T3` missing `codeSyntax`, `T8` mode casing, `T5`–`T7`, descriptions carrying intent, instance
+count) need `audit-figma.js` through `use_figma`, which is a session of its own. Their 08-20 values
+are **not** carried forward here, because a number that old presented as current is worse than no
+number. Run the audit and fill them in.
+
+The layer model was healthy at the last audit (`T5`–`T7` at zero) and the pipeline now closes:
+the package is generated, the validator runs, and a value change cannot land unsigned. What is
+open is **the audit itself** — nothing has re-measured the `T*` family since 08-20.
 
 ---
 

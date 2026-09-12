@@ -63,7 +63,6 @@ account-chart/series/debt/fill-from	COLOR	rgba(244,63,94,0.5)	rgba(244,63,94,0.5
 account-chart/series/debt/fill-to	COLOR	rgba(244,63,94,0)	rgba(244,63,94,0)	color/rose/500/0	color/rose/500/0
 account-chart/axis/foreground	COLOR	#64748b	#94a3b8	color/slate/500	color/slate/400
 account-chart/marker/line	COLOR	#64748b	rgba(255,255,255,0.7)	color/slate/500	color/white/70
-account-summary-card/icon/foreground	COLOR	#a855f7	#c084fc	color/purple/500	color/purple/400
 calendar/day/foreground/default	COLOR	#0f172a	#f8fafc	fg/default	fg/default
 calendar/day/foreground/outside	COLOR	#334155	#cbd5e1	fg/subtle	fg/subtle
 calendar/day/foreground/selected	COLOR	#ffffff	#083344	fg/on-brand	fg/on-brand

@@ -235,7 +235,6 @@
   --account-chart-series-debt-fill-to: rgba(244,63,94,0);
   --account-chart-axis-foreground: #64748b;
   --account-chart-marker-line: #64748b;
-  --account-summary-card-icon-foreground: #a855f7;
   --calendar-day-foreground-default: #0f172a;
   --calendar-day-foreground-outside: #334155;
   --calendar-day-foreground-selected: #ffffff;
@@ -533,7 +532,7 @@
   --border-subtle: var(--border-emphasis);
 
   /* QUARANTINE — no Figma source. See token-ledger.json `pending`. Should only shrink. */
-
+  --account-summary-card-icon-foreground: #a855f7;
 }
 
 /* Two dark selectors on purpose: [data-theme] is what the generated previews in this
@@ -776,7 +775,6 @@
   --account-chart-series-debt-fill-to: rgba(244,63,94,0);
   --account-chart-axis-foreground: #94a3b8;
   --account-chart-marker-line: rgba(255,255,255,0.7);
-  --account-summary-card-icon-foreground: #c084fc;
   --calendar-day-foreground-default: #f8fafc;
   --calendar-day-foreground-outside: #cbd5e1;
   --calendar-day-foreground-selected: #083344;
@@ -809,7 +807,7 @@
   --readout-swatch-debt: #e11d48;
   --progress-track: #334155;
   --account-summary-card-meta-chip-border: #475569;
-
+  --account-summary-card-icon-foreground: #c084fc;
 }
 
 /* Text styles — Rethink Sans, tabular by default */
@@ -821,7 +819,7 @@
 .ts-body-base { font-family:var(--font-sans);font-weight:400;font-size:16px;line-height:24px;letter-spacing:0.0px; }
 .ts-body-base-emphasis { font-family:var(--font-sans);font-weight:500;font-size:16px;line-height:24px;letter-spacing:0.0px; }
 .ts-body-small { font-family:var(--font-sans);font-weight:400;font-size:14px;line-height:20px;letter-spacing:0.0px; }
-.ts-label-base { font-family:var(--font-sans);font-weight:500;font-size:12px;line-height:16px;letter-spacing:0.5px; }
+.ts-label-base { font-family:var(--font-sans);font-weight:500;font-size:14px;line-height:16px;letter-spacing:0.5px; }
 .ts-amount-micro { font-family:var(--font-sans);font-weight:400;font-size:12px;line-height:16px;letter-spacing:0.0px;font-variant-numeric:tabular-nums; }
 .ts-body-small-emphasis { font-family:var(--font-sans);font-weight:500;font-size:14px;line-height:20px;letter-spacing:0.0px; }
 .ts-detail-base { font-family:var(--font-sans);font-weight:400;font-size:11px;line-height:16px;letter-spacing:0.0px; }
