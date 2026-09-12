@@ -330,10 +330,28 @@ Done, 2026-08-24:
   and Mobile's action is 44, the 2.5.5 touch target, not 36.
 - Both account screens (`Desktop · 2` and `Mobile · 2`) now use it.
 
-Still open:
+Done, 2026-09-12 — **the phase is closed**:
 
-- the three annual charts — 748 lines of hand-built SVG with no Figma counterpart;
-- the per-category distribution bar (`EgresosCard.tsx:67`), which is NOT `DistribucionCard`;
+- `category-bar` — the per-category distribution bar (`EgresosCard.tsx:48`), four variants over
+  `State × Device`. Measured against the code node by node and identical to it: the drawing is
+  documentation, not a redesign. Two findings came out of drawing it — the same dim gesture is 30%
+  here and 40% in `DistribucionCard` with no token behind either, and `R1` looks for `#hex` so the
+  six `oklch()` literals in the annual charts pass the validator unseen.
+- **The three annual charts** — `TrendChart`, `EgresosCategoryChart` and `AnnualDonut`: 748 lines of
+  hand-built SVG that had no counterpart. Their series now bind to `chart/categorical/1–4` instead
+  of the KPI tokens — same value today, and the indirection is what stops a series drifting from
+  the card it belongs to.
+- Drawing them minted the chrome the charts never had: `chart/grid`, `chart/highlight`,
+  `chart/empty`, `chart/average`, each value taken from the literal it replaces. And it found that
+  the dump was **21 tokens behind Figma** — fifteen `size/*` that had never reached the CSS at all,
+  and six surfaces that Figma had regrouped under `bg/surface/*` while the package still published
+  the flat names.
+- Three behavioural changes the drawing asks for, all in `docs/inbox/dev/TASK-2026-09-12`: empty
+  months draw a stub (and the branch that draws it is currently unreachable), the average line goes
+  over the bars rather than under them, and on mobile the axis labels drop the year.
+
+Nothing is open in this phase. The one item left over from the original list:
+
 - ~~a transactions container to hold the rows~~ — **`LedgerContainer`, 2026-09-01.** Both account
   screens were borrowing `IncomeContainer`, the Ingresos tab of the Mes view: it opens with an
   icon and the title “Ingresos del mes” and closes with a converted monthly gross, and a ledger
