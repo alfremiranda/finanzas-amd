@@ -52,30 +52,56 @@
   }
   paintCaptures()
 
-  /* ── Returning users and installed PWAs go straight to the app ─────────────────────
-     Once the app moves to /app, every PWA installed before that still opens "/" — its
-     manifest said so. Someone who already has data here did not come to read the pitch.
-     Deliberately NOT triggered by a Supabase session: reading auth state would mean loading
-     the client, and this page loads no bundle. Local data is the cheap, offline-true proxy. */
+  /* ── Signed-in people and installed PWAs go straight to the app ────────────────────
+     Two signals, and the difference between them cost a rewrite.
+
+     The first version keyed off the `amd-finance` store, on the reasoning that reading auth
+     state would mean loading the Supabase client and this page loads no bundle. That was
+     simply wrong: supabase-js keeps the session in localStorage under `sb-<ref>-auth-token`,
+     so "is this person signed in" is a getItem, not a bundle.
+
+     It matters because the two signals are not the same claim. `amd-finance` says "this
+     browser opened the app once" — true of somebody who looked around and never signed up,
+     and true forever after. Keying the redirect off it meant that anyone who had ever
+     opened Neto here could never reach this page again on this device: not to re-read the
+     privacy section, not to see what is coming in Pro, not to check the link before sending
+     it to someone. A marketing page you cannot show to a former visitor is not a redirect,
+     it is a wall.
+
+     Presence only — the token is never read, parsed or sent anywhere. Presence does not
+     prove the session is still alive either; an expired one lands on the login screen,
+     which is where it would have landed anyway. */
   var APP_URL = '/panel/'
-  function looksLikeAUser() {
-    if (matchMedia('(display-mode: standalone)').matches || navigator.standalone) return true
+
+  function hasSession() {
     try {
-      return localStorage.getItem('amd-finance') !== null
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i)
+        // Matched by shape rather than by the project ref, so dev and prod both work and a
+        // Supabase project change does not silently turn this off.
+        if (k && k.indexOf('sb-') === 0 && k.indexOf('-auth-token') > 0) return true
+      }
     } catch (e) {
-      return false
+      /* private mode or blocked storage: treat as not signed in */
     }
+    return false
   }
-  // Live as of the /app migration. Before it, redirecting to the app from "/" would have
-  // looped, because "/" WAS the app.
-  var MIGRATED = true
-  if (MIGRATED && looksLikeAUser()) {
+
+  function isInstalledApp() {
+    return matchMedia('(display-mode: standalone)').matches || navigator.standalone === true
+  }
+
+  // The escape hatch. Without it this page has no reachable URL for anyone signed in, which
+  // includes whoever needs to look at it before sharing it.
+  var WANTS_LANDING = /(^|[?&])home(=|&|$)/.test(location.search)
+
+  if (!WANTS_LANDING && (hasSession() || isInstalledApp())) {
     location.replace(APP_URL)
     return
   }
-  // Meanwhile the CTAs must still point at something real.
+
   Array.prototype.forEach.call(document.querySelectorAll('[data-app-link]'), function (a) {
-    a.setAttribute('href', MIGRATED ? APP_URL : '/')
+    a.setAttribute('href', APP_URL)
   })
 
   /* ── Sticky nav ────────────────────────────────────────────────────────────────────

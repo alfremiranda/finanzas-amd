@@ -50,7 +50,13 @@ Cinco superficies (la navegación expone cuatro; Configuración y Perfil viven e
 
 \* Tabs condicionales: solo aparecen si el usuario tiene ese grupo de deducciones habilitado.
 
-**Rutas.** La app vive en `netofinanzas.app/panel/`; la raíz `/` es el landing. El manifest y el
+**Rutas.** La app vive en `netofinanzas.app/panel/`; la raíz `/` es el landing. Quien **tiene
+sesión iniciada** —o abre la PWA instalada, cuyo `start_url` quedó grabado en `/`— es enviado
+directo a `/panel/`; quien no, ve el landing. La señal es la presencia de la sesión de Supabase en
+`localStorage`, no «este navegador abrió la app alguna vez»: eso último es cierto también de quien
+sólo miró, y para siempre. `netofinanzas.app/?home` se salta el reenvío, para que la página siga
+siendo alcanzable por alguien con cuenta —compartirla, releer la política— en vez de quedar vetada
+en su propio dispositivo. El manifest y el
 `scope` de la PWA apuntan a `/panel/`, y el callback de OAuth también. No es `/app/`: sobre un
 dominio `.app` eso se lee «app punto app barra app». `panel` tampoco choca con ningún nombre del
 producto — las vistas son Resumen, Mes, Obligaciones, Cuentas y Configuración.
