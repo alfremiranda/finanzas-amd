@@ -218,17 +218,6 @@
  },
  {
   "g": "Cards",
-  "n": "AccountChart",
-  "v": 2,
-  "p": [
-   "Device=Desktop|Mobile"
-  ],
-  "w": 1084,
-  "h": 250,
-  "d": "Balance over time for one account. Device is the only axis.\n\nA credit card's balance is already ≤ 0, so plotting it as-is draws what is owed growing downward, and the series takes the debt hue. That is the whole of it — there is no second series.\n\n2026-09-02 · Series=Single|Dual was DELETED. Dual's legend read \"Cupo · Deuda\", and cupo is limit − debt against a limit that does not move, so the second area was the first one mirrored: two shapes, one number. Measured before removing it: four instances in the file, all four inside this component's own documentation, none on a screen. Dev asked what number Dual plotted, which was the right question — the description named the picture and never the quantity. If a real second quantity ever exists, the axis comes back with a reason attached.\n\nBoth series carry a gradient that fades to fully transparent — account-chart/series/*/fill-to is the same hue at 0 alpha, not white — so the fill never turns milky over a dark canvas.\n\nThe marker line is account-chart/marker/line: slate on light, white at 70% on dark, because one fixed grey disappears against one of the two.\n\n2026-09-01 · the static \"Últimos 30 días\" label was removed from the header. The range is now stated by chart-range, the strip of pills under the chart, and the axis already prints the dates. A fixed label would have contradicted both the moment anyone picked a different range — and a label that can contradict the control next to it is worse than no label."
- },
- {
-  "g": "Cards",
   "n": "AccountSummaryCard",
   "v": 8,
   "p": [
@@ -239,17 +228,6 @@
   "w": 1156,
   "h": 1695,
   "d": "The header of an account's own page: identity, the metadata, the headline figures, and the chart. Type × Device.\n\nIt is NOT AccountCard. That one is the compact selectable tile in the grid — a control you press to choose an account. This is the detail of the account you are already inside, so it has no selected state and it carries the actions and figures the tile deliberately hides at size=\"sm\".\n\nTHE META IS ONE NODE PER FIELD, NOT ONE STRING. Alfredo, 2026-09-02: the metadata was already there but arrived as a single run of text, and it is separated now because that is how the data is handled. Each node is NAMED FOR ITS FIELD on the Account record, so the mapping is read off the layer name and never guessed:\n\n  currency          Account.currency        every type — a CurrencyBadge instance, not text\n  account-number    Account.number          every type except cash, which has none\n  utilization       debt / creditLimit      credit\n  cutoff            Account.cutoffDay       credit\n  due               Account.dueDay          credit\n  rate              Account.rate            savings · bank\n  yield             derived from rate       savings · bank — a computed figure, not a stored field\n  kind              Account.savingsKind     savings\n  maturity          Account.maturityDate    savings, and only when the kind is a CDT\n\nTHE META HAS TWO GROUPS, and which group a field belongs to is decided by one question: does it name a DATE the user has to act on?\n\n  facts     the plain run — currency, number, and the standing figures: utilization, kind, rate, yield\n  schedule  a chip: radius/16 on bg/surface, 1px account-summary-card/meta-chip/border, a calendar-days\n            icon at size=S, then the dated fields — cutoff and due on a card, maturity on a CDT\n\nAlfredo drew the chip on Credit Card, 2026-09-02, and it carries to the other types by the same question. Savings has one dated field and gets a chip with maturity in it. Bank Account and Cash have none, so they have no chip and the facts run alone — an empty chip is not a quieter chip, it is a border round nothing.\n\nThe chip earns its outline: Corte 4 · Pago 20 are the only two things on this card that are a deadline rather than a description, and putting a boundary round them is what says so without a word. The icon repeats it for anyone who does not read the boundary as meaning.\n\nSeparators are Separator instances, not characters, so an absent field takes its separator with it instead of leaving a stranded middot. A field with no value hides; it does not render empty. The separator between the two groups belongs to facts, so a type with no chip has no trailing rule.\n\nTHREE OF THESE ARE NEW and were missing from the card entirely, not just unsplit: currency — this app holds COP and USD and the card showed neither, so every figure on it was an amount without a unit. It is a CurrencyBadge instance and not a word, on Alfredo’s call: AccountCard already opens its meta with that badge, and the two cards describe the same account, so the currency has to look the same in both places. CurrencyBadge exists for exactly this — “used wherever an amount could be misread as the wrong currency”; kind — the savings vehicle, which the code already puts in its meta line and Figma did not have; maturity — a CDT's due date, which appeared nowhere on the account's own page.\n\nTHE META ROW WRAPS WHEN IT HAS TO, and that is per variant rather than per Device — Alfredo set it on 2026-09-02. Savings on Desktop wraps because six facts plus the chip do not fit 640; Credit Card on Mobile does not, because three facts plus the chip fit 380. What drops to the second line is the chip, whole: a schedule chip that had to be squeezed or clipped would be worse than one on its own line.\n\nIn code this is ONE declaration, not four: flex-wrap on the meta row, always. CSS wraps only when the content overflows, so the four behaviours Figma has to draw one variant at a time fall out of a single rule. Do not port the per-variant flag.\n\nEach type shows different data, which is why the metrics are a list built per type rather than a fixed set of slots: a cash account has no rate to report and a credit card's headline figure is a debt, not a balance."
- },
- {
-  "g": "Cards",
-  "n": "AnnualDonut",
-  "v": 2,
-  "p": [
-   "State=Default|Selected"
-  ],
-  "w": 520,
-  "h": 268,
-  "d": "The year’s gross, split into what it turned into: Obligaciones · Provisiones · Gastos · Neto libre. Four segments of chart/categorical/1–4 — the same four as TrendChart and DistribucionCard, so the three say the same thing with the same colours.\n\n220 across with a 30 ring. The track underneath is bg/surface/subtle, so the ring still reads as a whole when one segment is a sliver.\n\nThe centre is the readout, which is why this donut needs neither legend nor tooltip: by default it holds the gross, and selecting a segment moves that segment’s amount into the centre in its own colour while the others drop to 25%. Dimming the rest rather than lighting the one keeps the selected colour true — the colour is what names the segment.\n\nEach segment is a control with a name, a role and a key. Without that the amounts it reveals are mouse-only: unreachable by keyboard and unannounced to a screen reader.\n\nIt appears only when there is more than one segment with an amount. A donut of one colour is a circle."
  },
  {
   "g": "Cards",
@@ -264,35 +242,12 @@
  },
  {
   "g": "Cards",
-  "n": "category-bar",
-  "v": 4,
-  "p": [
-   "State=Default|Hovered",
-   "Device=Desktop|Mobile"
-  ],
-  "w": 688,
-  "h": 528,
-  "d": "How one month’s expenses split across categories, as a single bar. One segment per category with an amount above zero, sorted widest first — so the bar has as many segments as the month had categories, not a fixed number. It is NOT DistribucionCard: that one always draws the same four segments (Obligaciones · Provisiones · Gastos · Neto libre) and answers where the gross income went. This answers what the expenses were made of.\n\n8px tall, fully rounded, 1px gaps. Segment colour is category/<name>/accent — the same token as the category’s icon bubble and its row, so a category cannot be one colour in the list and another in the bar.\n\nThe legend is not decoration: it carries the percentage, which the bar alone cannot give you at a glance below ~10%. Label in Body/Small on fg/subtle, percentage in Amount/Small on fg/default — the figure is the emphasized half of the pair.\n\nState=Hovered dims every OTHER segment and legend item to 30% and reveals the hovered category’s amount in pesos. Dimming the rest rather than highlighting the one keeps the hovered segment at its true colour, which matters when the colour is the identity.\n\nSits under the expense list, separated by a 1px rule on border/default and 12 of padding. It renders nothing at all when the month’s total is zero — an empty rounded bar reads as a component that failed to load.\n\nTwo things the mock cannot show and the code decides: segment widths are the real percentages (here 34,2 · 21,5 · 15,8 · 11,4 · 9,6 · 7,5), and the legend wraps — two rows at 640, three at 346, with the hovered amount taking its own right-aligned line on mobile because it does not fit beside the last item."
- },
- {
-  "g": "Cards",
   "n": "DistribucionCard",
   "v": 1,
   "p": [],
   "w": 420,
   "h": 70,
   "d": "Where the gross income of the month went, as one bar. Not a chart component — it always shows the same four segments in the same order: Obligaciones · Provisiones · Gastos · Neto libre.\n\nSegments come from chart/categorical/*, so a segment can never drift from the KPI card it corresponds to. Hovering one dims the rest to 40% and reveals its amount on the right.\n\nSegments with a zero amount are not rendered, so the bar can have between one and four."
- },
- {
-  "g": "Cards",
-  "n": "EgresosCategoryChart",
-  "v": 2,
-  "p": [
-   "Device=Desktop|Mobile"
-  ],
-  "w": 688,
-  "h": 520,
-  "d": "The year month by month, each bar stacked by expense CATEGORY rather than by KPI — this is what the money was spent ON; TrendChart is what the month was made of.\n\n220 tall over 172 of plot, twelve bands, segments in category/<name>/accent so a category is the same colour here, in its row and in category-bar.\n\nEmpty months are drawn as a 4px stub on chart/empty, not left out. A year that hides its empty months compresses time and puts March next to June as though they were adjacent — and the gap IS information: it says the app was not being used yet.\n\nThe code cannot draw that today. visibleData filters months without data before the branch that draws the stub, so the branch is unreachable and chart/empty has no consumer until the filter goes. That is the one behavioural change this drawing asks for.\n\nThe average line sits ON TOP of the bars, dashed 4,4 at 1.5, on chart/average — six rungs above the grid because it is a figure you read against. The code draws it before the bars, so a tall stack swallows it.\n\nIts tooltip is not TooltipReadout: it is a hand-built panel with a per-category list and a «Promedio» footer. Two charts on one page with two different tooltips is a defect, and the fix belongs in the library rather than in either chart."
  },
  {
   "g": "Cards",
@@ -358,15 +313,81 @@
   "d": "THE most used container in the product — 10 files import it. Action = True/False.\n\nA Card with an icon + title header and an optional action on the right. The title uses Heading/Group, which is the most common header in the app precisely because of this component.\n\nEvery list section in the Mes view is one of these: Ingresos, Gastos, Movimientos, Tributarias, Provisiones."
  },
  {
-  "g": "Cards",
-  "n": "TrendChart",
+  "g": "Charts",
+  "n": "AccountChart",
+  "v": 4,
+  "p": [
+   "State=Default|Hover",
+   "Device=Desktop|Mobile"
+  ],
+  "w": 1084,
+  "h": 250,
+  "d": "Balance over time for one account. Device is the only axis.\n\nA credit card's balance is already ≤ 0, so plotting it as-is draws what is owed growing downward, and the series takes the debt hue. That is the whole of it — there is no second series.\n\n2026-09-02 · Series=Single|Dual was DELETED. Dual's legend read \"Cupo · Deuda\", and cupo is limit − debt against a limit that does not move, so the second area was the first one mirrored: two shapes, one number. Measured before removing it: four instances in the file, all four inside this component's own documentation, none on a screen. Dev asked what number Dual plotted, which was the right question — the description named the picture and never the quantity. If a real second quantity ever exists, the axis comes back with a reason attached.\n\nBoth series carry a gradient that fades to fully transparent — account-chart/series/*/fill-to is the same hue at 0 alpha, not white — so the fill never turns milky over a dark canvas.\n\nThe marker line is account-chart/marker/line: slate on light, white at 70% on dark, because one fixed grey disappears against one of the two.\n\n2026-09-01 · the static \"Últimos 30 días\" label was removed from the header. The range is now stated by chart-range, the strip of pills under the chart, and the axis already prints the dates. A fixed label would have contradicted both the moment anyone picked a different range — and a label that can contradict the control next to it is worse than no label.\n\nState=Default and State=Hover: the tooltip and its marker were always drawn, which made a transient readout look like furniture. They now belong to Hover, the same axis TrendChart and EgresosCategoryChart carry, so the three charts of the system say hover the same way."
+ },
+ {
+  "g": "Charts",
+  "n": "AnnualDonut",
   "v": 2,
   "p": [
+   "State=Default|Selected"
+  ],
+  "w": 520,
+  "h": 268,
+  "d": "The year’s gross, split into what it turned into: Obligaciones · Provisiones · Gastos · Neto libre. Four segments of chart/categorical/1–4 — the same four as TrendChart and DistribucionCard, so the three say the same thing with the same colours.\n\n220 across with a 30 ring. The track underneath is bg/surface/subtle, so the ring still reads as a whole when one segment is a sliver.\n\nThe centre is the readout, which is why this donut needs neither legend nor tooltip: by default it holds the gross, and selecting a segment moves that segment’s amount into the centre in its own colour while the others drop to 25%. Dimming the rest rather than lighting the one keeps the selected colour true — the colour is what names the segment.\n\nEach segment is a control with a name, a role and a key. Without that the amounts it reveals are mouse-only: unreachable by keyboard and unannounced to a screen reader.\n\nIt appears only when there is more than one segment with an amount. A donut of one colour is a circle."
+ },
+ {
+  "g": "Charts",
+  "n": "category-bar",
+  "v": 4,
+  "p": [
+   "State=Default|Hovered",
+   "Device=Desktop|Mobile"
+  ],
+  "w": 688,
+  "h": 528,
+  "d": "How one month’s expenses split across categories, as a single bar. One segment per category with an amount above zero, sorted widest first — so the bar has as many segments as the month had categories, not a fixed number. It is NOT DistribucionCard: that one always draws the same four segments (Obligaciones · Provisiones · Gastos · Neto libre) and answers where the gross income went. This answers what the expenses were made of.\n\n8px tall, fully rounded, 1px gaps. Segment colour is category/<name>/accent — the same token as the category’s icon bubble and its row, so a category cannot be one colour in the list and another in the bar.\n\nThe legend is not decoration: it carries the percentage, which the bar alone cannot give you at a glance below ~10%. Label in Body/Small on fg/subtle, percentage in Amount/Small on fg/default — the figure is the emphasized half of the pair.\n\nState=Hovered dims every OTHER segment and legend item to 30% and reveals the hovered category’s amount in pesos. Dimming the rest rather than highlighting the one keeps the hovered segment at its true colour, which matters when the colour is the identity.\n\nSits under the expense list, separated by a 1px rule on border/default and 12 of padding. It renders nothing at all when the month’s total is zero — an empty rounded bar reads as a component that failed to load.\n\nTwo things the mock cannot show and the code decides: segment widths are the real percentages (here 34,2 · 21,5 · 15,8 · 11,4 · 9,6 · 7,5), and the legend wraps — two rows at 640, three at 346, with the hovered amount taking its own right-aligned line on mobile because it does not fit beside the last item."
+ },
+ {
+  "g": "Charts",
+  "n": "chart-legend",
+  "v": 1,
+  "p": [],
+  "w": 100,
+  "h": 20,
+  "d": "Legend entry for the annual donut and the 8-month trend bars.\n\nColour comes from chart/categorical/1–5, which alias the KPI tokens — so a legend swatch can never drift from the KPI it labels."
+ },
+ {
+  "g": "Charts",
+  "n": "chart-range",
+  "v": 1,
+  "p": [],
+  "w": 315,
+  "h": 32,
+  "d": "The date range of an account chart — the strip of pills under it, the pattern every stocks app uses.\n\nIt composes Segment instances rather than minting a pill of its own. Segment’s own description says a segment on its own is not a control; this is one of the controls that composes them, the same relationship tab-navigation has with Tab. Selected therefore reuses Segment’s Selected — bg/brand-alpha-20 with border/brand-alpha-50 — so “selected” means the same thing here as in every other control in the file.\n\nTHE STRIP IS VARIABLE LENGTH, AND THAT IS THE RULE, NOT A CONVENIENCE. A range is rendered only when the account has at least one movement OLDER than that range’s start. Otherwise it draws exactly the same line as the shorter range beside it, and a control that cannot change what you see is not a choice — it is a promise the data does not keep. Alfredo’s call, 2026-09-01, and it is the reason the full seven can be offered at all.\n\nTwo of the seven need something the data model does not guarantee. `date` is OPTIONAL on an income (src/types), so an account whose movements only carry a month has no day-level series at all: 1D and 1S cannot be drawn for it and must not be offered. 5A waits the same way — the app is younger than five years, so the pill appears the first time an account is.\n\nThat is why this is a strip of instances and not a variant axis. Its length is data, not design, exactly as tab-navigation’s is (Tributarias and Provisiones only exist when the user enabled those groups) and action-chip’s is (only categories with data that month).\n\nAccountChart lost its static “Últimos 30 días” label the day this arrived. The strip now states the range, the axis already prints the dates, and a fixed label would have contradicted both the moment anyone picked 1A.\n\nOPEN — two copy choices Alfredo should settle: “1S” for the week (mirrors the reference’s 1W; “7D” is less ambiguous in Spanish) and “YTD”, kept as the acronym Colombian finance uses, where “Año” would be plainer.\n\nThe pills are 32 high, like every Segment. That clears 2.5.8 (24) and not 2.5.5 (44); it is the height the rest of the system already uses for this control, so changing it is a decision about Segment, not about this strip."
+ },
+ {
+  "g": "Charts",
+  "n": "EgresosCategoryChart",
+  "v": 6,
+  "p": [
+   "State=Default|Hover|Empty",
+   "Device=Desktop|Mobile"
+  ],
+  "w": 688,
+  "h": 520,
+  "d": "The year month by month, each bar stacked by expense CATEGORY rather than by KPI — this is what the money was spent ON; TrendChart is what the month was made of.\n\n220 tall over 172 of plot, twelve bands, segments in category/<name>/accent so a category is the same colour here, in its row and in category-bar.\n\nEmpty months are drawn as a 4px stub on chart/empty, not left out. A year that hides its empty months compresses time and puts March next to June as though they were adjacent — and the gap IS information: it says the app was not being used yet.\n\nThe code cannot draw that today. visibleData filters months without data before the branch that draws the stub, so the branch is unreachable and chart/empty has no consumer until the filter goes. That is the one behavioural change this drawing asks for.\n\nThe average line sits ON TOP of the bars, dashed 4,4 at 1.5, on chart/average — six rungs above the grid because it is a figure you read against. The code draws it before the bars, so a tall stack swallows it.\n\nIts tooltip is not TooltipReadout: it is a hand-built panel with a per-category list and a «Promedio» footer. Two charts on one page with two different tooltips is a defect, and the fix belongs in the library rather than in either chart.\n\nState=Hover uses the same Tooltip · TooltipReadout as TrendChart, with a Divider row for «Promedio». That unifies the two tooltips of the page, which today are two different things. Its swatches are the CATEGORY accents, and there they fail: measured on the inverted surface they are 3.45–5.02 in Light and 1.32–1.80 in Dark. In dark mode those dots are invisible. The fix is a category swatch family fixed at the light accent — 14 tokens — and it is not minted yet, so the Dark preview shows the defect on purpose.\n\nState=Empty is the year with no expenses: title, one line of explanation and no action. The action that the Empty component brings by default is hidden — there is nothing to add from a chart."
+ },
+ {
+  "g": "Charts",
+  "n": "TrendChart",
+  "v": 4,
+  "p": [
+   "State=Default|Hover",
    "Device=Desktop|Mobile"
   ],
   "w": 688,
   "h": 584,
-  "d": "The last eight months, each one a stacked bar: Obligaciones · Provisiones · Gastos · Neto libre, bottom to top — the order in which a month stops being yours.\n\n252 tall over 180 of plot; each bar takes 68% of its band. Series bind to chart/categorical/1–4 rather than to the KPI tokens directly. Same value today, and that is the point: the indirection is what stops a series drifting from the card it corresponds to.\n\nThe band behind a column is the month the rest of the app is showing (chart/highlight), and clicking a bar moves the app to that month. These bars are a control, not a picture — which is why the current one has to be marked at all.\n\nFour dashed rungs on chart/grid, faint on purpose: the bars are the figure and the grid is only there when you look for it. Hover opens a Tooltip with TooltipReadout, whose swatches are readout/swatch/*, a separate rung chosen to clear 3:1 on the inverted surface — the chart colours do not (tax measures 1.44 there).\n\nOn Mobile the labels drop the year. Eight «sep ’26» do not fit in 346 and nothing wraps them: they overlap. Measured on the real width, not assumed.\n\nTwo series disappear for an employee profile (Obligaciones, Provisiones), leaving two. Not drawn as a variant: it is the same bar with fewer segments, and an axis for it would double the set to say nothing new."
+  "d": "The last eight months, each one a stacked bar: Obligaciones · Provisiones · Gastos · Neto libre, bottom to top — the order in which a month stops being yours.\n\n252 tall over 180 of plot; each bar takes 68% of its band. Series bind to chart/categorical/1–4 rather than to the KPI tokens directly. Same value today, and that is the point: the indirection is what stops a series drifting from the card it corresponds to.\n\nThe band behind a column is the month the rest of the app is showing (chart/highlight), and clicking a bar moves the app to that month. These bars are a control, not a picture — which is why the current one has to be marked at all.\n\nFour dashed rungs on chart/grid, faint on purpose: the bars are the figure and the grid is only there when you look for it. Hover opens a Tooltip with TooltipReadout, whose swatches are readout/swatch/*, a separate rung chosen to clear 3:1 on the inverted surface — the chart colours do not (tax measures 1.44 there).\n\nOn Mobile the labels drop the year. Eight «sep ’26» do not fit in 346 and nothing wraps them: they overlap. Measured on the real width, not assumed.\n\nTwo series disappear for an employee profile (Obligaciones, Provisiones), leaving two. Not drawn as a variant: it is the same bar with fewer segments, and an axis for it would double the set to say nothing new.\n\nState=Hover is the tooltip: Tooltip · Side=Top with a TooltipReadout inside and one ReadoutRow per series, swatches on readout/swatch/* — a separate rung from the chart colours, chosen to clear 3:1 on the inverted surface, where the chart colours do not."
  },
  {
   "g": "Containers",
@@ -566,15 +587,6 @@
   "w": 360,
   "h": 80,
   "d": "Single day cell in the Calendar month grid.\n\nState is a property, not a baked layer — hover, focus-visible and disabled exist here and nowhere else. “outside” days belong to the adjacent month and remain pickable, so they are active text and meet 4.5:1."
- },
- {
-  "g": "Forms",
-  "n": "chart-range",
-  "v": 1,
-  "p": [],
-  "w": 315,
-  "h": 32,
-  "d": "The date range of an account chart — the strip of pills under it, the pattern every stocks app uses.\n\nIt composes Segment instances rather than minting a pill of its own. Segment’s own description says a segment on its own is not a control; this is one of the controls that composes them, the same relationship tab-navigation has with Tab. Selected therefore reuses Segment’s Selected — bg/brand-alpha-20 with border/brand-alpha-50 — so “selected” means the same thing here as in every other control in the file.\n\nTHE STRIP IS VARIABLE LENGTH, AND THAT IS THE RULE, NOT A CONVENIENCE. A range is rendered only when the account has at least one movement OLDER than that range’s start. Otherwise it draws exactly the same line as the shorter range beside it, and a control that cannot change what you see is not a choice — it is a promise the data does not keep. Alfredo’s call, 2026-09-01, and it is the reason the full seven can be offered at all.\n\nTwo of the seven need something the data model does not guarantee. `date` is OPTIONAL on an income (src/types), so an account whose movements only carry a month has no day-level series at all: 1D and 1S cannot be drawn for it and must not be offered. 5A waits the same way — the app is younger than five years, so the pill appears the first time an account is.\n\nThat is why this is a strip of instances and not a variant axis. Its length is data, not design, exactly as tab-navigation’s is (Tributarias and Provisiones only exist when the user enabled those groups) and action-chip’s is (only categories with data that month).\n\nAccountChart lost its static “Últimos 30 días” label the day this arrived. The strip now states the range, the axis already prints the dates, and a fixed label would have contradicted both the moment anyone picked 1A.\n\nOPEN — two copy choices Alfredo should settle: “1S” for the week (mirrors the reference’s 1W; “7D” is less ambiguous in Spanish) and “YTD”, kept as the acronym Colombian finance uses, where “Año” would be plainer.\n\nThe pills are 32 high, like every Segment. That clears 2.5.8 (24) and not 2.5.5 (44); it is the height the rest of the system already uses for this control, so changing it is a decision about Segment, not about this strip."
  },
  {
   "g": "Forms",
@@ -996,15 +1008,6 @@
   "w": 239,
   "h": 20,
   "d": "The default occupant of Tooltip · Content: one short sentence, Body/Small on fg/on-inverse.\n\nIt exists because an instance-swap property needs a component as its default and a bare text node cannot be one — the same reason SheetContent exists."
- },
- {
-  "g": "Rows",
-  "n": "chart-legend",
-  "v": 1,
-  "p": [],
-  "w": 100,
-  "h": 20,
-  "d": "Legend entry for the annual donut and the 8-month trend bars.\n\nColour comes from chart/categorical/1–5, which alias the KPI tokens — so a legend swatch can never drift from the KPI it labels."
  },
  {
   "g": "Rows",
