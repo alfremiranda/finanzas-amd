@@ -592,56 +592,90 @@
         </div>
       </section>
 
-      <!-- ── 12. Final CTA ─────────────────────────────────────────────────────────── -->
-      <section class="section section--tint">
-        <div class="wrap wrap--narrow" style="text-align: center" data-reveal>
+      <!-- ── 12. Final CTA ─────────────────────────────────────────────────────────────
+           A photograph with an overlay, and data-theme="dark" for the same reason the
+           profile panel carries it: this block is dark whatever the page is doing, so its
+           subtree has to resolve against the dark scale. The image is a background layer —
+           the section reads complete before the file exists and stays complete if it 404s,
+           because the panel colour is the base and the overlay sits on top of it either
+           way. -->
+      <section class="section cta-final" data-theme="dark">
+        <div class="wrap wrap--narrow cta-final__inner" data-reveal>
           <h2 class="display-lg">Sabe cuánto es tuyo antes de gastarlo.</h2>
-          <p class="lead" style="margin-top: var(--spacing-16)">
-            Gratis, sin tarjeta, y funciona desde el primer mes que registres.
-          </p>
-          <div class="cta-row" style="justify-content: center; margin-top: var(--spacing-24)">
+          <p class="lead">Gratis, sin tarjeta, y funciona desde el primer mes que registres.</p>
+          <div class="cta-row">
             <a class="btn btn--filled btn--lg" href="/" data-app-link data-cta="final">Empieza gratis</a>
           </div>
+          <p class="ts-body-small cta-final__note">
+            Entras con Google o GitHub. Sin contraseñas que recordar.
+          </p>
         </div>
       </section>
     </main>
 
-    <!-- ── 13. Footer ──────────────────────────────────────────────────────────────── -->
+    <!-- ── 13. Footer — the bounding-box panel ───────────────────────────────────────
+         An inset rounded panel rather than a rule across the page, in the shape Alfredo
+         uses on alfremiranda.com. The gesture that makes it work is the oversized wordmark
+         cropped by the panel's own bottom edge — the colour is secondary, which is why this
+         one keeps the marketing panel the rest of the page already established instead of
+         inventing a brand-coloured block.
+
+         The wordmark is aria-hidden and the <img> has an empty alt: the name is already the
+         first thing in the header and the link above it. Repeating it to a screen reader at
+         the end of the page is noise, not branding. -->
     <footer class="footer">
       <div class="wrap">
-        <div class="footer__grid">
-          <div>
-            <a class="brand ts-heading-group" href="#contenido" style="color: var(--fg-default)">
-              <img src="/icon.svg" alt="" width="28" height="28" />
-              Neto
-            </a>
-            <p class="ts-body-small" style="margin-top: var(--spacing-12); max-width: 40ch">
-              Planeador financiero para independientes colombianos. Hecho en Barranquilla.
-            </p>
+        <div class="footer__panel" data-theme="dark" data-reveal>
+          <div class="footer__top">
+            <div class="footer__pitch">
+              <!-- NOT a second pitch. The closing section three inches above already makes
+                   the argument, and it opened with «Sabe cuánto es tuyo antes de gastarlo» —
+                   near-identical copy that close together reads as a page repeating itself
+                   rather than insisting. This one says what Neto IS. -->
+              <h2 class="display-md">Finanzas claras para independientes.</h2>
+              <p class="ts-body-base">
+                Facturas en dólares, debes en pesos, y nadie te retiene. Neto lleva esa cuenta
+                cada mes, funciona sin conexión y no le vende tus datos a nadie. Hecho en
+                Barranquilla.
+              </p>
+              <a class="btn btn--filled btn--md" href="/" data-app-link data-cta="footer">Empieza gratis</a>
+            </div>
+
+            <nav class="footer__nav" aria-label="Pie de página">
+              <div>
+                <h3 class="ts-label-micro">Producto</h3>
+                <ul class="ts-body-small">
+                  <li><a href="#funciones">Funciones</a></li>
+                  <li><a href="#como-funciona">Cómo funciona</a></li>
+                  <li><a href="#pro">Qué viene en Pro</a></li>
+                </ul>
+              </div>
+              <div>
+                <h3 class="ts-label-micro">Recursos</h3>
+                <ul class="ts-body-small">
+                  <li><a href="/calculadoras/seguridad-social-independientes/">Calculadora de seguridad social</a></li>
+                  <li><a href="/storybook/">Sistema de diseño</a></li>
+                </ul>
+              </div>
+              <div>
+                <h3 class="ts-label-micro">Legal</h3>
+                <ul class="ts-body-small">
+                  <li><a href="/privacidad.html">Política de privacidad</a></li>
+                  <li><a href="mailto:privacidad@netofinanzas.app">privacidad@netofinanzas.app</a></li>
+                </ul>
+              </div>
+            </nav>
           </div>
 
-          <div>
-            <h3 class="ts-heading-group">Producto</h3>
-            <ul class="ts-body-small">
-              <li><a href="#funciones">Funciones</a></li>
-              <li><a href="#pro">Qué viene en Pro</a></li>
-              <li><a href="/calculadoras/seguridad-social-independientes/">Calculadora de seguridad social</a></li>
-              <li><a href="/storybook/">Sistema de diseño</a></li>
-            </ul>
+          <div class="footer__legal ts-detail-large">
+            <p>© <span data-year>2026</span> Neto · netofinanzas.app</p>
+            <p>Herramienta de planeación. No constituye asesoría tributaria ni contable.</p>
           </div>
 
-          <div>
-            <h3 class="ts-heading-group">Legal</h3>
-            <ul class="ts-body-small">
-              <li><a href="/privacidad.html">Política de privacidad</a></li>
-              <li><a href="mailto:privacidad@netofinanzas.app">privacidad@netofinanzas.app</a></li>
-            </ul>
+          <div class="footer__wordmark" aria-hidden="true">
+            <img src="/icon.svg" alt="" width="180" height="180" />
+            <span>Neto</span>
           </div>
-        </div>
-
-        <div class="footer__legal ts-detail-large">
-          <p>© <span data-year>2026</span> Neto · netofinanzas.app</p>
-          <p>Herramienta de planeación. No constituye asesoría tributaria ni contable.</p>
         </div>
       </div>
     </footer>

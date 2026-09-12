@@ -751,25 +751,120 @@ html.dark [data-icon='moon'] { display: none; }
 .faq details[open] summary svg { transform: rotate(45deg); }
 .faq p { padding-bottom: var(--spacing-20); color: var(--fg-subtle); max-width: 68ch; }
 
-/* ── §12. Footer ────────────────────────────────────────────────────────────────────── */
-.footer {
-  border-top: var(--border-width-default) solid var(--border-default);
-  padding-block: var(--spacing-48);
-  color: var(--fg-subtle);
+/* ── §11bis. Final CTA — photograph under an overlay ───────────────────────────────────
+   The overlay is the contract, not the decoration: it is what lets display-sized text sit on
+   a photograph nobody has measured. Two stops rather than a flat wash, so the top stays dark
+   enough for the heading while the bottom lets more of the image through.
+   Contrast is measured against the real photo (see docs/landing-images.md), not assumed. */
+.cta-final {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  text-align: center;
+  color: var(--marketing-panel-foreground);
+  background-color: var(--marketing-panel-background);
+  background-image: url('/landing/images/cta-final.webp');
+  background-size: cover;
+  background-position: center 40%;
 }
-.footer__grid { display: grid; gap: var(--spacing-32); }
-@media (min-width: 760px) { .footer__grid { grid-template-columns: 1.4fr 1fr 1fr; } }
-.footer h3 { color: var(--fg-default); margin-bottom: var(--spacing-12); }
-.footer li + li { margin-top: var(--spacing-8); }
-.footer a:hover { color: var(--fg-default); }
+.cta-final::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklch, var(--marketing-panel-background) 90%, transparent) 0%,
+    color-mix(in oklch, var(--marketing-panel-background) 74%, transparent) 100%
+  );
+}
+.cta-final__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-16);
+}
+.cta-final .lead { color: var(--marketing-panel-foreground-subtle); max-width: 46ch; }
+.cta-final .cta-row { justify-content: center; margin-top: var(--spacing-8); }
+.cta-final__note { color: var(--marketing-panel-foreground-subtle); }
+
+/* ── §12. Footer — the bounding-box panel ─────────────────────────────────────────────
+   The page's third marketing panel, so it carries data-theme="dark" like the other two: it
+   is dark whatever the page is doing, and its subtree has to resolve against the scale built
+   for a dark ground.
+
+   The wordmark is the whole idea. It is sized in vw so it always reaches both edges, and the
+   panel's `overflow: clip` is what crops it — the crop is the gesture, not an accident, and
+   a fixed px size would stop reaching the edges the moment the viewport changed. */
+.footer { padding-block: 0 var(--section-y); }
+.footer__panel {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  border-radius: var(--radius-2xl);
+  background: var(--marketing-panel-background);
+  color: var(--marketing-panel-foreground-subtle);
+  padding: clamp(var(--spacing-24), 4vw, var(--spacing-64));
+  padding-bottom: 0;
+}
+.footer__top {
+  display: grid;
+  gap: var(--block-gap);
+  margin-bottom: var(--spacing-48);
+}
+@media (min-width: 860px) {
+  .footer__top { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: clamp(32px, 5vw, 80px); }
+}
+.footer__pitch { display: flex; flex-direction: column; align-items: flex-start; gap: var(--spacing-16); max-width: 42ch; }
+.footer__pitch h2 { color: var(--marketing-panel-foreground); }
+
+.footer__nav { display: grid; gap: var(--spacing-24); }
+@media (min-width: 560px) { .footer__nav { grid-template-columns: repeat(3, 1fr); } }
+.footer__nav h3 {
+  color: var(--marketing-panel-foreground);
+  text-transform: uppercase;
+  margin-bottom: var(--spacing-12);
+}
+.footer__nav li + li { margin-top: var(--spacing-8); }
+.footer__nav a { transition: color var(--motion-duration-fast) var(--motion-easing-move); }
+.footer__nav a:hover { color: var(--marketing-panel-foreground); }
+
 .footer__legal {
-  margin-top: var(--spacing-32);
-  padding-top: var(--spacing-20);
-  border-top: var(--border-width-default) solid var(--border-default);
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-12) var(--spacing-24);
   justify-content: space-between;
+  padding-top: var(--spacing-20);
+  border-top: var(--border-width-default) solid color-mix(in oklch, var(--marketing-panel-foreground) 12%, transparent);
+}
+
+/* Cropped by the panel, on purpose. The negative bottom margin is how much of the letters
+   the panel eats; the line-height is pinned to 1 so the crop is the glyphs and not the font's
+   own descender space, which would vary by family. */
+.footer__wordmark {
+  display: flex;
+  align-items: center;
+  gap: 0.1em;
+  margin-top: clamp(var(--spacing-32), 5vw, var(--spacing-64));
+  /* How much of the letters the panel eats. −0.22em only grazed the baseline and read as a
+     wordmark that happened to sit low; the crop has to be unmistakably deliberate or it
+     looks like a mistake. */
+  margin-bottom: -0.3em;
+  font-size: clamp(72px, 17vw, 260px);
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  color: color-mix(in oklch, var(--marketing-panel-foreground) 15%, transparent);
+  user-select: none;
+}
+/* The mark carries its own colours, so at full strength it outweighed a word set at 15% and
+   the two stopped reading as one lockup. Knocked back to sit at the same visual weight. */
+.footer__wordmark img {
+  width: 0.74em;
+  height: 0.74em;
+  border-radius: 0.17em;
+  opacity: 0.3;
 }
 
 /* ── §13. Reveal ────────────────────────────────────────────────────────────────────────
