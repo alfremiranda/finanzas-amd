@@ -152,6 +152,7 @@
   --chart-empty: rgba(0,0,0,0.05);
   --chart-grid: rgba(0,0,0,0.05);
   --chart-highlight: rgba(0,0,0,0.05);
+  --fg-warning-strong: #b45309;
   --action-chip-selected-background: rgba(6,182,212,0.1);
   --action-chip-selected-foreground: #0e7490;
   --action-chip-selected-border: #06b6d4;
@@ -421,9 +422,16 @@
   --motion-easing-move: cubic-bezier(0.4, 0, 0.2, 1);
   --motion-easing-spin: linear;
 
-  /* Retired names, still emitted so nothing breaks mid-migration. Each one resolves
-     through var(), so it follows its replacement into dark without a second declaration.
-     token-drift.mjs lists the ones at zero consumers as RETIRABLE — delete those. */
+  /* Retired names, still emitted so nothing breaks mid-migration.
+     token-drift.mjs lists the ones at zero consumers as RETIRABLE — delete those.
+
+     They are emitted in BOTH theme blocks, and that is not redundancy. A custom property
+     whose value is var(--other) is substituted at the element where it is DECLARED, and
+     the result inherits already resolved. Declared only here, an alias freezes at the
+     light value for any subtree that switches theme lower down — which is exactly what
+     these preview pages do (<div data-theme="dark">). The app toggles .dark on <html>,
+     the same element, so it never saw this. Every dark preview in this folder was showing
+     light-mode text on a dark surface until 2026-09-12. */
   --badge-primary-background: var(--action-chip-selected-background);
   --badge-primary-border: var(--action-chip-selected-border);
   --badge-primary-foreground: var(--action-chip-selected-foreground);
@@ -717,6 +725,7 @@
   --chart-empty: rgba(255,255,255,0.05);
   --chart-grid: rgba(255,255,255,0.08);
   --chart-highlight: rgba(255,255,255,0.05);
+  --fg-warning-strong: #fcd34d;
   --action-chip-selected-background: rgba(6,182,212,0.2);
   --action-chip-selected-foreground: #22d3ee;
   --action-chip-selected-border: #164e63;
@@ -837,6 +846,139 @@
   --progress-track: #334155;
   --account-summary-card-meta-chip-border: #475569;
   --account-summary-card-icon-foreground: #c084fc;
+
+  /* Los mismos alias, re-declarados aquí: ver la nota del bloque claro. */
+  --badge-primary-background: var(--action-chip-selected-background);
+  --badge-primary-border: var(--action-chip-selected-border);
+  --badge-primary-foreground: var(--action-chip-selected-foreground);
+  --border-focus: var(--shadow-focus-inner);
+  --border-input: var(--border-default);
+  --border-width-hairline: var(--border-width-default);
+  --border-width-medium: var(--border-width-strong);
+  --border-width-thick: var(--border-width-strongest);
+  --category-bank-default: var(--category-bank-accent);
+  --category-connectivity-default: var(--category-connectivity-accent);
+  --category-family-default: var(--category-family-accent);
+  --category-food-default: var(--category-food-accent);
+  --category-health-default: var(--category-health-accent);
+  --category-home-default: var(--category-home-accent);
+  --category-insurance-default: var(--category-insurance-accent);
+  --category-other-default: var(--category-other-accent);
+  --category-recreation-default: var(--category-recreation-accent);
+  --category-savings-default: var(--category-savings-accent);
+  --category-shopping-default: var(--category-shopping-accent);
+  --category-tax-default: var(--category-tax-accent);
+  --category-transit-default: var(--category-transit-accent);
+  --category-travel-default: var(--category-travel-accent);
+  --category-work-default: var(--category-work-accent);
+  --data-categorical-1: var(--chart-categorical-1);
+  --data-categorical-2: var(--chart-categorical-2);
+  --data-categorical-3: var(--chart-categorical-3);
+  --data-categorical-4: var(--chart-categorical-4);
+  --data-categorical-5: var(--chart-categorical-5);
+  --data-sequential-1: var(--chart-sequential-1);
+  --data-sequential-2: var(--chart-sequential-2);
+  --data-sequential-3: var(--chart-sequential-3);
+  --data-sequential-4: var(--chart-sequential-4);
+  --data-sequential-5: var(--chart-sequential-5);
+  --foreground-default: var(--fg-default);
+  --foreground-on-card: var(--fg-default);
+  --foreground-on-inverse: var(--fg-on-inverse);
+  --foreground-on-popover: var(--fg-default);
+  --foreground-placeholder: var(--fg-placeholder);
+  --foreground-subtle: var(--fg-subtle);
+  --input-color-border-focus: var(--input-color-ring);
+  --interactive-accent: var(--bg-surface-subtle);
+  --interactive-accent-foreground: var(--fg-on-subtle);
+  --interactive-primary: var(--bg-brand);
+  --interactive-primary-foreground: var(--fg-on-brand);
+  --interactive-secondary: var(--bg-surface-subtle);
+  --interactive-secondary-foreground: var(--fg-on-subtle);
+  --kpi-expense-default: var(--fg-expense);
+  --kpi-expense-foreground: var(--fg-expense-strong);
+  --kpi-expense-surface: var(--bg-expense-subtle);
+  --kpi-income-default: var(--fg-income);
+  --kpi-income-foreground: var(--fg-income-strong);
+  --kpi-income-surface: var(--bg-income-subtle);
+  --kpi-net-default: var(--bg-net);
+  --kpi-net-foreground: var(--fg-net);
+  --kpi-net-surface: var(--bg-net-subtle);
+  --kpi-provision-default: var(--fg-provision);
+  --kpi-provision-foreground: var(--fg-provision-strong);
+  --kpi-provision-surface: var(--bg-provision-subtle);
+  --kpi-tax-default: var(--bg-tax);
+  --kpi-tax-foreground: var(--fg-tax);
+  --kpi-tax-surface: var(--bg-tax-subtle);
+  --padding-lg: var(--spacing-20);
+  --padding-md: var(--spacing-16);
+  --padding-sm: var(--spacing-8);
+  --padding-xl: var(--spacing-24);
+  --padding-xs: var(--spacing-4);
+  --radius-2xl: var(--radius-16);
+  --radius-lg: var(--radius-8);
+  --radius-md: var(--radius-6);
+  --radius-sm: var(--radius-4);
+  --radius-xl: var(--radius-12);
+  --radius-xs: var(--radius-2);
+  --size-0: var(--spacing-0);
+  --size-16: var(--spacing-16);
+  --size-20: var(--spacing-20);
+  --size-24: var(--spacing-24);
+  --size-32: var(--spacing-32);
+  --size-4: var(--spacing-4);
+  --size-48: var(--spacing-48);
+  --size-64: var(--spacing-64);
+  --size-8: var(--spacing-8);
+  --size-icon-lg: var(--icon-size-xl);
+  --size-icon-md: var(--icon-size-lg);
+  --size-icon-sm: var(--icon-size-md);
+  --size-icon-xs: var(--icon-size-sm);
+  --spacing-component-lg: var(--spacing-16);
+  --spacing-component-md: var(--spacing-12);
+  --spacing-component-sm: var(--spacing-8);
+  --spacing-component-xl: var(--spacing-20);
+  --spacing-component-xs: var(--spacing-4);
+  --status-danger-default: var(--fg-danger-strong);
+  --status-danger-foreground: var(--fg-danger-strongest);
+  --status-danger-surface: var(--bg-danger-subtlest);
+  --status-destructive-default: var(--fg-danger-strong);
+  --status-destructive-foreground: var(--button-danger-filled-foreground);
+  --status-live-default: var(--bg-live);
+  --status-live-ring: var(--bg-live-ring);
+  --surface-feedback-danger: var(--bg-danger-subtle);
+  --surface-feedback-danger-emphasis: var(--fg-danger);
+  --surface-feedback-info: var(--bg-info-subtle);
+  --surface-feedback-info-emphasis: var(--fg-info);
+  --surface-feedback-neutral: var(--bg-neutral-subtle);
+  --surface-feedback-neutral-emphasis: var(--fg-neutral);
+  --surface-feedback-success: var(--bg-success-subtle);
+  --surface-feedback-success-emphasis: var(--fg-success);
+  --surface-feedback-warning: var(--bg-warning-subtle);
+  --surface-feedback-warning-emphasis: var(--fg-warning);
+  --surface-inverse: var(--bg-surface-inverse);
+  --surface-popover: var(--bg-anchored);
+  --surface-raised: var(--bg-floating);
+  --surface-scrim: var(--bg-scrim);
+  --surface-status-active: var(--bg-active);
+  --surface-status-disabled: var(--bg-disabled);
+  --surface-status-hover: var(--bg-hover);
+  --surface-status-selected: var(--bg-selected);
+  --surface-sunken: var(--bg-surface-sunken);
+  --surface-wrap-card: var(--bg-surface-default);
+  --surface-wrap-container: var(--bg-surface-chrome);
+  --surface-wrap-default: var(--bg-surface-canvas);
+  --surface-wrap-subtle: var(--bg-surface-subtle);
+  --spinner-track-on-dark: var(--spinner-track-on-solid);
+  --spinner-head-on-dark: var(--spinner-head-on-solid);
+  --spinner-track-on-light: var(--spinner-track-default);
+  --spinner-head-on-light: var(--spinner-head-default);
+  --border-subtle: var(--border-emphasis);
+  --bg-canvas: var(--bg-surface-canvas);
+  --bg-chrome: var(--bg-surface-chrome);
+  --bg-inverse: var(--bg-surface-inverse);
+  --bg-subtle: var(--bg-surface-subtle);
+  --bg-sunken: var(--bg-surface-sunken);
+  --bg-surface: var(--bg-surface-default);
 }
 
 /* Text styles — Rethink Sans, tabular by default */

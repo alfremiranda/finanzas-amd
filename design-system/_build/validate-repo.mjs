@@ -11,6 +11,7 @@
  *   R3  every var(--x) in tokens.map.css resolves to a token that exists
  *   R5  no literal duration or easing curve in component code
  *   R6  the text scale in tokens.json matches the Figma dump
+ *   R7  every var()-valued alias is declared in both theme blocks
  *
  * Plus one ratchet, R4, which reports rather than forbids: the count of hard-coded
  * colours still defined in src/index.css. Those are the pre-token surface; the migration
@@ -220,6 +221,35 @@ for (const name of scale.keys()) {
 }
 r6.forEach(v => fail('R6', v))
 notes.push(`R6  ${dumpMeta.textStyles.length} estilos de texto · ${r6.length} desviaciones del volcado`)
+
+// ── R7 · every alias is declared in BOTH theme blocks ────────────────────────
+// A custom property whose value is var(--other) is substituted where it is DECLARED and
+// inherits already resolved. An alias declared only in the light block therefore freezes
+// at the light value for any subtree that switches theme lower down. The app never saw it
+// (it toggles .dark on <html>, the same element), but every generated preview page does
+// exactly that with <div data-theme="dark"> — and so every dark preview in
+// design-system/components/ rendered light-mode text on a dark surface until 2026-09-12.
+// The comment in build.py said aliases "follow their replacement into dark without a
+// second declaration". True in one of the two places the file is used, which is the worst
+// kind of true.
+const css = readFileSync(join(ROOT, 'design-system', 'tokens', 'tokens.css'), 'utf8')
+const bloque = (sel) => {
+  const i = css.indexOf(sel)
+  if (i < 0) return ''
+  const abre = css.indexOf('{', i)
+  let prof = 0
+  for (let k = abre; k < css.length; k++) {
+    if (css[k] === '{') prof++
+    else if (css[k] === '}') { prof--; if (prof === 0) return css.slice(abre, k) }
+  }
+  return ''
+}
+const nombres = (txt) => new Set([...txt.matchAll(/(--[a-z0-9-]+):\s*var\(/g)].map(m => m[1]))
+const claro = nombres(bloque(':root, [data-theme="light"]'))
+const oscuro = nombres(bloque('[data-theme="dark"], .dark'))
+const r7 = [...claro].filter(n => !oscuro.has(n))
+r7.forEach(n => fail('R7', `${n} — declarado sólo en el bloque claro: se congela en claro para cualquier subárbol que cambie de tema`))
+notes.push(`R7  ${claro.size} alias · ${r7.length} sin declarar en oscuro`)
 
 // ── report ───────────────────────────────────────────────────────────────────
 console.log('design-system · validador del lado del repo')

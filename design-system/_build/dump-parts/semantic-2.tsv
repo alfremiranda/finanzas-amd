@@ -147,3 +147,4 @@ size/32	FLOAT	32	32	scale/32	scale/32
 size/40	FLOAT	40	40	scale/40	scale/40
 size/48	FLOAT	48	48	scale/48	scale/48
 size/64	FLOAT	64	64	scale/64	scale/64
+fg/warning-strong	COLOR	#b45309	#fcd34d	color/amber/700	color/amber/300

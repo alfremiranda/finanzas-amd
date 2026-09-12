@@ -1185,6 +1185,11 @@
           "size/64",
           64,
           64
+        ],
+        [
+          "fg/warning-strong",
+          "#b45309",
+          "#fcd34d"
         ]
       ]
     },
@@ -5118,6 +5123,19 @@
       "aliases": {
         "Light": "scale/64",
         "Dark": "scale/64"
+      }
+    },
+    {
+      "collection": "Semantic",
+      "name": "fg/warning-strong",
+      "type": "COLOR",
+      "values": {
+        "Light": "#b45309",
+        "Dark": "#fcd34d"
+      },
+      "aliases": {
+        "Light": "color/amber/700",
+        "Dark": "color/amber/300"
       }
     },
     {

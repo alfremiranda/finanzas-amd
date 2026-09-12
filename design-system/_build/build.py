@@ -63,9 +63,16 @@ def tokens_css():
 {blk(DUR, "ms")}
 {blk(RAW)}
 
-  /* Retired names, still emitted so nothing breaks mid-migration. Each one resolves
-     through var(), so it follows its replacement into dark without a second declaration.
-     token-drift.mjs lists the ones at zero consumers as RETIRABLE — delete those. */
+  /* Retired names, still emitted so nothing breaks mid-migration.
+     token-drift.mjs lists the ones at zero consumers as RETIRABLE — delete those.
+
+     They are emitted in BOTH theme blocks, and that is not redundancy. A custom property
+     whose value is var(--other) is substituted at the element where it is DECLARED, and
+     the result inherits already resolved. Declared only here, an alias freezes at the
+     light value for any subtree that switches theme lower down — which is exactly what
+     these preview pages do (<div data-theme="dark">). The app toggles .dark on <html>,
+     the same element, so it never saw this. Every dark preview in this folder was showing
+     light-mode text on a dark surface until 2026-09-12. */
 {blk(ALIAS)}
 
   /* QUARANTINE — no Figma source. See token-ledger.json `pending`. Should only shrink. */
@@ -83,6 +90,9 @@ def tokens_css():
 {blk(SD)}
 {blk(CD)}
 {blk(LEG_D)}
+
+  /* Los mismos alias, re-declarados aquí: ver la nota del bloque claro. */
+{blk(ALIAS)}
 }}
 
 /* Text styles — Rethink Sans, tabular by default */
@@ -489,9 +499,27 @@ def mock(n, c):
                       f'<span style="{ts("Amount/Small")}color:var(--foreground-default)">{p}%</span></span>' for t, p, l in segs)
         return (f'<div style="width:380px"><div style="display:flex;gap:1px;height:16px;border-radius:999px;overflow:hidden">{bar}</div>'
                 f'<div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:10px">{leg}</div></div>')
-    if n == "Toast":
-        return (f'<div class="row"><span style="display:inline-flex;padding:8px 20px;border-radius:999px;'
-                f'background:var(--surface-inverse);color:var(--foreground-on-inverse);{ts("Body/Small")}">Ingreso guardado</span></div>')
+    if n in ("Toast", "SystemMessage"):
+        sombra = ("0 var(--elevation-floating-key-offset-y) var(--elevation-floating-key-blur) "
+                  "var(--elevation-floating-key-spread) var(--shadow-key),"
+                  "0 var(--elevation-floating-ambient-offset-y) var(--elevation-floating-ambient-blur) "
+                  "var(--elevation-floating-ambient-spread) var(--shadow-ambient)")
+        def pastilla(tinte, tono, glifo, texto, accion=False):
+            der = "8px" if accion else "16px"
+            btn = ('<span style="display:inline-flex;align-items:center;padding:4px 12px;border-radius:999px;'
+                   'background:var(--button-primary-filled-background);color:var(--button-primary-filled-foreground);'
+                   + ts("Control/SM") + '">Actualizar</span>') if accion else ""
+            return (f'<span style="display:inline-flex;align-items:center;gap:{"10px" if accion else "8px"};'
+                    f'padding:8px {der} 8px 16px;border-radius:999px;background:var({tinte});box-shadow:{sombra}">'
+                    f'{sq(16, tono)}'
+                    f'<span style="{ts("Body/Small")}color:var(--foreground-default)">{texto}</span>{btn}</span>')
+        if n == "SystemMessage":
+            return ('<div class="row">' + pastilla("--bg-info-subtle", "--fg-info", "info",
+                                                   "Hay una versión nueva", True) + '</div>')
+        return ('<div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start">'
+                + pastilla("--bg-success-subtle", "--fg-success", "check", "Ingreso registrado")
+                + pastilla("--bg-warning-subtle", "--fg-warning-strong", "alert", "Ingresa descripción y monto")
+                + pastilla("--bg-info-subtle", "--fg-info", "info", "Sincronizado") + '</div>')
     if n == "Tooltip":
         b = (f'<span style="display:inline-flex;padding:4px 8px;border-radius:var(--radius-md);'
              f'background:var(--surface-inverse);color:var(--foreground-on-inverse);{ts("Body/Small")}">Bruto del mes</span>')
