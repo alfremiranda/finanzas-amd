@@ -235,6 +235,76 @@
     }
   }
 
+  /* ── Features: tabs ────────────────────────────────────────────────────────────────
+     WAI-ARIA tabs with automatic activation: arrows move and select, Home/End jump, and only
+     the selected tab is in the tab order. The markup ships the bar hidden and every panel
+     visible, so this block is what turns a stack into tabs — if it never runs, nothing is lost. */
+  var showcase = document.querySelector('[data-showcase]')
+  if (showcase) {
+    var tablist = showcase.querySelector('[role="tablist"]')
+    var tabs = Array.prototype.slice.call(tablist.querySelectorAll('[role="tab"]'))
+    var panels = showcase.querySelectorAll('[role="tabpanel"]')
+
+    var activate = function (tab, opts) {
+      var id = tab.getAttribute('aria-controls')
+      tabs.forEach(function (t) {
+        var on = t === tab
+        t.setAttribute('aria-selected', String(on))
+        t.setAttribute('tabindex', on ? '0' : '-1')
+      })
+      Array.prototype.forEach.call(panels, function (panel) {
+        var on = panel.id === id
+        panel.hidden = !on
+        panel.removeAttribute('data-entering')
+        if (on && opts.animate) {
+          void panel.offsetWidth // restart the entrance when the same panel comes back
+          panel.setAttribute('data-entering', '')
+        }
+      })
+      if (opts.focus) tab.focus()
+      // On a phone the bar scrolls; keep the chosen label in view without moving the page.
+      if (opts.animate && tablist.scrollWidth > tablist.clientWidth) {
+        var left = tab.offsetLeft - (tablist.clientWidth - tab.offsetWidth) / 2
+        tablist.scrollTo({ left: left, behavior: reduced.matches ? 'auto' : 'smooth' })
+      }
+    }
+
+    // Hidden panels do not fetch their lazy captures; the first time someone reaches for the
+    // bar, fetch them all, so a tab never opens onto an empty box.
+    var warmed = false
+    var warm = function () {
+      if (warmed) return
+      warmed = true
+      Array.prototype.forEach.call(showcase.querySelectorAll('img[loading="lazy"]'), function (img) {
+        img.loading = 'eager'
+      })
+    }
+    tablist.addEventListener('pointerenter', warm)
+    tablist.addEventListener('focusin', warm)
+    tablist.addEventListener('touchstart', warm, { passive: true })
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        if (tab.getAttribute('aria-selected') !== 'true') activate(tab, { animate: true })
+      })
+    })
+    tablist.addEventListener('keydown', function (e) {
+      var i = tabs.indexOf(document.activeElement)
+      if (i === -1) return
+      var next = null
+      if (e.key === 'ArrowRight') next = tabs[(i + 1) % tabs.length]
+      else if (e.key === 'ArrowLeft') next = tabs[(i - 1 + tabs.length) % tabs.length]
+      else if (e.key === 'Home') next = tabs[0]
+      else if (e.key === 'End') next = tabs[tabs.length - 1]
+      if (!next) return
+      e.preventDefault()
+      activate(next, { animate: true, focus: true })
+    })
+
+    tablist.hidden = false
+    activate(tabs[0], { animate: false })
+  }
+
   /* ── Intent router ─────────────────────────────────────────────────────────────────
      Mirrors the app's own profile split (PRODUCT.md §8). The choice rides along on the CTA
      so the signup knows who arrived, and is remembered for the next visit. Nothing is sent

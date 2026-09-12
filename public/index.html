@@ -115,7 +115,7 @@
             </p>
 
             <div class="cta-row" data-reveal>
-              <a class="btn btn--filled btn--lg" href="/" data-app-link data-cta="hero">Empieza gratis</a>
+              <a class="btn btn--filled btn--lg" href="/" data-app-link data-cta="hero">Descubre cuánto es tuyo</a>
               <a class="btn btn--outline btn--lg" href="#como-funciona">Ver cómo funciona</a>
             </div>
 
@@ -327,126 +327,104 @@
         </div>
       </section>
 
-      <!-- ── 7. Features ───────────────────────────────────────────────────────────── -->
+      <!-- ── 7. Features — one tab bar, one feature at a time ───────────────────────────
+           Deel's "tabs-horizontal" shape, per Alfredo: a centred tab bar over two rounded boxes,
+           the copy on the left and the capture on the right. It replaced six alternating
+           blocks that ran ~4,000px tall, where the captures — each at its own aspect ratio —
+           landed at six different sizes. Here every capture sits in the same box, so they read
+           as one set and the section is one screen.
+
+           Degrades to the old reading: the tab bar ships `hidden` and every panel ships
+           visible, so with JS off the six features simply stack. main.js unhides the bar and
+           hides the panels that are not selected. -->
       <section class="section section--tint" id="funciones">
         <div class="wrap">
-          <div class="section-head" data-reveal>
+          <div class="section-head section-head--center" data-reveal>
             <h2 class="display-lg">Lo que hace Neto</h2>
           </div>
 
-          <div class="features">
-            <article class="feature" data-reveal>
-              <div class="feature__copy">
-                <p class="eyebrow ts-label-micro">01 · La cifra</p>
+          <div class="showcase" data-showcase data-reveal>
+            <div class="showcase__tabs" role="tablist" aria-label="Funciones de Neto" hidden>
+              <button class="showcase__tab ts-heading-group" type="button" role="tab" id="tab-neto-libre" aria-controls="panel-neto-libre" aria-selected="true" tabindex="0">Neto libre</button>
+              <button class="showcase__tab ts-heading-group" type="button" role="tab" id="tab-aportes" aria-controls="panel-aportes" aria-selected="false" tabindex="-1">Aportes</button>
+              <button class="showcase__tab ts-heading-group" type="button" role="tab" id="tab-obligaciones" aria-controls="panel-obligaciones" aria-selected="false" tabindex="-1">Obligaciones</button>
+              <button class="showcase__tab ts-heading-group" type="button" role="tab" id="tab-cuentas" aria-controls="panel-cuentas" aria-selected="false" tabindex="-1">Cuentas</button>
+              <button class="showcase__tab ts-heading-group" type="button" role="tab" id="tab-analitica" aria-controls="panel-analitica" aria-selected="false" tabindex="-1">Analítica</button>
+              <button class="showcase__tab ts-heading-group" type="button" role="tab" id="tab-divisas" aria-controls="panel-divisas" aria-selected="false" tabindex="-1">Divisas</button>
+            </div>
+
+            <div class="showcase__panel" role="tabpanel" id="panel-neto-libre" aria-labelledby="tab-neto-libre" tabindex="0">
+              <div class="showcase__copy">
                 <h3 class="display-md">Neto libre, y de dónde salió</h3>
-                <p class="ts-body-base muted">
-                  Lo que queda de tu ingreso después de obligaciones, provisiones y gastos, en una sola
-                  barra.
-                </p>
+                <p class="ts-body-base muted">Lo que queda de tu ingreso después de obligaciones, provisiones y gastos, en una sola barra.</p>
                 <ul class="feature__list ts-body-small">
                   <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m20 6-11 11-5-5" /></svg>Toca cualquier cifra y ves su desglose</li>
                   <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m20 6-11 11-5-5" /></svg>Si gastaste de más, te dice cuánto salió de tu saldo</li>
                 </ul>
               </div>
-              <figure class="feature__media">
-                <img src="/landing/images/feature-kpis.webp" data-capture="feature-kpis"
-                  width="1184" height="338" loading="lazy" decoding="async"
-                  alt="La vista Mes de Neto: cinco KPIs —ingreso bruto, obligaciones tributarias, provisiones, gastos y neto libre— sobre una barra que reparte el bruto en esas cuatro partes." />
+              <figure class="showcase__media">
+                <img src="/landing/images/feature-kpis.webp" data-capture="feature-kpis" width="1184" height="338" loading="lazy" decoding="async" alt="La vista Mes de Neto: cinco KPIs —ingreso bruto, obligaciones tributarias, provisiones, gastos y neto libre— sobre una barra que reparte el bruto en esas cuatro partes." />
               </figure>
-            </article>
-
-            <article class="feature" data-reveal>
-              <div class="feature__copy">
-                <p class="eyebrow ts-label-micro">02 · El motor</p>
+            </div>
+            <div class="showcase__panel" role="tabpanel" id="panel-aportes" aria-labelledby="tab-aportes" tabindex="0">
+              <div class="showcase__copy">
                 <h3 class="display-md">Tus aportes, calculados con las reglas de 2026</h3>
-                <p class="ts-body-base muted">
-                  Salud, pensión, ARL y Fondo de Solidaridad sobre tu IBC, con el piso y el tope de ley
-                  aplicados solos.
-                </p>
+                <p class="ts-body-base muted">Salud, pensión, ARL y Fondo de Solidaridad sobre tu IBC, con el piso y el tope de ley aplicados solos.</p>
                 <ul class="feature__list ts-body-small">
                   <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m20 6-11 11-5-5" /></svg>Activa, desactiva o ajusta cada deducción</li>
                   <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m20 6-11 11-5-5" /></svg>Crea las tuyas</li>
                 </ul>
               </div>
-              <figure class="feature__media">
-                <img src="/landing/images/feature-deducciones.webp" data-capture="feature-deducciones"
-                  width="1184" height="640" loading="lazy" decoding="async"
-                  alt="La pestaña Tributarias del mes, con el IBC del que sale cada aporte y el desglose de salud, pensión, ARL y Fondo de Solidaridad." />
+              <figure class="showcase__media">
+                <img src="/landing/images/feature-deducciones.webp" data-capture="feature-deducciones" width="1184" height="640" loading="lazy" decoding="async" alt="La pestaña Tributarias del mes, con el IBC del que sale cada aporte y el desglose de salud, pensión, ARL y Fondo de Solidaridad." />
               </figure>
-            </article>
-
-            <article class="feature" data-reveal>
-              <div class="feature__copy">
-                <p class="eyebrow ts-label-micro">03 · El año</p>
+            </div>
+            <div class="showcase__panel" role="tabpanel" id="panel-obligaciones" aria-labelledby="tab-obligaciones" tabindex="0">
+              <div class="showcase__copy">
                 <h3 class="display-md">Sabe si estás al día con tus aportes</h3>
-                <p class="ts-body-base muted">
-                  Lo que te tocaba pagar y lo que pagaste, mes a mes, con el calendario PILA según tu
-                  cédula.
-                </p>
+                <p class="ts-body-base muted">Lo que te tocaba pagar y lo que pagaste, mes a mes, con el calendario PILA según tu cédula.</p>
                 <ul class="feature__list ts-body-small">
                   <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m20 6-11 11-5-5" /></svg>Si pagaste sobre otro IBC, lo corriges</li>
                 </ul>
               </div>
-              <figure class="feature__media">
-                <img src="/landing/images/feature-obligaciones.webp" data-capture="feature-obligaciones"
-                  width="1184" height="596" loading="lazy" decoding="async"
-                  alt="La página de Obligaciones: la seguridad social del año mes a mes, cada uno con el IBC sobre el que se facturó y su estado, y la reserva de retención al 99%." />
+              <figure class="showcase__media">
+                <img src="/landing/images/feature-obligaciones.webp" data-capture="feature-obligaciones" width="1184" height="596" loading="lazy" decoding="async" alt="La página de Obligaciones: la seguridad social del año mes a mes, cada uno con el IBC sobre el que se facturó y su estado, y la reserva de retención al 99%." />
               </figure>
-            </article>
-
-            <article class="feature" data-reveal>
-              <div class="feature__copy">
-                <p class="eyebrow ts-label-micro">04 · Las cuentas</p>
+            </div>
+            <div class="showcase__panel" role="tabpanel" id="panel-cuentas" aria-labelledby="tab-cuentas" tabindex="0">
+              <div class="showcase__copy">
                 <h3 class="display-md">Todas tus cuentas, cada una con su lógica</h3>
-                <p class="ts-body-base muted">
-                  Tarjetas con cupo y fecha de pago, CDT con vencimiento, y traslados que no cuentan
-                  como gasto.
-                </p>
+                <p class="ts-body-base muted">Tarjetas con cupo y fecha de pago, CDT con vencimiento, y traslados que no cuentan como gasto.</p>
                 <ul class="feature__list ts-body-small">
                   <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m20 6-11 11-5-5" /></svg>Historial de cada cuenta, mes a mes</li>
                   <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m20 6-11 11-5-5" /></svg>Gastos programados que no mueven el saldo hasta su fecha</li>
                 </ul>
               </div>
-              <figure class="feature__media">
-                <img src="/landing/images/feature-cuentas.webp" data-capture="feature-cuentas"
-                  width="1184" height="560" loading="lazy" decoding="async"
-                  alt="La cuadrícula de cuentas de Neto: cuenta en dólares, cuenta de ahorros, efectivo, tarjeta de crédito con su cupo, reserva para la DIAN y un CDT con su vencimiento." />
+              <figure class="showcase__media">
+                <img src="/landing/images/feature-cuentas.webp" data-capture="feature-cuentas" width="1184" height="560" loading="lazy" decoding="async" alt="La cuadrícula de cuentas de Neto: cuenta en dólares, cuenta de ahorros, efectivo, tarjeta de crédito con su cupo, reserva para la DIAN y un CDT con su vencimiento." />
               </figure>
-            </article>
-
-            <article class="feature" data-reveal>
-              <div class="feature__copy">
-                <p class="eyebrow ts-label-micro">05 · La analítica</p>
+            </div>
+            <div class="showcase__panel" role="tabpanel" id="panel-analitica" aria-labelledby="tab-analitica" tabindex="0">
+              <div class="showcase__copy">
                 <h3 class="display-md">Doce meses de una sola mirada</h3>
-                <p class="ts-body-base muted">
-                  Tu año en un gráfico, la tendencia de ocho meses y tus gastos por categoría.
-                  Exportable a CSV para tu contador.
-                </p>
+                <p class="ts-body-base muted">Tu año en un gráfico, la tendencia de ocho meses y tus gastos por categoría. Exportable a CSV para tu contador.</p>
               </div>
-              <figure class="feature__media">
-                <img src="/landing/images/feature-analitica.webp" data-capture="feature-analitica"
-                  width="1008" height="857" loading="lazy" decoding="async"
-                  alt="El resumen anual: una dona que reparte el bruto del año entre obligaciones, provisiones, gastos y neto libre, y debajo la tendencia de los últimos ocho meses." />
+              <figure class="showcase__media">
+                <img src="/landing/images/feature-analitica.webp" data-capture="feature-analitica" width="1008" height="857" loading="lazy" decoding="async" alt="El resumen anual: una dona que reparte el bruto del año entre obligaciones, provisiones, gastos y neto libre, y debajo la tendencia de los últimos ocho meses." />
               </figure>
-            </article>
-
-            <article class="feature" data-reveal>
-              <div class="feature__copy">
-                <p class="eyebrow ts-label-micro">06 · La divisa</p>
+            </div>
+            <div class="showcase__panel" role="tabpanel" id="panel-divisas" aria-labelledby="tab-divisas" tabindex="0">
+              <div class="showcase__copy">
                 <h3 class="display-md">Cuánto te costó de verdad cambiar</h3>
-                <p class="ts-body-base muted">
-                  Pon lo que te llegó al banco y Neto te dice cuánto te cobraron de más al cambiar.
-                </p>
+                <p class="ts-body-base muted">Pon lo que te llegó al banco y Neto te dice cuánto te cobraron de más al cambiar.</p>
                 <ul class="feature__list ts-body-small">
                   <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m20 6-11 11-5-5" /></svg>TRM oficial en vivo</li>
                 </ul>
               </div>
-              <figure class="feature__media">
-                <img src="/landing/images/feature-movimientos.webp" data-capture="feature-movimientos"
-                  width="1184" height="620" loading="lazy" decoding="async"
-                  alt="La pestaña Movimientos: transferencias entre cuentas propias, incluida una de dólares a pesos con el monto realmente recibido." />
+              <figure class="showcase__media">
+                <img src="/landing/images/feature-movimientos.webp" data-capture="feature-movimientos" width="1184" height="620" loading="lazy" decoding="async" alt="La pestaña Movimientos: transferencias entre cuentas propias, incluida una de dólares a pesos con el monto realmente recibido." />
               </figure>
-            </article>
+            </div>
           </div>
         </div>
       </section>
@@ -596,7 +574,7 @@
           <h2 class="display-lg">Neto es gratis mientras construimos Pro.</h2>
           <p class="lead">Cuando esté listo, aquí mismo vas a poder pedir que te avisemos.</p>
           <div class="cta-row">
-            <a class="btn btn--filled btn--lg" href="/" data-app-link data-cta="pro">Empieza gratis</a>
+            <a class="btn btn--filled btn--lg" href="/" data-app-link data-cta="pro">Úsalo gratis hoy</a>
           </div>
         </div>
       </section>
@@ -678,7 +656,7 @@
           <h2 class="display-lg">Sabe cuánto es tuyo antes de gastarlo.</h2>
           <p class="lead">Gratis, sin tarjeta, y funciona desde el primer mes que registres.</p>
           <div class="cta-row">
-            <a class="btn btn--filled btn--lg" href="/" data-app-link data-cta="final">Empieza gratis</a>
+            <a class="btn btn--filled btn--lg" href="/" data-app-link data-cta="final">Registra tu primer mes</a>
           </div>
         </div>
       </section>
@@ -702,7 +680,7 @@
                  near-identical copy that close together reads as a page repeating itself
                  rather than insisting. This one says what Neto IS. -->
             <h2 class="display-md">Finanzas claras para independientes.</h2>
-            <a class="btn btn--filled btn--md" href="/" data-app-link data-cta="footer">Empieza gratis</a>
+            <a class="btn btn--filled btn--md" href="/" data-app-link data-cta="footer">Crea tu cuenta</a>
           </div>
 
           <nav class="footer__nav" aria-label="Pie de página">

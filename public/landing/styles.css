@@ -680,34 +680,118 @@ html.dark [data-icon='moon'] { display: none; }
 .section-head { display: flex; flex-direction: column; gap: var(--spacing-12); margin-bottom: var(--block-gap); }
 .section-head .lead { max-width: 60ch; }
 
-.features { display: grid; gap: var(--block-gap); }
-.feature {
-  display: grid;
+.section-head--center { align-items: center; text-align: center; }
+
+/* Features — Deel's tabs-horizontal. A centred tab bar over two rounded boxes: the copy on
+   the left, the capture on the right.
+
+   The capture box has ONE shape for all six. The captures come at six aspect ratios, from a
+   3.5:1 KPI strip to a near-square annual chart; each is contained inside the box rather than
+   sized by it, so switching tabs never moves the page under the bar — and the six read as a
+   set instead of six images at six sizes. */
+.showcase { display: grid; gap: var(--block-gap); }
+/* With JS the bar is shown and only the selected panel is; the gap is for the no-JS stack. */
+.showcase:has(> .showcase__tabs:not([hidden])) { gap: var(--spacing-32); }
+
+/* Scrolls sideways when six labels do not fit (every phone). Centring a scrolling flex row
+   with justify-content clips its start; auto margins on the ends centre it when it fits and
+   collapse to zero when it does not. */
+.showcase__tabs {
+  display: flex;
   gap: var(--spacing-24);
-  align-items: center;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: var(--border-width-default) solid var(--border-default);
+}
+.showcase__tabs::-webkit-scrollbar { display: none; }
+.showcase__tab:first-child { margin-inline-start: auto; }
+.showcase__tab:last-child { margin-inline-end: auto; }
+.showcase__tab {
+  flex: none;
+  appearance: none;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  white-space: nowrap;
+  padding: var(--spacing-12) var(--spacing-4);
+  color: var(--fg-subtle);
+  /* The indicator is an inset shadow, not a border, so selecting a tab never changes its box. */
+  box-shadow: inset 0 calc(-1 * var(--border-width-strongest)) 0 transparent;
+  transition:
+    color var(--motion-duration-fast) var(--motion-easing-move),
+    box-shadow var(--motion-duration-fast) var(--motion-easing-move);
+}
+.showcase__tab:hover { color: var(--fg-default); }
+/* Cyan is the selected state — the one place design.md §Principios #4 reserves it for. */
+.showcase__tab[aria-selected='true'] {
+  color: var(--fg-default);
+  box-shadow: inset 0 calc(-1 * var(--border-width-strongest)) 0 var(--border-brand-strong);
+}
+.showcase__tab:focus-visible { outline-offset: calc(-1 * var(--border-width-focus-default)); }
+
+.showcase__panel {
+  display: grid;
+  gap: var(--spacing-16);
 }
 @media (min-width: 900px) {
-  .feature { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(32px, 5vw, 72px); }
-  .feature:nth-child(even) .feature__copy { order: 2; }
+  .showcase__panel { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--spacing-24); }
 }
-.feature__copy { display: flex; flex-direction: column; gap: var(--spacing-12); align-items: flex-start; }
-.feature__list { display: grid; gap: var(--spacing-8); color: var(--fg-subtle); }
-.feature__list li { display: flex; gap: var(--spacing-8); }
-.feature__list svg { color: var(--fg-net); flex: none; margin-top: 3px; }
-.feature__media {
-  border: var(--border-width-default) solid var(--border-default);
+.showcase__panel[data-entering] {
+  animation: showcase-in var(--motion-duration-slow) var(--motion-easing-enter);
+}
+@keyframes showcase-in {
+  from { opacity: 0; transform: translateY(var(--spacing-8)); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .showcase__panel[data-entering] { animation: none; }
+}
+
+.showcase__copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--spacing-12);
+  padding: clamp(var(--spacing-24), 4vw, var(--spacing-48));
   border-radius: var(--radius-2xl);
   background: var(--bg-surface-subtle);
-  padding: var(--spacing-8);
-  overflow: hidden;
+  border: var(--border-width-default) solid var(--border-default);
 }
-.feature__media { margin: 0; }
-/* The captures are 2× and land at their own aspect ratio, so width+height on the <img> is
-   what stops the block collapsing and then jumping when a lazy image arrives. */
-.feature__media img {
-  border-radius: var(--radius-xl);
-  width: 100%;
+.feature__list { display: grid; gap: var(--spacing-8); color: var(--fg-subtle); margin-top: var(--spacing-4); }
+.feature__list li { display: flex; gap: var(--spacing-8); }
+.feature__list svg { color: var(--fg-net); flex: none; margin-top: 3px; }
+
+/* The privacy stage's ground — the surface warmed toward brand — so the page has one
+   "a piece of the app sits here" backdrop, not two. */
+.showcase__media {
+  margin: 0;
+  display: grid;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  padding: clamp(var(--spacing-16), 4vw, var(--spacing-40));
+  border-radius: var(--radius-2xl);
+  border: var(--border-width-default) solid var(--border-default);
+  background: linear-gradient(
+    135deg,
+    var(--bg-surface-default) 0%,
+    color-mix(in oklch, var(--bg-surface-default), var(--bg-brand) 16%) 100%
+  );
+}
+@media (min-width: 900px) { .showcase__media { aspect-ratio: 3 / 2; } }
+.showcase__media img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
   height: auto;
+  border-radius: var(--radius-xl);
+  border: var(--border-width-default) solid var(--border-default);
+  box-shadow:
+    0 var(--elevation-floating-key-offset-y) var(--elevation-floating-key-blur)
+      var(--elevation-floating-key-spread) var(--shadow-key),
+    0 var(--elevation-floating-ambient-offset-y) var(--elevation-floating-ambient-blur)
+      var(--elevation-floating-ambient-spread) var(--shadow-ambient);
 }
 
 /* ── §8. Privacy — the stage and three tall cards ────────────────────────────────────
@@ -966,7 +1050,8 @@ html.dark [data-icon='moon'] { display: none; }
   gap: var(--spacing-16);
 }
 .pro h2 { color: var(--marketing-panel-foreground); }
-.pro .lead { max-width: 44ch; }
+/* One line, per Alfredo: the narrow column fits its 64 characters from ~620px up; a phone wraps it. */
+.pro .lead { max-width: none; }
 .pro .cta-row { justify-content: center; margin-top: var(--spacing-8); }
 /* The status chip. It was the system Badge — #1e293b on a panel that is itself near #0f172a, so it
    all but disappeared into the mesh. Brand cyan now, on the only tokens measured for this ground:
