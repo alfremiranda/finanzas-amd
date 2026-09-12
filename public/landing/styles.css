@@ -710,6 +710,7 @@ html.dark [data-icon='moon'] { display: none; }
    obvious candidate and is deliberately not used — it holds the same value in both themes, so
    on the dark page it would be a pale block. */
 .privacy__stage {
+  container-type: inline-size;
   position: relative;
   overflow: clip;
   margin: 0 0 var(--spacing-16);
@@ -732,12 +733,21 @@ html.dark [data-icon='moon'] { display: none; }
    straight into the signal and wifi glyphs — 74 of island plus ~65 of icons into 172 of room.
    `container-type` makes the phone the unit, so every part of the bar is a share of its width
    and the proportions hold at every size. */
+/* Sized against the STAGE, not the viewport. It was `clamp(230px, 26vw, 320px)` — and 26vw
+   is a share of the window, so from 320px up to ~885px the floor won and the phone sat at a
+   fixed 230px while the stage grew from 280 to 820 around it: 82% of the stage at 320, 33% at
+   768, with its copy at 8.7px across that whole range. The stage is the container now, so the
+   phone is 80% of it until it reaches 320px, where it stops and the stage keeps growing — back
+   to the reference's ~30% on desktop.
+   Bezel and radius are shares of the phone's own width too. Fixed at 9px and 46px they read as
+   a heavier, rounder device the smaller it got. */
 .phone {
+  --phone-w: min(80cqi, 320px);
   container-type: inline-size;
-  width: clamp(230px, 26vw, 320px);
-  border: 9px solid var(--bg-surface-chrome);
+  width: var(--phone-w);
+  border: calc(var(--phone-w) * 0.028) solid var(--bg-surface-chrome);
   border-bottom: 0;
-  border-radius: 46px 46px 0 0;
+  border-radius: calc(var(--phone-w) * 0.145) calc(var(--phone-w) * 0.145) 0 0;
   background: var(--bg-surface-canvas);
   overflow: hidden;
   box-shadow:
@@ -774,9 +784,14 @@ html.dark [data-icon='moon'] { display: none; }
    is what puts the text on the floor of the card whatever its length. */
 .privacy__cards { display: grid; gap: var(--spacing-16); }
 @media (min-width: 760px) { .privacy__cards { grid-template-columns: repeat(3, 1fr); } }
+/* Centred: icon, title and description on the card's axis. The text still sits on the floor of
+   the card — `space-between` is untouched — so the three cards keep their shared bottom edge
+   whatever their title's length. */
 .privacy__card {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
   justify-content: space-between;
   gap: var(--spacing-32);
   min-height: 230px;
