@@ -651,16 +651,13 @@ html.dark [data-icon='moon'] { display: none; }
   padding: var(--spacing-8);
   overflow: hidden;
 }
-.feature__media img { border-radius: var(--radius-xl); width: 100%; }
-/* Scaffolding until the real captures land. --fg-placeholder on --bg-surface-default
-   measures 4.34:1 in light — under AA, and there is no reason for temporary copy to be the
-   one thing on the page that fails. */
-.feature__media--empty {
-  display: grid;
-  place-items: center;
-  min-height: 260px;
-  color: var(--fg-subtle);
-  background: var(--bg-surface-default);
+.feature__media { margin: 0; }
+/* The captures are 2× and land at their own aspect ratio, so width+height on the <img> is
+   what stops the block collapsing and then jumping when a lazy image arrives. */
+.feature__media img {
+  border-radius: var(--radius-xl);
+  width: 100%;
+  height: auto;
 }
 
 /* ── §8. Privacy block ────────────────────────────────────────────────────────────────

@@ -22,6 +22,20 @@
     toggle.setAttribute('aria-label', dark ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro')
   }
 
+  /* The app captures come in both themes. A light screenshot on the dark page is the same
+     light bomb that came out of the privacy section, so the src is swapped rather than
+     shipped twice: two <img> hidden by CSS would both be fetched, and <picture> with
+     prefers-color-scheme would follow the OS instead of this page's toggle.
+     The markup carries the LIGHT src, so with JS off the images are still there. */
+  var captures = document.querySelectorAll('[data-capture]')
+  function paintCaptures() {
+    var dark = root.classList.contains('dark')
+    Array.prototype.forEach.call(captures, function (img) {
+      var name = img.getAttribute('data-capture')
+      img.setAttribute('src', '/landing/images/' + name + (dark ? '-dark' : '') + '.webp')
+    })
+  }
+
   if (toggle) {
     toggle.addEventListener('click', function () {
       var dark = !root.classList.contains('dark')
@@ -32,9 +46,11 @@
         /* blocked storage: the choice holds for this page view and no further */
       }
       paintToggle()
+      paintCaptures()
     })
     paintToggle()
   }
+  paintCaptures()
 
   /* ── Returning users and installed PWAs go straight to the app ─────────────────────
      Once the app moves to /app, every PWA installed before that still opens "/" — its

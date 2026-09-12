@@ -28,7 +28,8 @@ import { LoginScreen } from '@/components/auth/LoginScreen'
 import { ConsentScreen } from '@/components/auth/ConsentScreen'
 import { OnboardingView } from '@/components/onboarding/OnboardingView'
 import { needsPrivacyConsent } from '@/lib/privacy'
-import { DEV_PREVIEW, DEV_PREVIEW_ONBOARDING, DEV_PREVIEW_CONSENT, previewDB, previewUser, backupBeforeSeed } from '@/lib/devPreview'
+import { DEV_PREVIEW, DEV_PREVIEW_ONBOARDING, DEV_PREVIEW_CONSENT, DEV_PREVIEW_DEMO, previewDB, previewUser, backupBeforeSeed } from '@/lib/devPreview'
+import { demoDB, demoUser } from '@/lib/demoSeed'
 
 function PullIndicator({ pullY, refreshing, isPulling }: { pullY: number; refreshing: boolean; isPulling: boolean }) {
   const progress = Math.min(pullY / PTR_THRESHOLD, 1)
@@ -89,8 +90,12 @@ export default function App() {
   useEffect(() => {
     if (DEV_PREVIEW) {
       backupBeforeSeed()
-      useFinanceStore.setState({ db: previewDB() })
-      useAuthStore.setState({ user: previewUser() as never, loading: false, cloudReady: true })
+      useFinanceStore.setState({ db: DEV_PREVIEW_DEMO ? demoDB() : previewDB() })
+      useAuthStore.setState({
+        user: (DEV_PREVIEW_DEMO ? demoUser() : previewUser()) as never,
+        loading: false,
+        cloudReady: true,
+      })
       return
     }
     const unsub = initialize()

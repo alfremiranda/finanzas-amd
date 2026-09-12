@@ -19,8 +19,12 @@
  * the dev localStorage. `backupBeforeSeed()` copies the previous value to
  * `amd-finance.pre-preview` first, so a dev session is recoverable.
  *
- * Usage: `npm run dev` then open http://localhost:5173/?preview
+ * Usage: `npm run dev` then open http://localhost:5173/panel/?preview
  *        (or ?preview=onboarding to land on the onboarding flow instead)
+ *
+ * The `/panel/` is not a typo and it is new: the app moved off `/` so the root could be the
+ * landing page. In dev, `/` now serves the marketing page out of publicDir and this file's
+ * old URL returns a 404 with no explanation of why.
  */
 import { TRANSFER_ACCOUNTS } from '@/data/defaults'
 import type { FinanceDB } from '@/types'
@@ -44,7 +48,16 @@ export const DEV_PREVIEW_ONBOARDING = DEV_PREVIEW && PARAM === 'onboarding'
  * legal gate, so it is the one screen that cannot be reached by ordinary means once a
  * device has consented — and therefore the one most likely to ship unlooked-at.
  */
-export const DEV_PREVIEW_CONSENT = DEV_PREVIEW && PARAM === 'consent' 
+export const DEV_PREVIEW_CONSENT = DEV_PREVIEW && PARAM === 'consent'
+
+/**
+ * `?preview=demo` swaps this file's one-month fixture for the marketing persona in
+ * `demoSeed.ts` — a full year, so the annual surfaces (donut, eight-month trend, category
+ * ranking, and an Obligaciones page with paid and unpaid months) render something worth
+ * photographing instead of an empty state. Same safety as every mode above: it is inside
+ * DEV_PREVIEW, so a production build folds it to false and tree-shakes the data away.
+ */
+export const DEV_PREVIEW_DEMO = DEV_PREVIEW && PARAM === 'demo'
 
 /**
  * The fixture lands in whatever month the app opens on, and dates every entry on
