@@ -12,6 +12,7 @@
  *   R5  no literal duration or easing curve in component code
  *   R6  the text scale in tokens.json matches the Figma dump
  *   R7  every var()-valued alias is declared in both theme blocks
+ *   R8  no token under 3:1 is used as a colour for words or glyphs (measured, not by name)
  *
  * Plus one ratchet, R4, which reports rather than forbids: the count of hard-coded
  * colours still defined in src/index.css. Those are the pre-token surface; the migration
@@ -272,6 +273,96 @@ const oscuro = nombres(bloque('[data-theme="dark"], .dark'))
 const r7 = [...claro].filter(n => !oscuro.has(n))
 r7.forEach(n => fail('R7', `${n} — declarado sólo en el bloque claro: se congela en claro para cualquier subárbol que cambie de tema`))
 notes.push(`R7  ${claro.size} alias · ${r7.length} sin declarar en oscuro`)
+
+// ── R8 · un color que no se puede leer no se usa como color de texto ──────────
+// Dev propuso la regla como «un token de relleno no aparece en una propiedad de texto»
+// y me dejó el criterio. Escrita por el NOMBRE no se sostiene: la familia --color-* mezcla
+// las dos cosas. Medido sobre bg/surface/default, --color-danger da 5.91 y --color-income
+// 6.12 — son peldaños de primer plano con nombre de relleno, y una regla que los marca en
+// rojo enseña a ignorarla. Los que fallan de verdad son otros: expense 3.44, provision 3.44,
+// tax 1.52.
+//
+// Así que la regla no lleva lista: deriva el conjunto prohibido midiendo tokens.json en cada
+// corrida. Si mañana alguien sube un peldaño, el token sale solo del conjunto; si baja otro,
+// entra solo. Es la diferencia entre una regla y un recordatorio.
+const TJ = JSON.parse(readFileSync(join(HERE, 'tokens.json'), 'utf8'))
+const lin = (u) => { u /= 255; return u <= 0.03928 ? u / 12.92 : Math.pow((u + 0.055) / 1.055, 2.4) }
+const lum = (h) => {
+  const m = /^#?([0-9a-f]{6})$/i.exec(String(h).trim()); if (!m) return null
+  const v = m[1], p = i => parseInt(v.slice(i, i + 2), 16)
+  return 0.2126 * lin(p(0)) + 0.7152 * lin(p(2)) + 0.0722 * lin(p(4))
+}
+const razon = (a, b) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05)
+const MAPA = readFileSync(join(ROOT, 'design-system', 'tokens', 'tokens.map.css'), 'utf8')
+const CSS = readFileSync(join(ROOT, 'design-system', 'tokens', 'tokens.css'), 'utf8')
+
+// --color-x -> el token con valor, siguiendo var() por el bloque del tema pedido
+function resolver(nombre, tema) {
+  const bloques = tema === 'dark'
+    ? [MAPA, bloque('[data-theme="dark"], .dark'), CSS]
+    : [MAPA, bloque(':root, [data-theme="light"]'), CSS]
+  let actual = nombre
+  for (let i = 0; i < 12; i++) {
+    const plano = TJ[tema === 'dark' ? 'sem_dark' : 'sem_light'][actual]
+      ?? TJ[tema === 'dark' ? 'cmp_dark' : 'cmp_light'][actual]
+    if (typeof plano === 'string' && plano.startsWith('#')) return plano
+    let sig = null
+    for (const b of bloques) {
+      const m = new RegExp(`${actual}:\\s*var\\((--[a-z0-9-]+)\\)`).exec(b)
+      if (m) { sig = m[1]; break }
+    }
+    if (!sig) return null
+    actual = sig
+  }
+  return null
+}
+
+const SUPERFICIES = ['--bg-surface-default', '--bg-surface-canvas']
+// Dos umbrales, porque en Tailwind `text-*` pinta las dos cosas: las palabras piden 4.5:1
+// (1.4.3) y un glifo pide 3:1 (1.4.11). La regla NO puede distinguirlas desde la clase —
+// `text-[var(--color-provision)]` es un icono en CuentasView.tsx:31 y sería una cifra dos
+// líneas más abajo. Así que falla sólo bajo 3:1, donde el color no sirve para nada, y los
+// del tramo 3:1–4.5:1 se NOMBRAN con sus sitios para que alguien los lea. Una regla que
+// marca en rojo un color que sí pasa enseña a ignorar la regla.
+const PISO_GRAFICO = 3, PISO_TEXTO = 4.5
+const medidos = new Map()
+for (const nombre of new Set([...MAPA.matchAll(/(--color-[a-z0-9-]+):/g)].map(m => m[1]))) {
+  if (/-bg$/.test(nombre)) continue          // una superficie ilegible como texto hace su trabajo
+  let peor = Infinity, dondePeor = ''
+  for (const tema of ['light', 'dark']) {
+    const c = lum(resolver(nombre, tema)); if (c == null) { peor = Infinity; break }
+    for (const sup of SUPERFICIES) {
+      const f = lum(resolver(sup, tema)); if (f == null) continue
+      const r = razon(c, f)
+      if (r < peor) { peor = r; dondePeor = `${tema} sobre ${sup.replace('--bg-surface-', '')}` }
+    }
+  }
+  if (peor !== Infinity && peor < PISO_TEXTO) medidos.set(nombre, { r: peor, d: dondePeor })
+}
+
+const usosDe = (t) => {
+  const hits = []
+  for (const f of componentFiles) {
+    readFileSync(f, 'utf8').split('\n').forEach((linea, i) => {
+      const usos = [
+        ...[...linea.matchAll(/text-\[var\((--[a-z0-9-]+)\)\]/g)].map(m => m[1]),
+        ...[...linea.matchAll(/(?<![a-zA-Z-])color:\s*['"`]?var\((--[a-z0-9-]+)\)/g)].map(m => m[1]),
+      ]
+      if (usos.includes(t)) hits.push(`${relative(ROOT, f)}:${i + 1}`)
+    })
+  }
+  return hits
+}
+
+const r8 = [], gris = []
+for (const [t, m] of medidos) {
+  const sitios = usosDe(t)
+  if (m.r < PISO_GRAFICO) sitios.forEach(s => r8.push(`${s}  ${t} mide ${m.r.toFixed(2)} (${m.d}) — no se lee ni como glifo; usa ${t}-txt`))
+  else if (sitios.length) gris.push(`${t} ${m.r.toFixed(2)} (${m.d}) → ${sitios.join(', ')}`)
+}
+r8.forEach(v => fail('R8', v))
+notes.push(`R8  ${medidos.size} tokens bajo 4.5 · ${r8.length} usos bajo 3:1`)
+gris.forEach(g => notes.push(`    tramo glifo (3:1–4.5:1), pasa si es un icono y falla si son palabras: ${g}`))
 
 // ── report ───────────────────────────────────────────────────────────────────
 console.log('design-system · validador del lado del repo')
