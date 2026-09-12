@@ -209,6 +209,20 @@ button { font: inherit; color: inherit; }
 .cta-note li { display: flex; align-items: center; gap: var(--spacing-6); }
 .cta-note svg { color: var(--fg-provision); flex: none; }
 
+/* On a phone the CTAs sit centred. Two details make it actually centre:
+   - In the hero, .cta-row is a child of a column with `align-items: flex-start`, so the row is
+     only as wide as its buttons and `justify-content: center` has no free space to use. It has
+     to stretch to the column first.
+   - The calculator link and the footer button are single buttons in a wrapping or column flex
+     container, so they centre themselves on their own line with auto margins / align-self.
+   Text above them stays as it is; only the buttons move. Scoped to content — the nav's actions
+   are pinned to the end of the bar and must stay there. */
+@media (max-width: 759px) {
+  .cta-row { align-self: stretch; justify-content: center; }
+  .crosslink > .btn { margin-inline: auto; }
+  .footer__pitch > .btn { align-self: center; }
+}
+
 /* ── §3. Announcement bar + nav ─────────────────────────────────────────────────────── */
 .announce {
   background: var(--bg-surface-inverse);
@@ -752,6 +766,12 @@ html.dark [data-icon='moon'] { display: none; }
 
 /* ── §11. FAQ ───────────────────────────────────────────────────────────────────────── */
 .faq { display: grid; gap: var(--spacing-2); max-width: var(--container-narrow); }
+/* Centred as a COLUMN, not as text. The questions are accordion rows with the toggle pinned
+   to the right; centring their text would break the row, so each question stays left inside
+   a column that sits in the middle of the page. Scoped to this section: .section-head is
+   shared by blocks that stay left-aligned. */
+.section--faq .faq { margin-inline: auto; }
+.section--faq .section-head { align-items: center; text-align: center; }
 .faq details {
   border-bottom: var(--border-width-default) solid var(--border-default);
 }
