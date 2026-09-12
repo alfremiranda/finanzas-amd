@@ -395,15 +395,27 @@ html.dark [data-icon='moon'] { display: none; }
    That is not shorthand — they are the ONLY values in the system measured against an
    always-dark surface. The semantic accents (fg/income, fg/tax…) flip with the theme, so on
    a panel that never flips, half of them would land unreadable in one mode. */
-/* Full-bleed, like the privacy band and the closing block. The dark surface runs edge to
-   edge and only the CONTENT is bounded — `.section` already owns the vertical rhythm and
-   `.wrap` the gutter and the max-width, so the panel adds neither. A panel that stops at
-   1120px is a card; a band that runs out of the viewport is a change of ground, which is
-   what this section is doing. */
+/* Near full-bleed with rounded corners — measured off Deel, not guessed.
+
+   This took three tries, and the history is the useful part. The first version was a card
+   trapped inside .wrap's 1120px. Asked for "full width like Deel", the second made it a
+   flat band running off both edges — and dropped the radius along the way, which nobody had
+   asked for. Deel's block, measured: 12px from each viewport edge, 20px radius. The page's
+   own ground shows as a thin frame and in the four corners. Full width AND rounded; "full
+   width" never meant "square".
+
+   Radius is --radius-2xl (16px), not Deel's 20: the system has no 20 rung, and inventing
+   one to match a reference four pixels more closely is exactly the drift the tokens exist
+   to stop. The frame is --spacing-12, which does exist.
+
+   .section still owns the vertical padding and .wrap still bounds the content; the panel
+   contributes only its inset, its corners and its ground. */
 .panel {
   position: relative;
   isolation: isolate;
   overflow: clip;
+  margin: var(--spacing-12);
+  border-radius: var(--radius-2xl);
   background: var(--marketing-panel-background);
   color: var(--marketing-panel-foreground);
 }
@@ -804,22 +816,22 @@ html.dark [data-icon='moon'] { display: none; }
 .cta-final .cta-row { justify-content: center; margin-top: var(--spacing-8); }
 .cta-final__note { color: var(--marketing-panel-foreground-subtle); }
 
-/* ── §12. Footer — the bounding-box panel ─────────────────────────────────────────────
-   The page's third marketing panel, so it carries data-theme="dark" like the other two: it
-   is dark whatever the page is doing, and its subtree has to resolve against the scale built
-   for a dark ground.
+/* ── §12. Footer ────────────────────────────────────────────────────────────────────────
+   A marketing panel, so it carries data-theme="dark" like the others: dark whatever the page
+   is doing, with its subtree resolving against the scale built for a dark ground.
 
-   The wordmark is the whole idea. It is sized in vw so it always reaches both edges, and the
-   panel's `overflow: clip` is what crops it — the crop is the gesture, not an accident, and
-   a fixed px size would stop reaching the edges the moment the viewport changed. */
-/* The band, not a box. A hairline on top because the closing block above is the same dark
-   ground: without the photograph in it the two would run together into one unreadable mass,
-   and the boundary should not depend on an image that may not have loaded. */
+   The same near-full-bleed rounded shape as the profile block, for the same measured reason
+   (see .panel). The hairline that used to sit on top is gone: it existed because this band
+   touched the closing block with no gap, and two dark grounds ran together. With the inset,
+   the page's own ground separates them — a boundary that no longer depends on anything
+   having loaded. */
 .footer {
+  margin: var(--spacing-12);
+  border-radius: var(--radius-2xl);
+  overflow: clip;
   background: var(--marketing-panel-background);
   color: var(--marketing-panel-foreground-subtle);
   padding-block: var(--section-y);
-  border-top: var(--border-width-default) solid color-mix(in oklch, var(--marketing-panel-foreground) 10%, transparent);
 }
 .footer__top {
   display: grid;
