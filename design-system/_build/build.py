@@ -388,6 +388,32 @@ def mock(n, c):
             f'<div style="{ts("Label/Micro")}text-transform:uppercase;color:var(--kpi-{k}-foreground)">{l}</div>'
             f'<div style="{ts("Amount/Hero")}color:var(--foreground-on-card)">{v}</div></div>'
             for k, l, v in [("income", "Ingreso bruto", "$ 8.800.000"), ("net", "Neto libre", "$ 2.640.000")]) + '</div>')
+    if n == "category-bar":
+        segs = [("home", "Vivienda", "34,2"), ("food", "Alimentación", "21,5"),
+                ("bank", "Deudas y Crédito", "15,8"), ("transit", "Movilidad", "11,4"),
+                ("connectivity", "Conectividad", "9,6"), ("other", "Otros", "7,5")]
+        def barra(hover):
+            tramos = "".join(
+                f'<span style="flex:{p.replace(",", ".")};background:var(--category-{c}-accent);'
+                f'opacity:{"0.3" if hover and i else "1"}"></span>'
+                for i, (c, _, p) in enumerate(segs))
+            leyenda = "".join(
+                f'<span style="display:inline-flex;align-items:center;gap:6px;'
+                f'opacity:{"0.3" if hover and i else "1"}">'
+                f'<span style="width:6px;height:6px;border-radius:999px;background:var(--category-{c}-accent)"></span>'
+                f'<span style="{ts("Body/Small")}color:var(--foreground-subtle)">{l}</span>'
+                f'<span style="{ts("Amount/Small")}color:var(--foreground-default)">{p}%</span></span>'
+                for i, (c, l, p) in enumerate(segs))
+            monto = (f'<span style="{ts("Amount/Small")}color:var(--foreground-default);margin-left:auto">$2.216.000</span>'
+                     if hover else "")
+            return (f'<div style="width:100%;max-width:560px;padding-top:12px;'
+                    f'border-top:1px solid var(--border-default)">'
+                    f'<div style="display:flex;gap:1px;height:8px;border-radius:999px;overflow:hidden">{tramos}</div>'
+                    f'<div style="display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;margin-top:8px">'
+                    f'{leyenda}{monto}</div></div>')
+        return (f'<div style="display:flex;flex-direction:column;gap:20px;width:100%">'
+                f'<div><span class="note">State=Default</span>{barra(False)}</div>'
+                f'<div><span class="note">State=Hovered</span>{barra(True)}</div></div>')
     if n == "DistribucionCard":
         segs = [("--kpi-tax-default", 21, "Obligaciones"), ("--kpi-provision-default", 18, "Provisiones"),
                 ("--kpi-expense-default", 31, "Gastos"), ("--kpi-net-default", 30, "Neto libre")]

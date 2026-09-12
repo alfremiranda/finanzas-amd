@@ -59,6 +59,18 @@
  },
  {
   "g": "Cards",
+  "n": "category-bar",
+  "v": 4,
+  "p": [
+   "State=Default|Hovered",
+   "Device=Desktop|Mobile"
+  ],
+  "w": 688,
+  "h": 528,
+  "d": "How one month’s expenses split across categories, as a single bar. One segment per category with an amount above zero, sorted widest first — so the bar has as many segments as the month had categories, not a fixed number. It is NOT DistribucionCard: that one always draws the same four segments (Obligaciones · Provisiones · Gastos · Neto libre) and answers where the gross income went. This answers what the expenses were made of.\n\n8px tall, fully rounded, 1px gaps. Segment colour is category/<name>/accent — the same token as the category’s icon bubble and its row, so a category cannot be one colour in the list and another in the bar.\n\nThe legend is not decoration: it carries the percentage, which the bar alone cannot give you at a glance below ~10%. Label in Body/Small on fg/subtle, percentage in Amount/Small on fg/default — the figure is the emphasized half of the pair.\n\nState=Hovered dims every OTHER segment and legend item to 30% and reveals the hovered category’s amount in pesos. Dimming the rest rather than highlighting the one keeps the hovered segment at its true colour, which matters when the colour is the identity.\n\nSits under the expense list, separated by a 1px rule on border/default and 12 of padding. It renders nothing at all when the month’s total is zero — an empty rounded bar reads as a component that failed to load.\n\nTwo things the mock cannot show and the code decides: segment widths are the real percentages (here 34,2 · 21,5 · 15,8 · 11,4 · 9,6 · 7,5), and the legend wraps — two rows at 640, three at 346, with the hovered amount taking its own right-aligned line on mobile because it does not fit beside the last item."
+ },
+ {
+  "g": "Cards",
   "n": "DistribucionCard",
   "v": 1,
   "p": [],
