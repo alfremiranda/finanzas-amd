@@ -17,7 +17,7 @@ import { MONTHS, DEFAULTS } from '@/data/defaults'
 import { useTheme } from '@/hooks/useTheme'
 import { deductionGroupFlags } from '@/hooks/useDeductionGroups'
 import { SectionCard } from '@/components/ui/SectionCard'
-import { cssVar, useChartRefs, useChartWidth } from '@/lib/chart'
+import { cssVar, radiusVar, topRoundedBarPath, useChartRefs, useChartWidth } from '@/lib/chart'
 import { TOOLTIP_SURFACE } from '@/components/ui/tooltip'
 import { TooltipReadout, type SwatchTone } from '@/components/ui/TooltipReadout'
 import { cn } from '@/lib/utils'
@@ -146,6 +146,7 @@ export function TrendChart() {
     const colorVars = series.map(s => `var(${s.token})`)
     const tickColor = cssVar('--muted-foreground')
     // See EgresosCategoryChart: the token carries both modes, `dark` stays to force the redraw.
+    const R = radiusVar('--radius-4')
     const gridColor = cssVar('--chart-grid')
     const hlColor   = cssVar('--chart-highlight')
 
@@ -222,14 +223,29 @@ export function TrendChart() {
       .attr('class', 'layer')
       .style('fill', (_, i) => colorVars[i])
 
-    groups.selectAll<SVGRectElement, SeriesPoint<BarDatum>>('rect')
-      .data(d => d)
-      .join('rect')
-      .attr('x', d => xScale(d.data.label) ?? 0)
-      .attr('width', xScale.bandwidth())
-      .attr('rx', 2)
-      .attr('y', h)
-      .attr('height', 0)
+    /**
+     * Paths, not rects, because only the TOP of a bar rounds and `rx` rounds all four
+     * corners. A segment is the top one when nothing above it in the stack has a value for
+     * that month — which is per month, not per layer, since a month with no provisions puts
+     * a different series on top.
+     */
+    const topKeyFor = new Map(data.map(d => {
+      const above = [...keys].reverse().find(k => (d[k] as number) > 0)
+      return [d.label, above]
+    }))
+    const barPath = (d: SeriesPoint<BarDatum>, y: number, height: number) => {
+      const x = xScale(d.data.label) ?? 0
+      const bw = xScale.bandwidth()
+      const isTop = topKeyFor.get(d.data.label) === (d as SeriesPoint<BarDatum> & { key?: string }).key
+      return isTop
+        ? topRoundedBarPath(x, y, bw, height, R)
+        : `M${x},${y}h${bw}v${height}h${-bw}Z`
+    }
+
+    groups.selectAll<SVGPathElement, SeriesPoint<BarDatum>>('path')
+      .data(d => d.map(p => Object.assign(p, { key: d.key })))
+      .join('path')
+      .attr('d', d => barPath(d, h, 0))
       .style('cursor', 'pointer')
       .on('mouseenter', function(event: MouseEvent, d) {
         const containerRect = containerRef.current!.getBoundingClientRect()
@@ -259,8 +275,14 @@ export function TrendChart() {
       .on('mouseleave', () => setTooltip(null))
       .on('click', (_: MouseEvent, d) => setCurKey(d.data.monthKey))
       .transition().duration(450).ease(easeCubicOut)
-      .attr('y', d => yScale(d[1]))
-      .attr('height', d => Math.max(0, yScale(d[0]) - yScale(d[1])))
+      // The shape has to be recomputed at every frame, so the grow animation tweens `d`
+      // itself rather than y/height. Plain linear interpolation of the two numbers — the
+      // easing above is what gives the motion its curve.
+      .attrTween('d', function (d) {
+        const y = yScale(d[1])
+        const height = Math.max(0, yScale(d[0]) - yScale(d[1]))
+        return (t: number) => barPath(d, h + (y - h) * t, height * t)
+      })
 
     // Legend — 5 items, split 3+2 on narrow widths
     const legendG = svg.append('g').attr('transform', `translate(${mg.left},${H - 18})`)

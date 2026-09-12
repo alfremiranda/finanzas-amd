@@ -51,3 +51,25 @@ export function useChartRefs() {
   const svgRef = useRef<SVGSVGElement>(null)
   return { containerRef, svgRef }
 }
+
+/**
+ * A bar whose TOP two corners are rounded and whose bottom two are square.
+ *
+ * `rx` cannot express this — SVG rounds all four corners or none — which is why a stacked
+ * bar needs a path for its topmost segment. And it needs one: rounding every segment turns
+ * a bar into a stack of loose pills and the eye stops adding them up. Rounded only at the
+ * top, the bar says "this is one quantity, and it ends here".
+ *
+ * The radius is clamped to half the width and to the height, so a segment shorter than the
+ * radius degrades into a shallower curve instead of an inverted one.
+ */
+export function topRoundedBarPath(x: number, y: number, w: number, h: number, r: number): string {
+  const rr = Math.max(0, Math.min(r, w / 2, h))
+  if (rr === 0) return `M${x},${y}h${w}v${h}h${-w}Z`
+  return `M${x},${y + h}V${y + rr}A${rr},${rr} 0 0 1 ${x + rr},${y}H${x + w - rr}A${rr},${rr} 0 0 1 ${x + w},${y + rr}V${y + h}Z`
+}
+
+/** A design-system radius token as a number, for the d3 code that needs one. */
+export function radiusVar(name: string): number {
+  return parseFloat(cssVar(name)) || 0
+}

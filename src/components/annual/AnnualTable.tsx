@@ -3,7 +3,7 @@ import { useState, type ReactNode } from 'react'
 import { useFinanceStore } from '@/store/financeStore'
 import { useSettingsStore } from '@/store/settingsStore'
 import { buildAnnualData } from '@/lib/calc'
-import { COP, USD, pct } from '@/lib/format'
+import { COP, COPShort, USD, pct } from '@/lib/format'
 import { MetricCard } from '@/components/ui/MetricCard'
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/components/ui/empty'
 import { deductionGroupFlags } from '@/hooks/useDeductionGroups'
@@ -61,11 +61,14 @@ function AnnualDonut({ segments, total, centerValue }: { segments: DonutSeg[]; t
         </svg>
         {/* Center reflects the tapped segment, or the gross by default */}
         <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center pointer-events-none">
+          {/* Abbreviated, because a year's gross written in full is eleven digits inside a
+              160px circle. The abbreviation belongs to the CENTRE, not to the donut's data:
+              the aria-label on each arc above still announces the amount in full. */}
           <div
-            className="ts-amount-large"
+            className="ts-amount-hero"
             style={sel ? { color: `var(${sel.color})` } : undefined}
           >
-            {sel ? COP(sel.amount) : centerValue}
+            {sel ? COPShort(sel.amount) : centerValue}
           </div>
           <div className="text-[11px] text-muted-foreground">{sel ? sel.label : 'Bruto'}</div>
         </div>
@@ -144,7 +147,7 @@ export function AnnualTable({ year }: AnnualTableProps) {
       {/* Donut — on top on mobile, left (hugging its width, centered with the KPIs) on desktop */}
       {showDonut && (
         <div className="py-4 lg:py-0 lg:w-[200px] lg:shrink-0">
-          <AnnualDonut segments={donutSegments} total={donutTotal} centerValue={COP(totBruto)} />
+          <AnnualDonut segments={donutSegments} total={donutTotal} centerValue={COPShort(totBruto)} />
         </div>
       )}
 

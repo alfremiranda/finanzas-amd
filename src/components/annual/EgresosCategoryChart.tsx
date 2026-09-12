@@ -9,7 +9,7 @@ import { MONTHS, DEFAULTS, EGRESO_CATEGORIAS } from '@/data/defaults'
 import { settledEgresos } from '@/lib/calc'
 import { COP } from '@/lib/format'
 import { useTheme } from '@/hooks/useTheme'
-import { cssVar, useChartRefs, useChartWidth } from '@/lib/chart'
+import { cssVar, radiusVar, topRoundedBarPath, useChartRefs, useChartWidth } from '@/lib/chart'
 import { SectionCard } from '@/components/ui/SectionCard'
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/components/ui/empty'
 
@@ -111,6 +111,7 @@ export function EgresosCategoryChart({ year }: EgresosCategoryChartProps) {
     const hlColor    = cssVar('--chart-highlight')
     const emptyColor = cssVar('--chart-empty')
     const avgColor   = cssVar('--chart-average')
+    const R          = radiusVar('--radius-4')
 
     const svg = select(svgRef.current)
     svg.attr('width', W).attr('height', H)
@@ -173,8 +174,10 @@ export function EgresosCategoryChart({ year }: EgresosCategoryChartProps) {
       const bw = xScale.bandwidth()
 
       if (!d.hasData) {
+        // All four corners here, on purpose: at 4px high that makes a round-ended dash,
+        // which reads as a deliberate mark rather than a bar that got cut off.
         g.append('rect')
-          .attr('x', x).attr('width', bw).attr('rx', 3)
+          .attr('x', x).attr('width', bw).attr('rx', R)
           .attr('y', h - 4).attr('height', 4)
           .attr('fill', emptyColor)
         return
@@ -185,15 +188,15 @@ export function EgresosCategoryChart({ year }: EgresosCategoryChartProps) {
         const barH = Math.max(1, h - yScale(cat.amount) - (h - yScale(d.total - yOffset)))
         const catH = Math.max(1, yScale(yOffset) - yScale(yOffset + cat.amount))
         const catY = yScale(yOffset + cat.amount)
-        const isFirst = i === 0
-        const isLast  = i === d.cats.length - 1
+        // Only the topmost segment rounds, and only at the top — see topRoundedBarPath.
+        const isTop = i === d.cats.length - 1
+        const segH  = Math.max(1, catH)
 
-        g.append('rect')
-          .attr('x', x).attr('width', bw)
-          .attr('y', catY).attr('height', Math.max(1, catH))
+        g.append('path')
+          .attr('d', isTop
+            ? topRoundedBarPath(x, catY, bw, segH, R)
+            : `M${x},${catY}h${bw}v${segH}h${-bw}Z`)
           .attr('fill', `var(${cat.color})`)
-          // round top corners on topmost segment, bottom on last
-          .attr('rx', isFirst || isLast ? 3 : 0)
 
         void barH
         yOffset += cat.amount

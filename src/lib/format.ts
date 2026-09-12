@@ -51,3 +51,32 @@ export function localToday(): string {
   const d = new Date()
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
+
+/**
+ * An amount abbreviated to fit somewhere it otherwise cannot: up to two decimals, a
+ * lowercase unit, and the comma decimal separator the rest of the app uses (es-CO).
+ *
+ *   $54,57 m   millions
+ *   $1,20 k    thousands
+ *
+ * It exists because a year's gross written in full is eleven digits inside a 160px circle:
+ * it either shrinks until it stops being the headline, or it breaks onto two lines.
+ *
+ * Deliberately NOT used on chart axes. An axis is a scale you read AGAINST — it stays
+ * `$12M`, uppercase and without decimals — while this is the figure you read. Two different
+ * jobs, and unifying them would make the headline look like a tick.
+ */
+export function COPShort(n: number): string {
+  const sign = n < 0 ? '-' : ''
+  // The unit is chosen against the ROUNDED figure, not the raw one: 999.999 rounds to
+  // 1.000,00 at two decimals, and "$1.000,00 k" is a number nobody wants to read.
+  const abs = Math.round(Math.abs(n) / 10) * 10
+  const [value, unit] =
+    abs >= 1_000_000 ? [abs / 1_000_000, ' m'] :
+    abs >= 1_000     ? [abs / 1_000,     ' k'] :
+    [abs, '']
+  const body = unit
+    ? value.toLocaleString('es-CO', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    : Math.round(value).toLocaleString('es-CO')
+  return `${sign}$${body}${unit}`
+}
