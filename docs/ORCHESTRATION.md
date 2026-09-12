@@ -10,7 +10,9 @@
 > production, not just no delivery. v3.5 (2026-08-17): roles outlive sessions; a handoff
 > doc is mandatory at close when work is in flight. v3.6 (2026-08-21): before an irreversible
 > step, verify against every member of the set, never the first — proposed by Design, adopted after a
-> Design session died mid-queue and only its handoff saved the continuity.
+> Design session died mid-queue and only its handoff saved the continuity. **v3.7 (2026-09-12): the
+> orchestrator commits what it writes, same run; an audit belongs to the leg that can observe what
+> it audits.**
 
 ## The system
 
@@ -89,7 +91,8 @@ Two agents share this working tree. The boundary that keeps that sane:
   finding and **Dev applies it** (the favourite-star / radius findings flow was the model).
 - **Orchestrator writes:** `docs/DIRECTION.md`, `docs/ORCHESTRATION.md` and
   `docs/inbox/**` tickets/answers, via the Mac bridge (interactive sessions) or the local
-  daily sync (see v3.4 delivery rules); Alfredo or Dev commits them.
+  daily sync. **v3.7: the orchestrator commits what it writes, in the same run** — it does not
+  leave delivery to Alfredo or Dev. See below for why that changed.
 
 Git rules for a shared tree:
 
@@ -185,6 +188,33 @@ Two corollaries already earned the hard way:
   32 of its hand-typed values in one component.
 - **A token check does not replace a screenshot.** `ChoiceRow`'s focus ring measured correct and
   rendered solid cyan: `showShadowBehindNode` defaults to `true`.
+
+## The orchestrator commits its own deliveries (v3.7)
+
+Until now the local sync delivered into the working tree and left the commit to someone else. That
+cost a week, and the way it cost it is worth writing down, because the failure was **invisible in
+exactly one direction**.
+
+On 09-07 the local sync ran. It wrote `DIRECTION.md §3.10` and two mailbox files, and committed
+none of them. The cloud leg audits by cloning `origin`, so it cannot see an uncommitted working
+tree on Alfredo's Mac — it saw no commits, no DIRECTION change, no tickets, and concluded **"the
+local sync is not running."** It escalated that for five consecutive passes. The sync had run. Its
+output was sitting on disk, one `git checkout` away from not existing, visible to nobody but the
+machine it was written on.
+
+**Two rules follow:**
+
+1. **Write and commit in the same run.** An uncommitted delivery is not a delivery. This also
+   removes a human hop from the critical path, which is the entire point of the mailboxes.
+2. **An audit belongs to a leg that can observe the thing it audits.** The cloud leg was assigned
+   "check for delivered-but-uncommitted files (compare against origin)" — a check its own route
+   makes impossible. It moves to the local leg, which has the working tree in front of it. A check
+   nobody can run reports clean forever, which is worse than no check. A check that reports
+   *failure* it cannot distinguish from absence — what happened here — is worse still, because it
+   is believed.
+
+**Corollary for any role reading an audit:** "no evidence of X" and "X did not happen" are different
+claims. Say which one you have.
 
 ## Handoff conventions
 
