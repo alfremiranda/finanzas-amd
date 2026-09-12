@@ -50,8 +50,10 @@ Cinco superficies (la navegación expone cuatro; Configuración y Perfil viven e
 
 \* Tabs condicionales: solo aparecen si el usuario tiene ese grupo de deducciones habilitado.
 
-**Rutas.** La app vive en `netofinanzas.app/app/`; la raíz `/` es el landing. El manifest y el
-`scope` de la PWA apuntan a `/app/`, y el callback de OAuth también.
+**Rutas.** La app vive en `netofinanzas.app/panel/`; la raíz `/` es el landing. El manifest y el
+`scope` de la PWA apuntan a `/panel/`, y el callback de OAuth también. No es `/app/`: sobre un
+dominio `.app` eso se lee «app punto app barra app». `panel` tampoco choca con ningún nombre del
+producto — las vistas son Resumen, Mes, Obligaciones, Cuentas y Configuración.
 
 **Superficies públicas** (fuera de la app, sin login y sin cargar el bundle): el landing (`/`), la
 política de privacidad (`/privacidad.html`), las calculadoras SEO (`/calculadoras/…`, ver 4.12) y el

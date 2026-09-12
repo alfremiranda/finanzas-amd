@@ -22,10 +22,11 @@ export function sbReady(): boolean { return true }
 
 // ─── Auth ────────────────────────────────────────────────────────────────────
 
-// `/app/`, not `/`: the root is the landing page. Supabase's Redirect URLs must list the
-// same path in BOTH projects, and that side is configured by hand — a mismatch there fails
-// the callback with no error in this code.
-const REDIRECT_URL = `${window.location.origin}/app/`
+// `/panel/`, not `/`: the root is the landing page, and not `/app/` either — on a .app
+// domain that reads as "app dot app slash app". Supabase's Redirect URLs must cover the
+// path in BOTH projects; prod's allowlist is a wildcard over the domain, so it already
+// does. A mismatch there fails the callback with no error in this code.
+const REDIRECT_URL = `${window.location.origin}/panel/`
 
 export async function signInWithGitHub(): Promise<void> {
   await sbClient().auth.signInWithOAuth({

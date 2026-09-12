@@ -41,7 +41,7 @@
      manifest said so. Someone who already has data here did not come to read the pitch.
      Deliberately NOT triggered by a Supabase session: reading auth state would mean loading
      the client, and this page loads no bundle. Local data is the cheap, offline-true proxy. */
-  var APP_URL = '/app/'
+  var APP_URL = '/panel/'
   function looksLikeAUser() {
     if (matchMedia('(display-mode: standalone)').matches || navigator.standalone) return true
     try {
@@ -50,9 +50,9 @@
       return false
     }
   }
-  // Guarded until the migration lands: while the app still answers at "/", redirecting
-  // there from "/" would loop. Dev's ticket flips this on with the rest of the move.
-  var MIGRATED = false
+  // Live as of the /app migration. Before it, redirecting to the app from "/" would have
+  // looped, because "/" WAS the app.
+  var MIGRATED = true
   if (MIGRATED && looksLikeAUser()) {
     location.replace(APP_URL)
     return
