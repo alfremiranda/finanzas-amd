@@ -10,6 +10,7 @@ import { calcGastos } from '@/lib/calc'
 import { COP, fmtDate, localToday } from '@/lib/format'
 import { accountLabel } from '@/lib/accountLabel'
 import { cn } from '@/lib/utils'
+import { DIM_SWATCH, DIM_TEXT } from '@/lib/dim'
 import { EGRESO_CATEGORIAS } from '@/data/defaults'
 import { SectionCard } from '@/components/ui/SectionCard'
 import { Button } from '@/components/ui/button'
@@ -47,6 +48,7 @@ function fmtUSDSecondary(n: number) {
 
 function EgresosBar({ egresos, trm }: { egresos: Egreso[]; trm: number }) {
   const [hovered, setHovered] = useState<string | null>(null)
+  const dim = (id: string) => !!hovered && hovered !== id
   const total = egresos.reduce(
     (sum, e) => sum + (e.currency === 'USD' ? e.amount * trm : e.amount), 0
   )
@@ -68,7 +70,7 @@ function EgresosBar({ egresos, trm }: { egresos: Egreso[]; trm: number }) {
         {segments.map(seg => (
           <div
             key={seg.id}
-            className={cn('transition-opacity duration-fast cursor-default', hovered && hovered !== seg.id ? 'opacity-30' : 'opacity-100')}
+            className={cn('transition-opacity duration-fast cursor-default', dim(seg.id) && DIM_SWATCH)}
             style={{ width: `${seg.pct}%`, background: `var(${seg.color})` }}
             onMouseEnter={() => setHovered(seg.id)}
             onMouseLeave={() => setHovered(null)}
@@ -80,13 +82,16 @@ function EgresosBar({ egresos, trm }: { egresos: Egreso[]; trm: number }) {
           <button
             key={seg.id}
             type="button"
-            className={cn('flex items-center gap-1.5 bg-transparent border-none p-0 cursor-default transition-opacity', hovered && hovered !== seg.id ? 'opacity-30' : 'opacity-100')}
+            className="flex items-center gap-1.5 bg-transparent border-none p-0 cursor-default"
             onMouseEnter={() => setHovered(seg.id)}
             onMouseLeave={() => setHovered(null)}
           >
-            <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: `var(${seg.color})` }} />
-            <span className="ts-body-small text-muted-foreground">{seg.label}</span>
-            <span className="ts-amount-small">{seg.pct.toLocaleString('es-CO', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%</span>
+            <span
+              className={cn('w-1.5 h-1.5 rounded-full shrink-0 transition-opacity duration-fast', dim(seg.id) && DIM_SWATCH)}
+              style={{ background: `var(${seg.color})` }}
+            />
+            <span className={cn('ts-body-small text-muted-foreground transition-opacity duration-fast', dim(seg.id) && DIM_TEXT)}>{seg.label}</span>
+            <span className={cn('ts-amount-small transition-opacity duration-fast', dim(seg.id) && DIM_TEXT)}>{seg.pct.toLocaleString('es-CO', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%</span>
           </button>
         ))}
         {hovered && (

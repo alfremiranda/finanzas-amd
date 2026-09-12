@@ -5,6 +5,7 @@ import { useSettingsStore } from '@/store/settingsStore'
 import { calcTotales, calcIBC, calcGastos, calcAllDeductions, calcProvisionBase } from '@/lib/calc'
 import { COP, localToday } from '@/lib/format'
 import { cn } from '@/lib/utils'
+import { DIM_SWATCH, DIM_TEXT } from '@/lib/dim'
 
 interface Segment {
   id: string
@@ -58,6 +59,7 @@ export function DistribucionCard() {
   }
 
   const hovSeg = hovered ? segments.find(s => s.id === hovered) : null
+  const dim = (id: string) => !!hovered && hovered !== id
 
   return (
     <div className="mb-5">
@@ -70,7 +72,7 @@ export function DistribucionCard() {
             aria-label={`${seg.label}: ${Math.round(seg.pct)}% — ${COP(seg.amount)}`}
             className={cn(
               'transition-opacity duration-fast focus-visible:outline-none focus-visible:brightness-125',
-              hovered && hovered !== seg.id ? 'opacity-40' : 'opacity-100',
+              dim(seg.id) && DIM_SWATCH,
             )}
             style={{ width: `${seg.pct}%`, background: `var(${seg.color})` }}
             onMouseEnter={() => setHovered(seg.id)}
@@ -89,18 +91,18 @@ export function DistribucionCard() {
               key={seg.id}
               type="button"
               aria-label={`${seg.label}: ${Math.round(seg.pct)}% del bruto — ${COP(seg.amount)}`}
-              className={cn(
-                'flex items-center gap-1.5 bg-transparent border-none p-0 cursor-default transition-opacity focus-visible:outline-none focus-visible:underline',
-                hovered && hovered !== seg.id ? 'opacity-40' : 'opacity-100',
-              )}
+              className="flex items-center gap-1.5 bg-transparent border-none p-0 cursor-default focus-visible:outline-none focus-visible:underline"
               onMouseEnter={() => setHovered(seg.id)}
               onMouseLeave={() => setHovered(null)}
               onFocus={() => setHovered(seg.id)}
               onBlur={() => setHovered(null)}
             >
-              <span className="w-2 h-2 rounded-full shrink-0" style={{ background: `var(${seg.color})` }} />
-              <span className="ts-body-small text-muted-foreground">{seg.label}</span>
-              <span className="ts-amount-small">
+              <span
+                className={cn('w-2 h-2 rounded-full shrink-0 transition-opacity duration-fast', dim(seg.id) && DIM_SWATCH)}
+                style={{ background: `var(${seg.color})` }}
+              />
+              <span className={cn('ts-body-small text-muted-foreground transition-opacity duration-fast', dim(seg.id) && DIM_TEXT)}>{seg.label}</span>
+              <span className={cn('ts-amount-small transition-opacity duration-fast', dim(seg.id) && DIM_TEXT)}>
                 {Math.round(seg.pct)}%
               </span>
             </button>
