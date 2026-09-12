@@ -478,12 +478,6 @@ html.dark [data-icon='moon'] { display: none; }
   align-items: start;
 }
 @media (min-width: 900px) { .pro { grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr); } }
-.price {
-  display: flex;
-  align-items: baseline;
-  gap: var(--spacing-8);
-  font-variant-numeric: tabular-nums;
-}
 .plan {
   border: var(--border-width-default) solid var(--border-default);
   border-radius: var(--radius-2xl);

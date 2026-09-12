@@ -50,8 +50,6 @@ jobs:
       # A mirror nobody checks is what public/calculadoras/ has: a hand-copied :root block
       # still declaring Inter Variable and --color-tax, both retired in August. This is the
       # check that stops the same thing happening twice.
-      - name: Landing assets in sync with the token package
-        run: node scripts/landing-assets.mjs --check
 
   # Separate job: the repo validator needs no npm install, and a visual diff that has to
   # wait for one would discourage running it.
@@ -73,6 +71,12 @@ jobs:
 
       - name: Install
         run: npm ci
+
+      # Lives here and not in `validate` because half of this check reads the font binaries
+      # out of node_modules, and `validate` deliberately runs without an install. It failed
+      # on its first run for exactly that reason: "missing font source — run npm ci".
+      - name: Landing assets in sync with the token package
+        run: node scripts/landing-assets.mjs --check
 
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
