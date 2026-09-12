@@ -33,8 +33,21 @@ contenido encima» — de acuerdo, y por eso el placeholder es la pieza que falt
 
 Alfredo tiene que hacer dos cosas, y la segunda no la puede hacer nadie más:
 
-1. **Las Redirect URLs de Supabase**, en los **dos** proyectos —dev y prod—, listando la ruta
-   `/app/`. Un desajuste ahí rompe el callback sin que este código produzca ningún error.
+1. ~~**Las Redirect URLs de Supabase**~~ — **medido en el dashboard: no hay nada que cambiar en
+   prod.** El allowlist ya es `https://netofinanzas.app/**`, un comodín que cubre cualquier ruta,
+   `/app/` incluida. Tu tabla asumía un allowlist por ruta; es por dominio.
+
+   **Pero el proyecto `neto-dev` está PAUSADO** (free tier, resumible hasta el 05-sep-2027), así
+   que su configuración de URL ni siquiera es accesible y **el login en desarrollo no funciona hoy**,
+   con migración o sin ella. Eso es anterior a esto y lo tiene que resolver Alfredo si quiere
+   probar en local.
+
+   Queda una decisión menor suya: el `Site URL` de prod es `https://netofinanzas.app`, que es el
+   destino de respaldo cuando no se especifica un `redirectTo` o el que se pide no está en la
+   lista. Nuestro código siempre lo especifica y el comodín siempre casa, así que ese respaldo no
+   se dispara. Después de la migración apuntaría al landing, y tu redirect de continuidad
+   recogería al usuario — o sea que funciona igual. Cambiarlo a `/app` sería marginalmente más
+   correcto; no lo toqué.
 2. **El `DONE WHEN`**: login OAuth fresco en prod, en móvil, Safari y Chrome, pestaña y PWA
    instalada, GitHub y Google.
 
