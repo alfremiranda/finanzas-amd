@@ -13,6 +13,7 @@
  *   R6  the text scale in tokens.json matches the Figma dump
  *   R7  every var()-valued alias is declared in both theme blocks
  *   R8  no token under 3:1 is used as a colour for words or glyphs (measured, not by name)
+ *   R9  a token whose source is the duration ramp is emitted in ms, never px
  *
  * Plus one ratchet, R4, which reports rather than forbids: the count of hard-coded
  * colours still defined in src/index.css. Those are the pre-token surface; the migration
@@ -363,6 +364,37 @@ for (const [t, m] of medidos) {
 r8.forEach(v => fail('R8', v))
 notes.push(`R8  ${medidos.size} tokens bajo 4.5 · ${r8.length} usos bajo 3:1`)
 gris.forEach(g => notes.push(`    tramo glifo (3:1–4.5:1), pasa si es un icono y falla si son palabras: ${g}`))
+
+// ── R9 · el tiempo no se emite en píxeles ────────────────────────────────────
+// El 12-sep motion/stagger/base salió como `50px`. No falló nada: un token de tiempo en
+// píxeles no rompe el build, sólo miente en silencio hasta que alguien lo usa en una
+// transición y no pasa nada. La regla de emisión miraba el prefijo del nombre
+// (motion/duration/), y el stagger es tiempo sin llamarse duration.
+// Esta regla no mira el nombre: mira de dónde viene el valor. Si un token resuelve a la
+// rampa duration/* de Primitives, tiene que salir en ms.
+// El alias sólo sobrevive en los TSV: figma-dump.json guarda [nombre, claro, oscuro] y
+// pierde de dónde venía el valor. Así que la regla lee la fuente, no el ensamblado — si
+// leyera el JSON mediría cero y reportaría verde sin haber mirado nada.
+const PARTES = join(HERE, 'dump-parts')
+const deTiempo = new Set()
+for (const archivo of readdirSync(PARTES).filter(f => f.endsWith('.tsv'))) {
+  for (const linea of readFileSync(join(PARTES, archivo), 'utf8').split('\n')) {
+    if (!linea.trim()) continue
+    const col = linea.split('\t')
+    const alias = col.slice(4).join(' ')
+    if (/(^|[\s/])duration\//.test(alias)) deTiempo.add('--' + col[0].replace(/\//g, '-'))
+  }
+}
+const r9 = []
+for (const t of deTiempo) {
+  const m = new RegExp(`${t}:\\s*([^;]+);`).exec(CSS)
+  if (!m) continue
+  const valor = m[1].trim()
+  if (/^var\(/.test(valor)) continue
+  if (!/ms$/.test(valor)) r9.push(`${t}: ${valor} — sale de la rampa duration/*, así que es tiempo; emitido sin ms`)
+}
+r9.forEach(v => fail('R9', v))
+notes.push(`R9  ${deTiempo.size} tokens con origen en duration/* · ${r9.length} emitidos sin ms`)
 
 // ── report ───────────────────────────────────────────────────────────────────
 console.log('design-system · validador del lado del repo')

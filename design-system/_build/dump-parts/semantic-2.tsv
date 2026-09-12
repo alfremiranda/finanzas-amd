@@ -150,3 +150,19 @@ size/64	FLOAT	64	64	scale/64	scale/64
 fg/warning-strong	COLOR	#b45309	#fcd34d	color/amber/700	color/amber/300
 chart/dim/label	FLOAT	0.75	0.75		
 chart/dim/swatch	FLOAT	0.3	0.3		
+spacing/96	FLOAT	96	96	scale/96	scale/96
+spacing/128	FLOAT	128	128	scale/128	scale/128
+spacing/160	FLOAT	160	160	scale/160	scale/160
+motion/duration/reveal	FLOAT	450	450	duration/450	duration/450
+motion/stagger/base	FLOAT	50	50	duration/50	duration/50
+blur/sm	FLOAT	8	8	scale/8	scale/8
+blur/md	FLOAT	20	20	scale/20	scale/20
+blur/lg	FLOAT	48	48	scale/48	scale/48
+blur/xl	FLOAT	96	96	scale/96	scale/96
+marketing/panel/background	COLOR	#0f172a	#0f172a	color/slate/900	color/slate/900
+marketing/panel/foreground	COLOR	#f8fafc	#f8fafc	color/slate/50	color/slate/50
+marketing/panel/foreground-subtle	COLOR	#94a3b8	#94a3b8	color/slate/400	color/slate/400
+marketing/accent/wash	COLOR	#cffafe	#cffafe	color/cyan/100	color/cyan/100
+marketing/accent/glow	COLOR	rgba(6,182,212,0.3)	rgba(6,182,212,0.3)	color/cyan/500/30	color/cyan/500/30
+marketing/accent/line	COLOR	rgba(6,182,212,0.2)	rgba(6,182,212,0.2)	color/cyan/500/20	color/cyan/500/20
+marketing/accent/on-panel	COLOR	#22d3ee	#22d3ee	color/cyan/400	color/cyan/400

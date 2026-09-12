@@ -22,7 +22,7 @@
  *   sem_light/sem_dark   Semantic COLOR         no unit
  *   cmp_light/cmp_dark   Component COLOR        no unit
  *   num                  FLOAT lengths          px
- *   dur                  motion/duration/*      ms   <- 150px would be silent nonsense
+ *   dur                  motion/duration/*, motion/stagger/*   ms   <- 150px would be silent nonsense
  *   raw                  STRING (easing curves) no unit
  *   alias                old name -> var(new)   no unit
  *   text                 carried over untouched
@@ -69,7 +69,12 @@ for (const v of dump.variables) {
     out[D][key] = v.values.Dark
   } else if (v.type === 'FLOAT') {
     // A duration in a px block is not a rounding error, it is a different quantity.
-    ;(v.name.startsWith('motion/duration/') ? out.dur : out.num)[key] = v.values.Light
+    // El 12-sep motion/stagger/base salió como `50px`. La regla miraba el prefijo
+    // motion/duration/ y el stagger es tiempo aunque no se llame duration — un token de
+    // tiempo emitido en píxeles no falla, sólo miente en silencio. La prueba es la unidad
+    // del valor, no su nombre: lo que vive en la rampa de duration/* es tiempo.
+    const esTiempo = v.name.startsWith('motion/duration/') || /^motion\/stagger\//.test(v.name)
+    ;(esTiempo ? out.dur : out.num)[key] = v.values.Light
   } else {
     out.raw[key] = v.values.Light
   }

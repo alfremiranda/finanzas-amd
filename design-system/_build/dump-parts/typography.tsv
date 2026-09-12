@@ -39,3 +39,9 @@ leading/32	FLOAT	32
 leading/36	FLOAT	36
 size/28	FLOAT	28
 size/32	FLOAT	32
+size/48	FLOAT	48
+size/60	FLOAT	60
+size/72	FLOAT	72
+leading/52	FLOAT	52
+leading/64	FLOAT	64
+leading/76	FLOAT	76

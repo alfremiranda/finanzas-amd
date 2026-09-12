@@ -143,6 +143,13 @@
   --chart-grid: rgba(0,0,0,0.05);
   --chart-highlight: rgba(0,0,0,0.05);
   --fg-warning-strong: #b45309;
+  --marketing-panel-background: #0f172a;
+  --marketing-panel-foreground: #f8fafc;
+  --marketing-panel-foreground-subtle: #94a3b8;
+  --marketing-accent-wash: #cffafe;
+  --marketing-accent-glow: rgba(6,182,212,0.3);
+  --marketing-accent-line: rgba(6,182,212,0.2);
+  --marketing-accent-on-panel: #22d3ee;
   --action-chip-selected-background: rgba(6,182,212,0.1);
   --action-chip-selected-foreground: #0e7490;
   --action-chip-selected-border: #06b6d4;
@@ -336,6 +343,13 @@
   --size-64: 64px;
   --chart-dim-label: 0.75px;
   --chart-dim-swatch: 0.3px;
+  --spacing-96: 96px;
+  --spacing-128: 128px;
+  --spacing-160: 160px;
+  --blur-sm: 8px;
+  --blur-md: 20px;
+  --blur-lg: 48px;
+  --blur-xl: 96px;
   --badge-size: 20px;
   --button-size-sm-padding-x: 8px;
   --button-size-sm-padding-y: 4px;
@@ -409,6 +423,8 @@
   --motion-duration-moderate: 200ms;
   --motion-duration-slow: 300ms;
   --motion-duration-spin: 1000ms;
+  --motion-duration-reveal: 450ms;
+  --motion-stagger-base: 50ms;
   --motion-easing-enter: cubic-bezier(0.16, 1, 0.3, 1);
   --motion-easing-exit: cubic-bezier(0.4, 0, 1, 1);
   --motion-easing-move: cubic-bezier(0.4, 0, 0.2, 1);
@@ -698,6 +714,13 @@
   --chart-grid: rgba(255,255,255,0.08);
   --chart-highlight: rgba(255,255,255,0.05);
   --fg-warning-strong: #fcd34d;
+  --marketing-panel-background: #0f172a;
+  --marketing-panel-foreground: #f8fafc;
+  --marketing-panel-foreground-subtle: #94a3b8;
+  --marketing-accent-wash: #cffafe;
+  --marketing-accent-glow: rgba(6,182,212,0.3);
+  --marketing-accent-line: rgba(6,182,212,0.2);
+  --marketing-accent-on-panel: #22d3ee;
   --action-chip-selected-background: rgba(6,182,212,0.2);
   --action-chip-selected-foreground: #22d3ee;
   --action-chip-selected-border: #164e63;
@@ -944,6 +967,9 @@
 }
 
 /* Text styles — Rethink Sans, tabular by default */
+.ts-display-xl { font-family:var(--font-sans);font-weight:700;font-size:72px;line-height:76px;letter-spacing:-1.0px; }
+.ts-display-lg { font-family:var(--font-sans);font-weight:700;font-size:60px;line-height:64px;letter-spacing:-1.0px; }
+.ts-display-md { font-family:var(--font-sans);font-weight:700;font-size:48px;line-height:52px;letter-spacing:-1.0px; }
 .ts-heading-display { font-family:var(--font-sans);font-weight:700;font-size:28px;line-height:36px;letter-spacing:0.5px; }
 .ts-heading-section { font-family:var(--font-sans);font-weight:600;font-size:24px;line-height:32px;letter-spacing:-0.25px; }
 .ts-heading-subsection { font-family:var(--font-sans);font-weight:600;font-size:20px;line-height:24px;letter-spacing:-0.25px; }
