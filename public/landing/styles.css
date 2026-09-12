@@ -253,8 +253,14 @@ button { font: inherit; color: inherit; }
 .nav__links { display: none; gap: var(--spacing-20); margin-inline-start: auto; }
 .nav__links a { color: var(--fg-subtle); transition: color var(--motion-duration-fast) var(--motion-easing-move); }
 .nav__links a:hover { color: var(--fg-default); }
+/* `margin-inline-start: auto` is what pins the actions to the end of the bar. It used to be
+   overridden by `.nav__links + .nav__actions { margin-inline-start: 24px }` sitting outside
+   any media query — and below 860px the links are `display: none`, so that rule replaced the
+   auto with a fixed gap against nothing and the whole group bunched up against the logo with
+   half the bar empty to its right. An adjacent-sibling selector still matches a hidden
+   sibling; `display: none` removes the box, not the element. The fixed gap now lives in the
+   same media query as the links it is separating from. */
 .nav__actions { display: flex; align-items: center; gap: var(--spacing-8); margin-inline-start: auto; }
-.nav__links + .nav__actions { margin-inline-start: var(--spacing-24); }
 .icon-btn {
   display: inline-flex;
   align-items: center;
@@ -277,6 +283,7 @@ html.dark [data-icon='moon'] { display: none; }
 .nav .btn--ghost { display: none; }
 @media (min-width: 860px) {
   .nav__links { display: flex; }
+  .nav__links + .nav__actions { margin-inline-start: var(--spacing-24); }
   .nav .btn--ghost { display: inline-flex; }
 }
 
