@@ -351,14 +351,26 @@
     // After a choice, bring what it changed into view. The least scroll that shows the photo's
     // bottom edge, but never so much that the answer slides under the sticky nav: on a phone the
     // stacked cards leave both below the fold; on a desktop this is usually zero and does nothing.
-    var reveal = function () {
+    var revealCheck = null
+    var shortfall = function () {
       var target = media || answer
       var navBottom = nav ? nav.getBoundingClientRect().bottom : 0
       var room = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--spacing-16')) || 16
       var toShowAll = target.getBoundingClientRect().bottom - (window.innerHeight - room)
       var toKeepAnswer = answer.getBoundingClientRect().top - (navBottom + room)
-      var delta = Math.min(toShowAll, toKeepAnswer)
+      return Math.min(toShowAll, toKeepAnswer)
+    }
+    var reveal = function () {
+      var delta = shortfall()
       if (delta > 0) window.scrollBy({ top: delta, behavior: reduced.matches ? 'auto' : 'smooth' })
+      // A smooth scroll can be cut short — a tap during momentum, another scroll starting on top
+      // of it — and land a few pixels shy (seen: the photo 8px under the fold, 1 tap in 9). Once it
+      // has had time to finish, measure again and close whatever is left, without animation.
+      clearTimeout(revealCheck)
+      revealCheck = setTimeout(function () {
+        var rest = shortfall()
+        if (rest > 1) window.scrollBy({ top: rest, behavior: 'auto' })
+      }, 600)
     }
 
     // ── On a phone the cards are a swipe row (styles.css). The card that settles in front is
