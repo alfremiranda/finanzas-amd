@@ -227,6 +227,9 @@ button { font: inherit; color: inherit; }
   .cta-row { align-self: stretch; }
   .cta-row > .btn { flex: 1 1 100%; }
   .footer__pitch > .btn { align-self: stretch; }
+  /* The footer's line sits centred over its full-width button, per Alfredo, balanced so a centred
+     two-line heading does not leave one word alone on the second line. */
+  .footer__pitch > h2 { text-align: center; text-wrap: balance; }
 }
 
 /* ── §3. Announcement bar + nav ─────────────────────────────────────────────────────── */
