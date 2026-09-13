@@ -1,6 +1,6 @@
 import { useUIStore } from '@/store/uiStore'
 import { cn } from '@/lib/utils'
-import { FeedbackGlyph, feedbackSurface, FEEDBACK_SHADOW, FEEDBACK_BOTTOM } from './feedback'
+import { FeedbackGlyph, feedbackSurface, FEEDBACK_SHADOW, FEEDBACK_BOTTOM, FEEDBACK_POSITION } from './feedback'
 
 /**
  * A transient confirmation that says WHICH kind it is.
@@ -21,7 +21,8 @@ export function Toast() {
       style={{ boxShadow: FEEDBACK_SHADOW }}
       className={cn(
         feedbackSurface(toast?.tone ?? 'info'),
-        'fixed left-1/2 -translate-x-1/2 py-2 pl-3 pr-4',
+        FEEDBACK_POSITION,
+        'py-2 pl-3 pr-4',
         // z above the drawer (overlay z-100 / content z-101) so toasts stay visible over an open sheet
         'opacity-0 translate-y-2 pointer-events-none transition-[opacity,transform] duration-slow z-[110]',
         FEEDBACK_BOTTOM,

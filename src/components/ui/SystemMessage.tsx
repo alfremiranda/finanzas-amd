@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { FeedbackGlyph, feedbackSurface, FEEDBACK_SHADOW, FEEDBACK_BOTTOM, type FeedbackTone } from './feedback'
+import { FeedbackGlyph, feedbackSurface, FEEDBACK_SHADOW, FEEDBACK_BOTTOM, FEEDBACK_POSITION, type FeedbackTone } from './feedback'
 
 /**
  * A message that WAITS. Same pill as `Toast`, same tints, same glyphs — the difference is
@@ -23,7 +23,8 @@ export function SystemMessage({ tone = 'info', children, action }: {
       style={{ boxShadow: FEEDBACK_SHADOW }}
       className={cn(
         feedbackSurface(tone),
-        'fixed left-1/2 -translate-x-1/2 z-[120] py-2 pl-4 pr-2',
+        FEEDBACK_POSITION,
+        'z-[120] py-2 pl-4 pr-2',
         FEEDBACK_BOTTOM,
       )}
     >

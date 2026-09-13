@@ -52,6 +52,20 @@ export const FEEDBACK_SHADOW = [
  */
 export const FEEDBACK_BOTTOM = 'bottom-[calc(58px+42px+env(safe-area-inset-bottom))] sm:bottom-6'
 
+/**
+ * Centred at the bottom, and sized to its own content.
+ *
+ * `w-max` is the part that is not decoration. A fixed box with `left: 50%` shrinks to fit
+ * against its containing block measured FROM that offset — so its widest possible size is half
+ * the viewport, and «Hay una versión nueva» broke into three lines on a phone inside a pill
+ * about 200px wide. `w-max` sizes it to the content instead, and the translate still centres it.
+ *
+ * `max-w` then puts the ceiling back where it belongs: the viewport minus a margin, so a long
+ * message wraps like a sentence rather than running off the screen.
+ */
+export const FEEDBACK_POSITION =
+  'fixed left-1/2 -translate-x-1/2 w-max max-w-[calc(100vw-32px)]'
+
 export function feedbackSurface(tone: FeedbackTone) {
   return cn('inline-flex items-center gap-2.5 rounded-full', TONE_SURFACE[tone])
 }
