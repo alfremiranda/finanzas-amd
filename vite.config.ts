@@ -48,10 +48,14 @@ export default defineConfig({
         // Keep the static pages out of the SPA navigation fallback — a direct
         // navigation to /privacidad.html or /calculadoras/... must serve that page,
         // not the app shell. (They must also load pre-login and without the SW.)
-        // `/^\/$/` joins them: the root is the landing page now, and the SPA fallback must
-        // not shadow it. It is an exact match on purpose — /panel/ and everything under it
-        // still falls back to the shell.
-        navigateFallbackDenylist: [/^\/api/, /^\/$/, /privacidad\.html$/, /^\/calculadoras\//, /^\/storybook\//, /^\/landing\//],
+        // The root joins them: it is the landing page now, and the SPA fallback must not
+        // shadow it. Exact on the PATH on purpose — /panel/ and everything under it still falls
+        // back to the shell.
+        // Workbox tests these against pathname + SEARCH, not the pathname alone, so an anchored
+        // `$` must allow a query string. As `/^\/$/` it matched only a bare `/`: with the app's
+        // SW installed, `/?home` (the landing's own escape hatch), `/?utm_source=…` or any shared
+        // link with a query opened the app shell instead of the landing.
+        navigateFallbackDenylist: [/^\/api/, /^\/(\?.*)?$/, /privacidad\.html(\?.*)?$/, /^\/calculadoras\//, /^\/storybook\//, /^\/landing\//],
         // Network-only for external APIs
         runtimeCaching: [
           {
