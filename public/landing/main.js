@@ -94,8 +94,11 @@
   // The escape hatch. Without it this page has no reachable URL for anyone signed in, which
   // includes whoever needs to look at it before sharing it.
   var WANTS_LANDING = /(^|[?&])home(=|&|$)/.test(location.search)
+  // Only the home page redirects. This script also runs on the SEO calculator, which a signed-in
+  // person opens on purpose (from the app, from a search) and must be allowed to use.
+  var IS_HOME = location.pathname === '/' || location.pathname === '/index.html'
 
-  if (!WANTS_LANDING && (hasSession() || isInstalledApp())) {
+  if (IS_HOME && !WANTS_LANDING && (hasSession() || isInstalledApp())) {
     location.replace(APP_URL)
     return
   }

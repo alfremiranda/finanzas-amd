@@ -249,9 +249,13 @@ Páginas públicas de adquisición: resuelven una duda concreta sin registro y l
   IBC, salud (12,5%), pensión (16%), ARL y Fondo de Solidaridad Pensional, con el desglose por
   concepto, el total mensual y las fórmulas visibles paso a paso. Avisa cuando el IBC proviene del
   piso (1 SMMLV) y aplica el tope legal de 25 SMMLV (Ley 797 de 2003, art. 5), informándolo cuando actúa.
-- **Cómo está construida:** página estática autónoma en `public/` — HTML/CSS/JS propios con los
-  tokens del design system (claro/oscuro por preferencia del sistema) y fuentes autoalojadas. **No
-  carga el bundle de la app, no hace peticiones a terceros y está excluida del service worker**
+- **Cómo está construida:** página estática en `public/` con el diseño del landing (rediseño
+  2026-09-12): usa los mismos `tokens.css` (generado desde el design system), `styles.css` y `main.js`
+  de `public/landing/`, con la misma nav, footer, FAQ y bloque de cierre, y Rethink Sans. Lo propio
+  de la página vive en `public/landing/calculadora.css`. La calculadora es la tarjeta cálida del
+  landing hecha interactiva. El tema sigue la clave `neto-theme` de la app y tiene el mismo toggle.
+  Quien tiene sesión **no** es redirigido a la app en esta página; eso solo pasa en `/`. **No carga
+  el bundle de la app, no hace peticiones a terceros y está excluida del service worker**
   (`navigateFallbackDenylist` + `globIgnores`), igual que la política de privacidad.
 - **Constantes legales** (SMMLV, tasas, tramos del FSS) viven en un único bloque JSON dentro de la
   página, para actualizarlas una vez al año; `src/lib/calculadoraSS.test.ts` las contrasta contra el

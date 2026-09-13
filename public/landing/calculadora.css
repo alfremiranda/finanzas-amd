@@ -1,0 +1,189 @@
+/* Neto — the SEO calculator page (/calculadoras/seguridad-social-independientes/).
+   Loads after tokens.css and styles.css, so everything the landing already styles — nav, footer,
+   buttons, section rhythm, the warm .calc panel and its card, the FAQ, the closing block — comes
+   from there unchanged. This file holds only what the landing never needed: a card you can type
+   into, and a worked explanation under it. Same rule as the landing: no raw colour, size or
+   duration that a token covers. */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* The calculator is the first thing under the nav, so the section's top rhythm is halved: the
+   landing's full --section-y is spacing between blocks, not a gap before the page begins. */
+.calc-page { padding-top: calc(var(--section-y) / 2); }
+.calc-page .calc__copy .lead { max-width: 44ch; }
+#calculadora { scroll-margin-top: calc(var(--spacing-64) + var(--spacing-16)); }
+
+/* ── The card, made real ───────────────────────────────────────────────────────────────── */
+.calc__field--input { cursor: text; }
+.calc__field--input:focus-within {
+  box-shadow: inset 0 0 0 var(--border-width-strong) var(--border-focus);
+}
+.calc__money {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-4);
+  color: var(--fg-default);
+}
+.calc__money > span { color: var(--fg-subtle); }
+.calc__money input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--fg-default);
+  /* The field carries its own focus ring (above); the input's would draw a second one inside it. */
+  outline: none;
+}
+.calc__money input::placeholder { color: var(--fg-disabled); font-weight: 400; }
+
+.calc__risk {
+  display: grid;
+  gap: var(--spacing-8);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.calc__risk legend { padding: 0; margin-bottom: var(--spacing-8); }
+.calc__levels {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--spacing-6);
+}
+.calc__level {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-8) var(--spacing-2);
+  border: var(--border-width-default) solid transparent;
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface-default);
+  color: var(--fg-default);
+  cursor: pointer;
+  transition:
+    background-color var(--motion-duration-fast) var(--motion-easing-move),
+    border-color var(--motion-duration-fast) var(--motion-easing-move);
+}
+.calc__level .ts-amount-micro { color: var(--fg-subtle); }
+.calc__level input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+/* Selected is cyan, the one use design.md reserves it for — on the amber card too. Marked from JS
+   with data-selected rather than :has(input:checked), which the page did not want to depend on. */
+.calc__level[data-selected='true'] {
+  background: var(--bg-selected);
+  border-color: var(--border-brand-strong);
+}
+/* The text stays the default foreground: cyan text on its own cyan tint measured 4.30:1 in dark,
+   under 4.5. The border and the tint already say "selected". */
+.calc__level:focus-within {
+  outline: var(--border-width-focus-default) solid var(--shadow-focus-inner);
+  outline-offset: 2px;
+}
+.calc__hint { color: var(--fg-subtle); }
+
+.calc__result strong { color: var(--fg-default); }
+/* A 25-SMMLV income is eleven digits; the display figure must wrap rather than push the card. */
+.calc-page .calc__total { overflow-wrap: anywhere; }
+
+/* The Fondo de Solidaridad appears only from 4 SMMLV. It joins the landing's one-hue ramp for
+   social security (pensión 100%, salud 62%, ARL 32%) between salud and ARL, since in practice it
+   is larger than a risk-I ARL and smaller than salud. */
+.calc [data-part='fss'] { --part: color-mix(in oklch, var(--fg-tax) 46%, transparent); }
+
+.calc__alert {
+  margin: 0;
+  padding: var(--spacing-12) var(--spacing-16);
+  border-radius: var(--radius-lg);
+  background: var(--bg-tax-subtle);
+  color: var(--fg-default);
+}
+.calc__foot { margin: 0; color: var(--fg-subtle); }
+
+/* ── How it is calculated ─────────────────────────────────────────────────────────────────── */
+.steps {
+  display: grid;
+  gap: var(--spacing-16);
+  counter-reset: none;
+}
+@media (min-width: 900px) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-12);
+  min-width: 0;
+  padding: clamp(var(--spacing-20), 3vw, var(--spacing-32));
+  border: var(--border-width-default) solid var(--border-default);
+  border-radius: var(--radius-2xl);
+  background: var(--bg-surface-subtle);
+}
+/* Numbered like the landing's feature tabs, on the selected tint: a sequence to follow rather than
+   a list to pick from. */
+.step__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--spacing-40);
+  height: var(--spacing-32);
+  padding-inline: var(--spacing-8);
+  border-radius: var(--radius-full);
+  background: var(--bg-selected);
+  /* Default foreground on the tint, not cyan on cyan: that measured 4.30:1 in dark. */
+  color: var(--fg-default);
+}
+.step strong { color: var(--fg-default); }
+
+/* Formulas are written with the visitor's own figures and can run long; they wrap instead of
+   scrolling, because a formula cut off on a phone reads as an error. */
+.formula {
+  display: block;
+  align-self: stretch;
+  padding: var(--spacing-12) var(--spacing-16);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface-default);
+  color: var(--fg-default);
+  line-height: 1.7;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.cite { color: var(--fg-subtle); }
+
+.table-scroll { align-self: stretch; overflow-x: auto; }
+.table-scroll table { width: 100%; border-collapse: collapse; }
+.table-scroll th,
+.table-scroll td {
+  padding: var(--spacing-8) var(--spacing-12);
+  text-align: start;
+  border-bottom: var(--border-width-default) solid var(--border-default);
+  white-space: nowrap;
+}
+.table-scroll thead th { color: var(--fg-subtle); font-weight: 500; }
+.table-scroll tbody th { color: var(--fg-default); font-weight: 500; }
+.table-scroll td { color: var(--fg-default); }
+
+/* ── Phone ──────────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 759px) {
+  .step { align-items: center; text-align: center; }
+  .formula, .cite { text-align: start; }
+  .step .cite { text-align: center; }
+}
