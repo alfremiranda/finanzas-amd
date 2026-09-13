@@ -12,6 +12,13 @@
  * binaries verbatim, and `--check` fails when the mirror has drifted. Same shape as the
  * repo validator's R2.
  *
+ * It also stamps the page's own CSS and JS links in public/index.html with a content hash
+ * (`/landing/styles.css?v=1a2b3c4d`). GitHub Pages serves them with `Cache-Control: max-age=600`
+ * under names that never change, so for ten minutes after a deploy a returning visitor got the
+ * new HTML with the old stylesheet — a fix shipped, verified live, and invisible on the phone of
+ * the person who asked for it. A changed file is a changed URL, so it is fetched at once.
+ * `--check` fails when a stamp no longer matches its file.
+ *
  * Usage: node scripts/landing-assets.mjs [--check]
  */
 import { readFileSync, writeFileSync, copyFileSync, mkdirSync, existsSync } from 'node:fs'
@@ -64,6 +71,32 @@ for (const file of FONTS) {
   }
 }
 
+// ── Cache-busting stamps ────────────────────────────────────────────────────────────────
+// Hash what is on disk now (tokens.css was just written above when not checking; when checking,
+// hash what it SHOULD be, so a drifted mirror and a stale stamp are reported separately).
+const PAGE = join(root, 'public/index.html')
+const STAMPED = {
+  'tokens.css': check ? expected : readFileSync(TOKENS_OUT, 'utf8'),
+  'styles.css': readFileSync(join(root, 'public/landing/styles.css')),
+  'main.js': readFileSync(join(root, 'public/landing/main.js')),
+}
+const page = readFileSync(PAGE, 'utf8')
+let stamped = page
+for (const [file, body] of Object.entries(STAMPED)) {
+  const v = sha(body).slice(0, 8)
+  const re = new RegExp(`"/landing/${file.replace('.', '\\.')}(\\?v=[0-9a-f]+)?"`, 'g')
+  const hits = stamped.match(re) || []
+  if (hits.length !== 1) {
+    console.error(`expected exactly one link to /landing/${file} in public/index.html, found ${hits.length}`)
+    process.exit(1)
+  }
+  stamped = stamped.replace(re, `"/landing/${file}?v=${v}"`)
+}
+if (stamped !== page) {
+  if (check) drifted.push('public/index.html (asset version stamps)')
+  else writeFileSync(PAGE, stamped)
+}
+
 if (check) {
   if (drifted.length) {
     console.error('landing assets have drifted from their source:')
@@ -73,5 +106,5 @@ if (check) {
   }
   console.log('landing assets: in sync')
 } else {
-  console.log(`landing assets: tokens.css + ${FONTS.length} fonts written to public/landing/`)
+  console.log(`landing assets: tokens.css + ${FONTS.length} fonts written to public/landing/, index.html stamped`)
 }
