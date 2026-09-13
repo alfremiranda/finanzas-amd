@@ -532,14 +532,17 @@ html.dark [data-icon='moon'] { display: none; }
     overscroll-behavior-x: contain;
     scrollbar-width: none;
     margin-inline: calc(-1 * var(--gutter));
-    padding-inline: var(--gutter);
-    scroll-padding-inline: var(--gutter);
     margin-bottom: var(--spacing-12);
   }
   .router::-webkit-scrollbar { display: none; }
+  /* Centred on the page's axis: the card in front sits in the middle with both neighbours peeking
+     equally. The spacers are flex items, so their % resolves against the row like the cards' does:
+     9% + 82% + 9%, less the gap the spacer brings with it. */
+  .router::before,
+  .router::after { content: ''; flex: 0 0 calc(9% - var(--spacing-12)); }
   .router__opt {
     flex: 0 0 82%;
-    scroll-snap-align: start;
+    scroll-snap-align: center;
     /* One swipe, one card: a quick flick otherwise flew past Empleado straight to Ambos. */
     scroll-snap-stop: always;
     padding: var(--spacing-16);
@@ -1327,6 +1330,51 @@ html.dark [data-icon='moon'] { display: none; }
   border-top: var(--border-width-default) solid color-mix(in oklch, var(--marketing-panel-foreground) 12%, transparent);
 }
 
+
+/* ── §12b. Phone: centred ──────────────────────────────────────────────────────────────────
+   Per Alfredo, below 760px the page reads down a centred axis, text above all — the buttons
+   were already full width, and left-aligned text over full-width buttons read as two layouts.
+
+   Centred: every heading block, the hero copy and its three notes, the profile answer, the
+   problem cards, the feature copy, the calculator copy, the footer's links and legal lines.
+   NOT centred, on purpose — these are structures read across, not text read down:
+   - the hero's flow card and the calculator's breakdown (a label on the left, an amount on the
+     right; centring breaks the pairing),
+   - the pills on the photo (they sit in the veil on the left, the photo's quiet third),
+   - the FAQ accordion (the toggle is pinned to the right of each question).
+   Paragraph caps (max-width in ch) get auto margins, or a capped paragraph centres its text inside
+   a box that is still pinned left. */
+@media (max-width: 759px) {
+  .hero__copy,
+  .calc__copy,
+  .showcase__copy,
+  .section-head,
+  .panel__head { align-items: center; text-align: center; }
+  .panel__head,
+  .hero__copy .lead,
+  .calc__copy .lead,
+  .section-head .lead { margin-inline: auto; }
+  .panel__head { display: flex; flex-direction: column; }
+
+  .cta-note { justify-content: center; }
+
+  /* The answer's left rule is a quotation mark for a left-aligned paragraph; centred, it would
+     hang off one side of nothing. */
+  .router__answer {
+    text-align: center;
+    border-inline-start: 0;
+    padding-inline-start: 0;
+    margin-inline: auto;
+  }
+
+  .card { align-items: center; text-align: center; }
+
+  .feature__list { justify-items: center; }
+  .feature__list li { text-align: start; }
+
+  .footer__nav { text-align: center; }
+  .footer__legal { flex-direction: column; align-items: center; text-align: center; }
+}
 
 /* ── §13. Reveal ────────────────────────────────────────────────────────────────────────
    Opacity + 16px of travel, staggered between siblings. What leaves goes one step faster

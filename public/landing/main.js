@@ -371,13 +371,17 @@
     var touched = false
     var settle = null
 
+    // The row snaps cards to its centre, so "in front" is the card whose centre is nearest the row's.
+    var centreOf = function (el) {
+      var r = el.getBoundingClientRect()
+      return r.left + r.width / 2
+    }
     var inFront = function () {
-      if (router.scrollLeft >= router.scrollWidth - router.clientWidth - 2) return cards[cards.length - 1]
-      var edge = router.getBoundingClientRect().left + (parseFloat(getComputedStyle(router).paddingLeft) || 0)
+      var mid = centreOf(router)
       var best = cards[0]
       var bestDist = Infinity
       cards.forEach(function (card) {
-        var d = Math.abs(card.getBoundingClientRect().left - edge)
+        var d = Math.abs(centreOf(card) - mid)
         if (d < bestDist) { bestDist = d; best = card }
       })
       return best
@@ -389,8 +393,7 @@
     }
     var bringToFront = function (card, smooth) {
       if (!slider.matches) return
-      var edge = router.getBoundingClientRect().left + (parseFloat(getComputedStyle(router).paddingLeft) || 0)
-      router.scrollBy({ left: card.getBoundingClientRect().left - edge, behavior: smooth && !reduced.matches ? 'smooth' : 'auto' })
+      router.scrollBy({ left: centreOf(card) - centreOf(router), behavior: smooth && !reduced.matches ? 'smooth' : 'auto' })
     }
 
     ;['touchstart', 'pointerdown', 'wheel'].forEach(function (type) {
