@@ -361,9 +361,56 @@
       if (delta > 0) window.scrollBy({ top: delta, behavior: reduced.matches ? 'auto' : 'smooth' })
     }
 
+    // ── On a phone the cards are a swipe row (styles.css). The card that settles in front is
+    // chosen, so swiping is choosing. Only a swipe the visitor made chooses: restoring a saved
+    // choice, keyboard focus or a tap's own centring move the row without a touch, and must not
+    // re-select mid-flight. No vertical reveal after a swipe — the visitor's hand is on the row.
+    var slider = window.matchMedia('(max-width: 799px)')
+    var cards = Array.prototype.slice.call(options)
+    var dots = document.querySelectorAll('[data-router-dots] span')
+    var touched = false
+    var settle = null
+
+    var inFront = function () {
+      if (router.scrollLeft >= router.scrollWidth - router.clientWidth - 2) return cards[cards.length - 1]
+      var edge = router.getBoundingClientRect().left + (parseFloat(getComputedStyle(router).paddingLeft) || 0)
+      var best = cards[0]
+      var bestDist = Infinity
+      cards.forEach(function (card) {
+        var d = Math.abs(card.getBoundingClientRect().left - edge)
+        if (d < bestDist) { bestDist = d; best = card }
+      })
+      return best
+    }
+    var paintDots = function (card) {
+      Array.prototype.forEach.call(dots, function (dot, i) {
+        dot.setAttribute('data-on', String(cards[i] === card))
+      })
+    }
+    var bringToFront = function (card, smooth) {
+      if (!slider.matches) return
+      var edge = router.getBoundingClientRect().left + (parseFloat(getComputedStyle(router).paddingLeft) || 0)
+      router.scrollBy({ left: card.getBoundingClientRect().left - edge, behavior: smooth && !reduced.matches ? 'smooth' : 'auto' })
+    }
+
+    ;['touchstart', 'pointerdown', 'wheel'].forEach(function (type) {
+      router.addEventListener(type, function () { touched = true }, { passive: true })
+    })
+    router.addEventListener('scroll', function () {
+      if (!slider.matches) return
+      paintDots(inFront())
+      clearTimeout(settle)
+      settle = setTimeout(function () {
+        var card = inFront()
+        if (touched && card.getAttribute('aria-pressed') !== 'true') select(card, false)
+        touched = false
+      }, 120)
+    }, { passive: true })
+
     Array.prototype.forEach.call(options, function (btn) {
       btn.addEventListener('click', function () {
         select(btn, true)
+        bringToFront(btn, true)
         reveal()
       })
     })
@@ -373,7 +420,10 @@
       var remembered = localStorage.getItem('neto-landing-perfil')
       if (remembered) {
         var match = router.querySelector('[data-profile="' + remembered + '"]')
-        if (match) select(match, false)
+        if (match) {
+          select(match, false)
+          bringToFront(match, false)
+        }
       }
     } catch (e) {
       /* no stored choice: the neutral prompt in the markup stands */

@@ -513,18 +513,63 @@ html.dark [data-icon='moon'] { display: none; }
 .router__icon { margin-bottom: var(--spacing-4); transition: background-color var(--motion-duration-fast) var(--motion-easing-move), color var(--motion-duration-fast) var(--motion-easing-move); }
 .router__opt[aria-pressed='true'] .router__icon { background: var(--bg-selected); color: var(--fg-brand); }
 
-/* Stacked (below 800px) the three cards ran 128px each, and the answer and the photo they
-   change landed under the fold: a tap changed something the visitor could not see. So the
-   stack is tighter — the whole card is the target, and "Ver qué cambia" says what a tap on
-   a phone already does — and main.js scrolls the result into view after a choice. */
+/* Below 800px the three cards are a swipe slider, per Alfredo. Stacked they ran 128px each and
+   the answer and photo they change landed under the fold. In a row, one card and the edge of the
+   next fill the width — the peek is what says "swipe" — and the result sits right under them.
+   Swiping to a card chooses it (main.js); a tap still does, and still scrolls the result into view.
+   The row bleeds to the panel's edge (negative gutter, padded back) so the peek is cut by the panel,
+   not by an invisible margin. "Ver qué cambia" is hidden: on a phone the card is the target. */
+.router__dots { display: none; }
 @media (max-width: 799px) {
-  .router { gap: var(--spacing-8); }
-  .router__opt { padding: var(--spacing-12) var(--spacing-16); gap: var(--spacing-2); }
-  .router__more { display: none; }
-  /* Icon beside the text, not above it, so the stack keeps the height that fits the result on screen. */
-  .router__opt { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: var(--spacing-12); align-items: center; }
+  .router {
+    display: flex;
+    gap: var(--spacing-12);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: var(--gutter);
+    scroll-padding-inline: var(--gutter);
+    margin-bottom: var(--spacing-12);
+  }
+  .router::-webkit-scrollbar { display: none; }
+  .router__opt {
+    flex: 0 0 82%;
+    scroll-snap-align: start;
+    /* One swipe, one card: a quick flick otherwise flew past Empleado straight to Ambos. */
+    scroll-snap-stop: always;
+    padding: var(--spacing-16);
+    gap: var(--spacing-2);
+    /* Icon beside the text, not above it, so the row stays one card tall. */
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: var(--spacing-12);
+    align-items: center;
+  }
   .router__opt > :not(.router__icon) { grid-column: 2; }
   .router__icon { grid-row: 1 / span 2; margin-bottom: 0; }
+  .router__more { display: none; }
+
+  /* Where you are in the row. Position, not selection — before any choice it still says which card
+     is in front — so it wears the panel foreground, not the selected cyan. */
+  .router__dots {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-6);
+    margin-bottom: var(--spacing-24);
+  }
+  .router__dots span {
+    width: var(--spacing-6);
+    height: var(--spacing-6);
+    border-radius: var(--radius-full);
+    background: color-mix(in oklch, var(--marketing-panel-foreground) 28%, transparent);
+    transition:
+      width var(--motion-duration-moderate) var(--motion-easing-move),
+      background-color var(--motion-duration-moderate) var(--motion-easing-move);
+  }
+  .router__dots span[data-on='true'] { width: var(--spacing-16); background: var(--marketing-panel-foreground); }
+
   .router__media { margin-top: var(--spacing-24); }
 }
 
@@ -755,6 +800,15 @@ html.dark [data-icon='moon'] { display: none; }
     box-shadow var(--motion-duration-fast) var(--motion-easing-move);
 }
 .showcase__tab:hover { color: var(--fg-default); }
+/* Numbered, per Alfredo: six options read as a sequence to go through, not a menu. The number is
+   hidden from assistive tech (each tab's name stays "Aportes", not "02 Aportes"); on the selected
+   tab it takes the indicator's cyan. No opacity to make it quieter: at 70% it measured 4.21:1 in
+   light, under the 4.5 its 16px needs. */
+.showcase__num {
+  margin-inline-end: var(--spacing-6);
+  font-variant-numeric: tabular-nums;
+}
+.showcase__tab[aria-selected='true'] .showcase__num { color: var(--fg-brand); }
 /* Cyan is the selected state — the one place design.md §Principios #4 reserves it for. */
 .showcase__tab[aria-selected='true'] {
   color: var(--fg-default);
