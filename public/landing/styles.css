@@ -862,14 +862,16 @@ html.dark [data-icon='moon'] { display: none; }
 .feature__list svg { color: var(--fg-net); flex: none; margin-top: 3px; }
 
 /* The privacy stage's ground — the surface warmed toward brand — so the page has one
-   "a piece of the app sits here" backdrop, not two. */
+   "a piece of the app sits here" backdrop, not two.
+
+   The capture fills the box, per Alfredo. Every capture is 3:2 (scripts/landing-captures.mjs), so
+   it takes the box's full inner width and the box never changes shape between tabs. It runs to the
+   box's bottom edge and fades there: a fixed-ratio frame cannot snap to the end of a row, and the
+   fade makes the cut read as the view continuing below rather than as a slice through a line. */
 .showcase__media {
   margin: 0;
-  display: grid;
-  grid-template: minmax(0, 1fr) / minmax(0, 1fr);
-  place-items: center;
-  aspect-ratio: 4 / 3;
-  padding: clamp(var(--spacing-16), 4vw, var(--spacing-40));
+  overflow: hidden;
+  padding: clamp(var(--spacing-16), 4vw, var(--spacing-40)) clamp(var(--spacing-16), 4vw, var(--spacing-40)) 0;
   border-radius: var(--radius-2xl);
   border: var(--border-width-default) solid var(--border-default);
   background: linear-gradient(
@@ -878,19 +880,21 @@ html.dark [data-icon='moon'] { display: none; }
     color-mix(in oklch, var(--bg-surface-default), var(--bg-brand) 16%) 100%
   );
 }
-@media (min-width: 900px) { .showcase__media { aspect-ratio: 3 / 2; } }
 .showcase__media img {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
+  display: block;
+  width: 100%;
   height: auto;
-  border-radius: var(--radius-xl);
+  aspect-ratio: 3 / 2;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   border: var(--border-width-default) solid var(--border-default);
+  border-bottom: 0;
   box-shadow:
     0 var(--elevation-floating-key-offset-y) var(--elevation-floating-key-blur)
       var(--elevation-floating-key-spread) var(--shadow-key),
     0 var(--elevation-floating-ambient-offset-y) var(--elevation-floating-ambient-blur)
       var(--elevation-floating-ambient-spread) var(--shadow-ambient);
+  -webkit-mask-image: linear-gradient(to bottom, black 78%, transparent);
+  mask-image: linear-gradient(to bottom, black 78%, transparent);
 }
 
 /* ── §8. Privacy — the stage and three tall cards ────────────────────────────────────

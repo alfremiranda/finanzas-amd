@@ -36,34 +36,52 @@ const BASE = `http://localhost:${PORT}/panel/?preview=demo`
 
 /** The six blocks, in the order they appear on the landing.
  *
- *  Framing is by CARD, not by viewport. The first version shot whatever `main` happened to
- *  show and cut the trend chart through the middle of a bar — an arbitrary edge that reads
- *  as a broken screenshot. Naming the cards also makes this list say what each image is
- *  supposed to contain, which is the memory the script exists to hold: after a UI change,
- *  whoever re-runs it does not have to know which six views at which width with which tab.
+ *  Every shot is the same shape: RATIO wide, cut from the app's main column at full width. The
+ *  landing shows one capture at a time in one box (the feature tabs), and captures at six aspect
+ *  ratios — a 3.5:1 KPI strip, a near-square chart — floated in that box with bands of empty
+ *  ground above and below (Alfredo: they must fill the container). One ratio means the image
+ *  fills the box's width in every tab and the box never changes shape.
  *
- *  `cards`  — union of the cards with these headings, in order.
- *  `height` — clip `main` from its top down this many CSS px (for views with no card
- *             heading at the top, like the month's KPI strip).
+ *  A fixed ratio cannot snap its bottom edge to a line the way the old per-shot heights did, so
+ *  the landing fades the bottom of each capture instead: the cut reads as the view continuing,
+ *  not as a slice through a row.
+ *
+ *  `start` — where the frame's top edge sits:
+ *            'top'           the top of the view,
+ *            { tabs: true }  the Mes view's tab bar (so the tab that is open is in frame, and the
+ *                            shot does not repeat the KPI strip the first one already shows),
+ *            { card: name }  the card with this heading.
+ *  `width` — viewport width for this shot (default 1280). A view with little content leaves the
+ *            bottom half of a 3:2 frame empty at desktop width; a narrower window reflows it
+ *            into more rows, so it fills the frame and its UI reads larger in the box.
  */
+const RATIO = 3 / 2
+const OUT_WIDTH = 1200 // 2× the widest the box renders (~600 CSS px), so it stays sharp
+
 const SHOTS = [
-  { name: 'feature-kpis', view: 'mes', tab: 'Ingresos', height: 352,
-    label: 'KPIs y barra de distribución' },
-  { name: 'feature-deducciones', view: 'mes', tab: 'Tributarias', height: 640,
+  { name: 'feature-kpis', view: 'mes', tab: 'Ingresos', start: 'top',
+    label: 'KPIs, barra de distribución e ingresos' },
+  { name: 'feature-deducciones', view: 'mes', tab: 'Tributarias', start: { tabs: true },
     label: 'obligaciones tributarias del mes' },
-  { name: 'feature-obligaciones', view: 'tributarias', height: 620,
+  { name: 'feature-obligaciones', view: 'tributarias', start: 'top',
     label: 'página de Obligaciones' },
-  { name: 'feature-cuentas', view: 'cuentas', height: 560,
+  // 960: three columns and three rows of accounts — 93% of the frame. At 1280 it was two rows in
+  // the top 46%.
+  { name: 'feature-cuentas', view: 'cuentas', start: 'top', width: 960,
     label: 'cuentas' },
-  { name: 'feature-analitica', view: 'dashboard', cards: ['Resumen anual', 'Tendencia (últimos 8 meses)'],
-    label: 'resumen anual y tendencia' },
-  { name: 'feature-movimientos', view: 'mes', tab: 'Movimientos', height: 620,
+  { name: 'feature-analitica', view: 'dashboard', start: { card: 'Resumen anual' },
+    label: 'resumen anual' },
+  // From the top at 1180: the month's figures, the tab bar and the transfers fill 96% of the frame.
+  // From the tab bar the three transfers filled 47%. 1180 is still wide enough that no KPI wraps.
+  { name: 'feature-movimientos', view: 'mes', tab: 'Movimientos', start: 'top', width: 1180,
     label: 'movimientos y TRM efectiva' },
 ]
 
 const browser = await chromium.launch()
 const page = await browser.newPage({
-  viewport: { width: 1440, height: 980 },
+  // 1280 wide: the narrowest desktop width at which the month's KPI figures stay on one line
+  // (measured: at 1120 "$21,81 m" wraps). Tall, so a frame that starts low still fits on screen.
+  viewport: { width: 1280, height: 1500 },
   deviceScaleFactor: 2, // retina: the landing scales these down, and a 1x capture looks soft
   colorScheme: THEME === 'dark' ? 'dark' : 'light',
 })
@@ -77,24 +95,30 @@ await page.evaluate(t => {
 }, THEME)
 await page.waitForSelector('main', { timeout: 15000 })
 
-async function encode(buffer) {
+async function encode(buffer, width, height) {
   const dataUrl = `data:image/png;base64,${buffer.toString('base64')}`
-  return page.evaluate(async url => {
+  return page.evaluate(async ({ url, width, height }) => {
     const img = new Image()
     img.src = url
     await img.decode()
     const c = document.createElement('canvas')
-    c.width = img.naturalWidth
-    c.height = img.naturalHeight
-    c.getContext('2d').drawImage(img, 0, 0)
+    // Without a size, the image keeps its own (the phone shots).
+    c.width = width || img.naturalWidth
+    c.height = height || img.naturalHeight
+    const ctx = c.getContext('2d')
+    ctx.imageSmoothingQuality = 'high'
+    ctx.drawImage(img, 0, 0, c.width, c.height)
     return c.toDataURL('image/webp', 0.85).split(',')[1]
-  }, dataUrl)
+  }, { url: dataUrl, width, height })
 }
 
 mkdirSync(OUT, { recursive: true })
 const suffix = THEME === 'dark' ? '-dark' : ''
 
 for (const shot of SHOTS) {
+  await page.setViewportSize({ width: shot.width ?? 1280, height: 1500 })
+  await page.waitForTimeout(300)
+
   // uiStore drives navigation — there is no router, so a view plus an id is the whole of
   // what a route would have carried (src/types/index.ts).
   await page.evaluate(v => {
@@ -113,53 +137,33 @@ for (const shot of SHOTS) {
     await page.waitForTimeout(600)
   }
 
-  // Charts animate in. Waiting for the network is not waiting for d3.
-  await page.waitForTimeout(900)
-
-  const clip = await page.evaluate(({ cards, height }) => {
+  const clip = await page.evaluate(({ start, ratio }) => {
     const main = document.querySelector('main')
     const PAD = 16
-    if (cards) {
+    main.scrollTop = 0
+    const m = main.getBoundingClientRect()
+    let top = m.top
+    if (start && start.tabs) {
+      const tab = [...main.querySelectorAll('button')].find(b => b.textContent?.trim() === 'Ingresos')
+      if (!tab) return { error: 'tab bar not found' }
+      top = tab.getBoundingClientRect().top - PAD
+    } else if (start && start.card) {
       // Card titles are a <span class="ts-heading-group">, not a heading tag — the design
       // system's text styles carry the level, and the markup does not. Matching on the text
       // of a leaf element is what actually finds them.
-      const found = cards.map(name =>
-        [...main.querySelectorAll('*')]
-          .find(e => e.children.length === 0 && e.textContent.trim() === name)
-          ?.closest('[class*="rounded-xl"]'),
-      )
-      if (found.some(f => !f)) return { error: `card not found: ${cards.join(' / ')}` }
-      found[0].scrollIntoView({ block: 'start' })
-      const rects = found.map(f => f.getBoundingClientRect())
-      return {
-        x: Math.min(...rects.map(r => r.left)) - PAD,
-        y: Math.min(...rects.map(r => r.top)) - PAD,
-        width: Math.max(...rects.map(r => r.right)) - Math.min(...rects.map(r => r.left)) + PAD * 2,
-        height: Math.max(...rects.map(r => r.bottom)) - Math.min(...rects.map(r => r.top)) + PAD * 2,
-      }
+      const card = [...main.querySelectorAll('*')]
+        .find(e => e.children.length === 0 && e.textContent.trim() === start.card)
+        ?.closest('[class*="rounded-xl"]')
+      if (!card) return { error: `card not found: ${start.card}` }
+      top = card.getBoundingClientRect().top - PAD
     }
-    main.scrollTop = 0
-    const r = main.getBoundingClientRect()
-    let h = Math.min(height ?? r.height, r.height)
-
-    // Snap the bottom edge up so it never cuts through a line. `height` is a MAXIMUM, not a
-    // measurement: tuning it by hand per shot is the thing that breaks the first time a row
-    // changes height, and a screenshot sliced through the middle of "Julio" reads as broken
-    // rather than as cropped. Only leaves and short boxes count — a container always
-    // straddles the edge, that is what containers do.
-    const edge = r.top + h
-    const straddling = [...main.querySelectorAll('*')]
-      .filter(e => {
-        const b = e.getBoundingClientRect()
-        if (b.height === 0 || b.height > 120) return false
-        if (e.children.length > 2) return false
-        return b.top < edge - 2 && b.bottom > edge + 2
-      })
-      .map(e => e.getBoundingClientRect().top)
-    if (straddling.length) h = Math.max(Math.min(...straddling) - r.top - 8, 120)
-
-    return { x: r.left, y: r.top, width: r.width, height: h }
-  }, shot)
+    // Bring the frame's top to the top of the scroll area when the page is long enough.
+    main.scrollTop = Math.max(0, top - m.top)
+    const shift = main.scrollTop
+    const width = m.width
+    const height = Math.round(width / ratio)
+    return { x: m.left, y: top - shift, width, height }
+  }, { start: shot.start, ratio: RATIO })
 
   if (clip.error) {
     console.error(`✗ ${shot.name}: ${clip.error}`)
@@ -167,14 +171,17 @@ for (const shot of SHOTS) {
     continue
   }
 
+  // Charts animate in. Waiting for the network is not waiting for d3.
+  await page.waitForTimeout(1100)
+
   const png = await page.screenshot({ type: 'png', clip })
-  const webp = await encode(png)
+  const webp = await encode(png, OUT_WIDTH, Math.round(OUT_WIDTH / RATIO))
   const file = join(OUT, `${shot.name}${suffix}.webp`)
   writeFileSync(file, Buffer.from(webp, 'base64'))
   const size = statSync(file).size
   console.log(
     `${size > BUDGET ? '⚠ ' : '  '}${shot.name}${suffix}.webp  ${Math.round(size / 1024)} kB  ` +
-    `${Math.round(clip.width)}×${Math.round(clip.height)} — ${shot.label}`,
+    `${OUT_WIDTH}×${Math.round(OUT_WIDTH / RATIO)} (frame ${Math.round(clip.width)}×${Math.round(clip.height)} at y ${Math.round(clip.y)}) — ${shot.label}`,
   )
 }
 
