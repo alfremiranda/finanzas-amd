@@ -885,6 +885,10 @@ html.dark [data-icon='moon'] { display: none; }
   width: 100%;
   height: auto;
   aspect-ratio: 3 / 2;
+  /* Never stretched: an image of another ratio (an old capture still in a browser's cache) crops
+     from the top instead of distorting. */
+  object-fit: cover;
+  object-position: top;
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   border: var(--border-width-default) solid var(--border-default);
   border-bottom: 0;
