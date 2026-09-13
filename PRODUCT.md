@@ -245,6 +245,10 @@ Páginas públicas de adquisición: resuelven una duda concreta sin registro y l
 
 - **Primera calculadora:** *Seguridad Social para Independientes — Colombia 2026*, en
   `netofinanzas.app/calculadoras/seguridad-social-independientes/`.
+- **Índice:** `netofinanzas.app/calculadoras/` agrupa las calculadoras con el mismo bloque que
+  presenta la calculadora en el landing. Cada calculadora muestra la ruta *Inicio / Calculadoras /
+  …* (con schema.org `BreadcrumbList`), y la nav y el footer marcan «Calculadora» como página activa.
+  Las dos URLs están en `sitemap.xml`.
 - **Qué hace:** con los ingresos mensuales por servicios y el nivel de riesgo ARL (I–V) calcula el
   IBC, salud (12,5%), pensión (16%), ARL y Fondo de Solidaridad Pensional, con el desglose por
   concepto, el total mensual y las fórmulas visibles paso a paso. Avisa cuando el IBC proviene del

@@ -277,6 +277,10 @@ button { font: inherit; color: inherit; }
 .nav__links { display: none; gap: var(--spacing-20); margin-inline-start: auto; }
 .nav__links a { color: var(--fg-subtle); transition: color var(--motion-duration-fast) var(--motion-easing-move); }
 .nav__links a:hover { color: var(--fg-default); }
+/* The page you are on. The calculator pages share this nav; there the link to them is marked
+   aria-current and reads as the active one — full foreground and weight, no cyan (the nav is not a
+   selection control). */
+.nav__links a[aria-current='page'] { color: var(--fg-default); font-weight: 600; }
 /* `margin-inline-start: auto` is what pins the actions to the end of the bar. It used to be
    overridden by `.nav__links + .nav__actions { margin-inline-start: 24px }` sitting outside
    any media query — and below 860px the links are `display: none`, so that rule replaced the
@@ -1324,6 +1328,7 @@ html.dark [data-icon='moon'] { display: none; }
 .footer__nav li + li { margin-top: var(--spacing-8); }
 .footer__nav a { transition: color var(--motion-duration-fast) var(--motion-easing-move); }
 .footer__nav a:hover { color: var(--marketing-panel-foreground); }
+.footer__nav a[aria-current='page'] { color: var(--marketing-panel-foreground); }
 
 .footer__legal {
   display: flex;

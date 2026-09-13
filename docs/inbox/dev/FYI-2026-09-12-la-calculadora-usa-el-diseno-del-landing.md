@@ -33,3 +33,13 @@ el landing. Esa página no está en el territorio declarado de Web (`public/inde
 `.github/workflows/design-system.yml` corre `landing-assets.mjs --check` solo cuando cambian rutas
 de `public/landing/**`. Si alguien edita solo la página de la calculadora, el check no corre en
 ese push. Sugiero agregar `public/calculadoras/**` a `paths`.
+
+## Adenda: índice y ruta de navegación
+
+A pedido de Alfredo, para que la calculadora se sienta parte del sitio sin cambiar su URL:
+
+- **Página nueva `public/calculadoras/index.html`:** el índice de calculadoras, con el mismo diseño.
+  El `navigateFallbackDenylist` ya la cubría (`/^\/calculadoras\//`), así que no hubo que tocar el SW.
+- **Ruta en la calculadora:** *Inicio / Calculadoras / Seguridad social*, con `BreadcrumbList`.
+- **`public/sitemap.xml` (tuyo):** agregué `/calculadoras/` y actualicé el `lastmod` de la
+  calculadora a 2026-09-12.

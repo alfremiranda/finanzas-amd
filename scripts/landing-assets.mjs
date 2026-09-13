@@ -84,6 +84,7 @@ const ASSETS = {
 const PAGES = {
   'public/index.html': ['tokens.css', 'styles.css', 'main.js'],
   'public/calculadoras/seguridad-social-independientes/index.html': ['tokens.css', 'styles.css', 'calculadora.css', 'main.js'],
+  'public/calculadoras/index.html': ['tokens.css', 'styles.css', 'calculadora.css', 'main.js'],
 }
 for (const [rel, files] of Object.entries(PAGES)) {
   const path = join(root, rel)

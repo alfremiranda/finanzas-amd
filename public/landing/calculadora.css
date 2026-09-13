@@ -23,6 +23,24 @@
 .calc-page .calc__copy .lead { max-width: 44ch; }
 #calculadora { scroll-margin-top: calc(var(--spacing-64) + var(--spacing-16)); }
 
+/* Where this page sits in the site: Inicio / Calculadoras / this one. It is also the way back up,
+   so each level is a link except the page itself. */
+.breadcrumb { margin-bottom: var(--spacing-16); color: var(--fg-subtle); }
+.breadcrumb ol { display: flex; flex-wrap: wrap; gap: var(--spacing-4) var(--spacing-8); }
+.breadcrumb li { display: flex; align-items: center; gap: var(--spacing-8); }
+.breadcrumb li + li::before { content: '/' / ''; color: var(--fg-disabled); }
+.breadcrumb a { color: var(--fg-subtle); transition: color var(--motion-duration-fast) var(--motion-easing-move); }
+.breadcrumb a:hover { color: var(--fg-default); }
+.breadcrumb [aria-current='page'] { color: var(--fg-default); }
+@media (max-width: 759px) { .breadcrumb ol { justify-content: center; } }
+
+/* ── The hub, /calculadoras/ ──────────────────────────────────────────────────────────── */
+.hub-head { padding-top: calc(var(--section-y) / 2); padding-bottom: 0; }
+.hub-head .section-head { margin-bottom: var(--spacing-32); }
+.hub-head .breadcrumb { text-align: center; }
+.hub-head .breadcrumb ol { justify-content: center; }
+.hub-list { padding-top: 0; }
+
 /* ── The card, made real ───────────────────────────────────────────────────────────────── */
 .calc__field--input { cursor: text; }
 .calc__field--input:focus-within {
