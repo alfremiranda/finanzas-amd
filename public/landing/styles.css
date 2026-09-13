@@ -109,7 +109,14 @@ button { font: inherit; color: inherit; }
 }
 .wrap--narrow { max-width: var(--container-narrow); }
 .section { padding-block: var(--section-y); }
-.section--tint { background: var(--bg-surface-default); }
+/* The same near-full-bleed rounded band as the panels, per Alfredo: 12px inset, 16px corners
+   (see .panel for the measurement behind that shape). Only its ground is the tint instead of a
+   dark panel, and it follows the theme. */
+.section--tint {
+  margin: var(--spacing-12);
+  border-radius: var(--radius-2xl);
+  background: var(--bg-surface-default);
+}
 
 /* Type. The .ts-* classes from tokens.css cover everything at and below 28px; §0 covers
    what sits above it. Never write a raw font-size outside those two. */
@@ -468,7 +475,10 @@ html.dark [data-icon='moon'] { display: none; }
   align-items: flex-start;
   text-align: start;
   padding: var(--spacing-20);
-  border: var(--border-width-default) solid transparent;
+  /* A subtle edge at every width, per Alfredo — the pills' hairline rim. Borderless, the three read
+     as a list of text rather than three buttons (worst on a phone, with no hover to say so).
+     Selected swaps it for the accent line. */
+  border: var(--border-width-default) solid color-mix(in oklch, var(--marketing-panel-foreground) 14%, transparent);
   border-radius: var(--radius-xl);
   background: transparent;
   color: var(--marketing-panel-foreground-subtle);
@@ -497,6 +507,11 @@ html.dark [data-icon='moon'] { display: none; }
 .router__opt[aria-pressed='true'] .router__more { color: var(--marketing-accent-on-panel); }
 .router__more svg { transition: transform var(--motion-duration-fast) var(--motion-easing-move); }
 .router__opt:hover .router__more svg { transform: translateX(2px); }
+/* The icon is the cards' own .card__icon, as in the other sections. Neutral while unchosen — the
+   three are peers, and giving each a money colour would claim a meaning they do not have — and
+   on the selected card it takes the selected state, the one use of cyan design.md allows. */
+.router__icon { margin-bottom: var(--spacing-4); transition: background-color var(--motion-duration-fast) var(--motion-easing-move), color var(--motion-duration-fast) var(--motion-easing-move); }
+.router__opt[aria-pressed='true'] .router__icon { background: var(--bg-selected); color: var(--fg-brand); }
 
 /* Stacked (below 800px) the three cards ran 128px each, and the answer and the photo they
    change landed under the fold: a tap changed something the visitor could not see. So the
@@ -505,10 +520,11 @@ html.dark [data-icon='moon'] { display: none; }
 @media (max-width: 799px) {
   .router { gap: var(--spacing-8); }
   .router__opt { padding: var(--spacing-12) var(--spacing-16); gap: var(--spacing-2); }
-  /* No hover on a phone to announce that these are buttons, and borderless they read as a list of
-     text. The pills' hairline rim gives each card an edge; selected still swaps to the accent line. */
-  .router__opt:not([aria-pressed='true']) { border-color: color-mix(in oklch, var(--marketing-panel-foreground) 14%, transparent); }
   .router__more { display: none; }
+  /* Icon beside the text, not above it, so the stack keeps the height that fits the result on screen. */
+  .router__opt { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: var(--spacing-12); align-items: center; }
+  .router__opt > :not(.router__icon) { grid-column: 2; }
+  .router__icon { grid-row: 1 / span 2; margin-bottom: 0; }
   .router__media { margin-top: var(--spacing-24); }
 }
 
