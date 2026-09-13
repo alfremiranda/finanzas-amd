@@ -1378,8 +1378,11 @@ html.dark [data-icon='moon'] { display: none; }
 
   .card { align-items: center; text-align: center; }
 
-  .feature__list { justify-items: center; }
-  .feature__list li { text-align: start; }
+  /* A checklist does not centre line by line: each item centred on its own put the check marks at
+     different x positions, so the list stopped reading as one list (Alfredo). The LIST is centred
+     as a block — it shrinks to its widest item — and inside it every item starts at the same edge,
+     checks in one column. */
+  .feature__list { justify-items: start; text-align: start; }
 
   .footer__nav { text-align: center; }
   .footer__legal { flex-direction: column; align-items: center; text-align: center; }
